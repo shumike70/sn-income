@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Hamster Cyber Tap - Pro Edition</title>
+    <title>Hamster Cyber Tap - Pro Engine</title>
     <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- Tailwind CSS -->
@@ -116,15 +116,16 @@
             <div>
                 <h4 id="u-name" class="font-bold text-sm text-white font-cyber tracking-tight leading-none">Connecting...</h4>
                 <div class="flex items-center gap-1.5 mt-1">
-                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 font-bold border border-amber-500/20 uppercase tracking-widest font-cyber">Master</span>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 font-bold border border-amber-500/20 uppercase tracking-widest font-cyber">Master Rank</span>
                     <span id="u-id-badge" class="text-[10px] text-slate-400 font-medium">ID: ...</span>
                 </div>
             </div>
         </div>
 
         <div class="flex items-center gap-2">
+            <!-- Admin Button (Hidden by default, unhides for ID: 8172880871) -->
             <button id="admin-header-btn" onclick="openPage('page-admin')" class="hidden flex items-center gap-1.5 px-3 py-1.5 rounded-xl btn-neon text-white text-[11px] font-cyber font-bold tracking-wider animate-pulse">
-                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> ADMIN
+                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> ADMIN HUB
             </button>
             
             <div class="glass-card px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 border border-white/5">
@@ -149,11 +150,11 @@
 
                 <div class="mt-3 px-2">
                     <div class="flex justify-between text-[11px] font-cyber font-bold text-slate-400 mb-1">
-                        <span>Rank: Diamond</span>
-                        <span>Level 5</span>
+                        <span>Rank: Cyber Legend</span>
+                        <span>Level 8</span>
                     </div>
                     <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden p-0.5 border border-white/5">
-                        <div class="h-full bg-gradient-to-r from-amber-500 to-yellow-300 rounded-full transition-all duration-300" style="width: 75%;"></div>
+                        <div class="h-full bg-gradient-to-r from-amber-500 to-yellow-300 rounded-full transition-all duration-300" style="width: 82%;"></div>
                     </div>
                 </div>
             </div>
@@ -189,8 +190,8 @@
                 <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-2">
                     <i data-lucide="zap" class="w-6 h-6"></i>
                 </div>
-                <h3 class="text-lg font-bold font-cyber text-white">Power Upgrades</h3>
-                <p class="text-xs text-slate-400">Boost tap strength & passive hourly profits.</p>
+                <h3 class="text-lg font-bold font-cyber text-white">Power Boosts</h3>
+                <p class="text-xs text-slate-400">Multiply tap output and automated passive revenue.</p>
             </div>
 
             <div class="space-y-2.5">
@@ -211,7 +212,7 @@
                             <i data-lucide="battery-plus" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-xs text-white">Energy Capacity</h4>
+                            <h4 class="font-bold text-xs text-white">Energy Tank</h4>
                             <p class="text-[11px] text-slate-400">+500 Limit • Cost: <span class="text-cyan-400 font-cyber font-bold">2,000</span></p>
                         </div>
                     </div>
@@ -224,8 +225,8 @@
                             <i data-lucide="bot" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-xs text-white">Auto Mining Bot</h4>
-                            <p class="text-[11px] text-slate-400">+100 Profit/Hour • Cost: <span class="text-indigo-400 font-cyber font-bold">5,000</span></p>
+                            <h4 class="font-bold text-xs text-white">Auto Mining Rig</h4>
+                            <p class="text-[11px] text-slate-400">+100 Coins/Hour • Cost: <span class="text-indigo-400 font-cyber font-bold">5,000</span></p>
                         </div>
                     </div>
                     <button onclick="buyUpgrade('autobot')" class="px-3.5 py-2 btn-neon text-white font-bold text-xs rounded-xl font-cyber">Deploy</button>
@@ -239,10 +240,12 @@
                 <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto mb-2">
                     <i data-lucide="radio" class="w-6 h-6"></i>
                 </div>
-                <h3 class="text-lg font-bold font-cyber text-white">Channel Missions</h3>
-                <p class="text-xs text-slate-400">Join official channels to claim big bonuses.</p>
+                <h3 class="text-lg font-bold font-cyber text-white">Official Missions</h3>
+                <p class="text-xs text-slate-400">Join required partner channels to unlock bounties.</p>
             </div>
-            <div id="tasks-container" class="space-y-2.5 pb-4"></div>
+            <div id="tasks-container" class="space-y-2.5 pb-4">
+                <div class="text-center py-8 text-xs text-slate-500">Loading missions...</div>
+            </div>
         </section>
 
         <!-- ================= PAGE 4: 👥 FRIENDS & REFERRAL ================= -->
@@ -252,121 +255,158 @@
                     <i data-lucide="users" class="w-7 h-7"></i>
                 </div>
                 <h3 class="text-xl font-bold font-cyber text-white">Invite Squad</h3>
-                <p class="text-xs text-slate-400 mt-0.5">Share link and earn rewards for every join.</p>
+                <p class="text-xs text-slate-400 mt-0.5">Instant bonus reward for every squad member.</p>
                 
                 <div class="mt-3 p-3 bg-white/5 rounded-xl border border-white/5 flex items-center justify-around">
                     <div>
-                        <span class="text-[10px] text-slate-400 font-bold uppercase">Bonus Per Friend</span>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">Per Friend Bounty</span>
                         <h4 id="ref-reward-tag" class="text-lg font-black font-cyber text-amber-400">+5,000</h4>
                     </div>
                     <div class="h-8 w-px bg-white/10"></div>
                     <div>
-                        <span class="text-[10px] text-slate-400 font-bold uppercase">Friends Joined</span>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">Squad Members</span>
                         <h4 id="ref-count-tag" class="text-lg font-black font-cyber text-cyan-400">0</h4>
                     </div>
                 </div>
             </div>
 
             <div class="glass-card p-3.5 rounded-xl space-y-2">
-                <label class="text-[11px] font-bold text-slate-300 uppercase tracking-wider font-cyber">Your Personal Link</label>
+                <label class="text-[11px] font-bold text-slate-300 uppercase tracking-wider font-cyber">Personal Invite Link</label>
                 <div class="flex gap-2">
                     <button onclick="copyRefLink()" class="flex-1 py-3 glass-panel rounded-xl text-xs font-bold font-cyber flex items-center justify-center gap-2 hover:bg-white/10 active:scale-95 transition">
                         <i data-lucide="copy" class="w-4 h-4 text-slate-300"></i> Copy Link
                     </button>
                     <button onclick="shareRefTelegram()" class="flex-1 py-3 btn-gold rounded-xl text-xs font-bold font-cyber text-slate-950 flex items-center justify-center gap-2">
-                        <i data-lucide="send" class="w-4 h-4"></i> Invite Direct
+                        <i data-lucide="send" class="w-4 h-4"></i> Direct Invite
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- ================= PAGE 5: 💳 WALLET & PAYOUT ================= -->
+        <!-- ================= PAGE 5: 💳 WALLET & PAYOUT WITH REAL CRYPTO LOGOS ================= -->
         <section id="page-wallet" class="page-view flex-col h-full overflow-y-auto no-scrollbar py-2 space-y-3">
             <div class="glass-card p-4 rounded-2xl text-center">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 font-cyber">Withdrawable Balance</span>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 font-cyber">Available Coins</span>
                 <div class="flex items-center justify-center gap-2 mt-1">
                     <i data-lucide="coins" class="w-6 h-6 text-amber-400"></i>
                     <h2 id="wallet-balance-val" class="text-3xl font-extrabold font-cyber text-white">0</h2>
                 </div>
             </div>
 
-            <div class="glass-card p-4 rounded-2xl space-y-3">
+            <div class="glass-card p-4 rounded-2xl space-y-3.5">
                 <h4 class="font-bold text-xs text-white font-cyber flex items-center gap-1.5">
-                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-amber-400"></i> Instant Payout Request
+                    <i data-lucide="wallet" class="w-4 h-4 text-amber-400"></i> Crypto & Local Cashout
                 </h4>
 
+                <!-- Active Selected Currency Preview with Image -->
                 <div>
-                    <label class="block text-[11px] text-slate-400 mb-1">Select Currency Gateway</label>
-                    <select id="withdraw-currency" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs font-bold outline-none focus:border-amber-400 transition">
-                    </select>
+                    <label class="block text-[11px] text-slate-400 mb-1.5">Select Payout Gateway</label>
+                    <div class="relative">
+                        <select id="withdraw-currency-select" onchange="onCurrencySelected()" class="w-full p-3 pl-12 rounded-xl bg-slate-900 border border-white/10 text-white text-xs font-bold outline-none focus:border-amber-400 transition">
+                            <!-- Populated dynamically with dynamic icons -->
+                        </select>
+                        <div class="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full overflow-hidden flex items-center justify-center bg-slate-800">
+                            <img id="selected-curr-icon" src="https://assets.coingecko.com/coins/images/325/small/Tether.png" class="w-5 h-5 object-contain" alt="Crypto Icon">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conversion & Min Rate Display -->
+                <div class="p-2.5 bg-white/5 rounded-xl flex items-center justify-between text-xs">
+                    <span class="text-slate-400">Min. Withdrawal:</span>
+                    <span id="curr-min-display" class="font-cyber font-bold text-amber-400">10,000 Coins</span>
                 </div>
 
                 <div>
                     <label class="block text-[11px] text-slate-400 mb-1">Coin Amount</label>
-                    <input type="number" id="withdraw-coins" placeholder="Enter coins..." class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs outline-none focus:border-amber-400 font-cyber">
-                    <p class="text-[10px] text-slate-500 mt-1">Min: <span id="min-withdraw-val">10,000</span> Coins</p>
+                    <input type="number" id="withdraw-coins" placeholder="Enter coins to withdraw..." class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs outline-none focus:border-amber-400 font-cyber">
                 </div>
 
                 <div>
-                    <label class="block text-[11px] text-slate-400 mb-1">Wallet Address / Account Number</label>
-                    <input type="text" id="withdraw-target" placeholder="Address or phone number..." class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs outline-none focus:border-amber-400">
+                    <label id="withdraw-target-label" class="block text-[11px] text-slate-400 mb-1">Wallet Address / Account</label>
+                    <input type="text" id="withdraw-target" placeholder="Enter recipient address..." class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs outline-none focus:border-amber-400">
                 </div>
 
                 <button onclick="requestWithdrawal()" class="w-full py-3 btn-gold rounded-xl text-slate-950 font-bold font-cyber text-xs tracking-wider">
-                    Submit Request
+                    Confirm Withdrawal
                 </button>
             </div>
         </section>
 
-        <!-- ================= PAGE 6: 👑 ADMIN COMMAND (ID: 8172880871) ================= -->
+        <!-- ================= PAGE 6: 👑 ADMIN COMMAND HUB (ID: 8172880871) ================= -->
         <section id="page-admin" class="page-view flex-col h-full overflow-y-auto no-scrollbar py-2 space-y-3">
             <div class="flex items-center justify-between pb-2 border-b border-white/10">
                 <h3 class="text-sm font-bold font-cyber text-indigo-400 flex items-center gap-1.5">
-                    <i data-lucide="terminal" class="w-4 h-4"></i> MASTER COMMAND HUB
+                    <i data-lucide="shield-alert" class="w-4 h-4"></i> MASTER COMMAND (8172880871)
                 </h3>
-                <button onclick="openPage('page-exchange')" class="text-xs text-slate-400 hover:text-white font-cyber">Back to Game</button>
+                <button onclick="openPage('page-exchange')" class="text-xs text-slate-400 hover:text-white font-cyber">Close</button>
             </div>
 
-            <div class="flex gap-2 text-xs font-cyber">
-                <button onclick="showAdminSub('adm-settings')" class="flex-1 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">Economy</button>
+            <!-- Admin Navigation Subtabs -->
+            <div class="flex gap-1 text-xs font-cyber">
+                <button onclick="showAdminSub('adm-currencies')" class="flex-1 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">Currencies</button>
+                <button onclick="showAdminSub('adm-channels')" class="flex-1 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold">Tasks</button>
                 <button onclick="showAdminSub('adm-payouts')" class="flex-1 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold">Payouts</button>
-                <button onclick="showAdminSub('adm-channels')" class="flex-1 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold">Channels</button>
             </div>
 
-            <div id="adm-settings" class="admin-subspace space-y-3">
-                <div class="glass-card p-4 rounded-xl space-y-2.5">
-                    <h5 class="text-[11px] font-bold text-amber-400 uppercase font-cyber">Currencies & Mechanics</h5>
-                    <div>
-                        <label class="block text-[10px] text-slate-400 mb-0.5">Active Payout Gateways (Comma Separated)</label>
-                        <input id="cfg-curr" type="text" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white" placeholder="USDT, TON, bKash, Nagad, Stars">
-                    </div>
+            <!-- SUBTAB 1: DYNAMIC CURRENCY MANAGER WITH LOGOS -->
+            <div id="adm-currencies" class="admin-subspace space-y-3">
+                <div class="glass-card p-3.5 rounded-xl space-y-2.5">
+                    <h5 class="text-[11px] font-bold text-amber-400 uppercase font-cyber flex items-center gap-1.5">
+                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add New Payout Currency
+                    </h5>
+                    
                     <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-[10px] text-slate-400 mb-0.5">Min Withdraw (Coins)</label>
-                            <input id="cfg-min" type="number" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-slate-400 mb-0.5">Ref Bonus</label>
-                            <input id="cfg-ref" type="number" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
-                        </div>
+                        <input id="new-curr-name" type="text" placeholder="Currency Name (e.g. USDT TRC20, TON, bKash)" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
+                        <input id="new-curr-min" type="number" placeholder="Min Coins (e.g. 10000)" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
                     </div>
-                    <button onclick="saveAdminSettings()" class="w-full py-2 btn-neon rounded-lg text-white font-bold font-cyber text-xs mt-1">Sync Economy</button>
+
+                    <!-- Preset Image Select or Custom URL -->
+                    <div>
+                        <label class="block text-[10px] text-slate-400 mb-1">Logo / Image URL</label>
+                        <input id="new-curr-icon" type="url" placeholder="https://example.com/logo.png" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
+                    </div>
+
+                    <!-- Quick Icon Helper Buttons -->
+                    <div class="flex flex-wrap gap-1.5 pt-1">
+                        <button type="button" onclick="setPresetIcon('https://assets.coingecko.com/coins/images/325/small/Tether.png', 'USDT (TRC20)')" class="px-2 py-1 bg-white/5 rounded text-[10px] text-emerald-400 border border-white/5">+USDT</button>
+                        <button type="button" onclick="setPresetIcon('https://assets.coingecko.com/coins/images/17980/small/ton_symbol.png', 'TON Coin')" class="px-2 py-1 bg-white/5 rounded text-[10px] text-blue-400 border border-white/5">+TON</button>
+                        <button type="button" onclick="setPresetIcon('https://freelogopng.com/images/all_img/1656234745bkash-app-logo.png', 'bKash (BD)')" class="px-2 py-1 bg-white/5 rounded text-[10px] text-pink-400 border border-white/5">+bKash</button>
+                        <button type="button" onclick="setPresetIcon('https://freelogopng.com/images/all_img/1679248787Nagad-Logo.png', 'Nagad (BD)')" class="px-2 py-1 bg-white/5 rounded text-[10px] text-orange-400 border border-white/5">+Nagad</button>
+                        <button type="button" onclick="setPresetIcon('https://telegram.org/img/t_logo.png', 'Telegram Stars')" class="px-2 py-1 bg-white/5 rounded text-[10px] text-yellow-400 border border-white/5">+Stars</button>
+                    </div>
+
+                    <button id="add-curr-btn" onclick="addNewCurrency()" class="w-full py-2 btn-gold text-slate-950 font-bold font-cyber text-xs rounded-lg mt-1">
+                        Save Currency
+                    </button>
+                </div>
+
+                <!-- Existing Currencies Feed -->
+                <div class="space-y-1.5">
+                    <h5 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-cyber">Active Currencies</h5>
+                    <div id="admin-currencies-list" class="space-y-1.5"></div>
                 </div>
             </div>
 
-            <div id="adm-payouts" class="admin-subspace hidden space-y-2">
-                <div id="admin-payouts-feed" class="space-y-2"></div>
-            </div>
-
+            <!-- SUBTAB 2: CHANNELS & MISSIONS (FIXED) -->
             <div id="adm-channels" class="admin-subspace hidden space-y-2.5">
                 <div class="glass-card p-3.5 rounded-xl space-y-2">
-                    <h5 class="text-[11px] font-bold text-indigo-400 uppercase font-cyber">Add Channel Mission</h5>
-                    <input id="new-ch-title" type="text" placeholder="Channel Title" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
-                    <input id="new-ch-link" type="url" placeholder="https://t.me/yourchannel" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
-                    <input id="new-ch-reward" type="number" placeholder="Reward (e.g. 5000)" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
-                    <button onclick="addChannelMission()" class="w-full py-2 btn-gold text-slate-950 font-bold font-cyber text-xs rounded-lg">Create Mission</button>
+                    <h5 class="text-[11px] font-bold text-indigo-400 uppercase font-cyber flex items-center gap-1.5">
+                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Channel Mission
+                    </h5>
+                    <input id="new-ch-title" type="text" placeholder="Channel Title (e.g. Official News)" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
+                    <input id="new-ch-link" type="url" placeholder="Telegram Link (e.g. https://t.me/YourChannel)" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
+                    <input id="new-ch-reward" type="number" placeholder="Reward Coins (e.g. 5000)" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
+                    <button id="add-task-btn" onclick="addChannelMission()" class="w-full py-2 btn-gold text-slate-950 font-bold font-cyber text-xs rounded-lg">
+                        Publish Mission
+                    </button>
                 </div>
                 <div id="admin-channels-feed" class="space-y-1.5"></div>
+            </div>
+
+            <!-- SUBTAB 3: PAYOUT APPROVALS -->
+            <div id="adm-payouts" class="admin-subspace hidden space-y-2">
+                <div id="admin-payouts-feed" class="space-y-2"></div>
             </div>
         </section>
 
@@ -396,11 +436,11 @@
         </button>
     </nav>
 
-    <!-- Firebase & Persistent Sync Engine -->
+    <!-- Firebase & Core State Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, addDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, addDoc, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDMUbNIou46lwgXVxNwDKikPlLOSDYsqPA",
@@ -426,7 +466,7 @@
 
         const MASTER_ADMIN_ID = "8172880871";
 
-        // Permanent User Identifier
+        // Permanent User Initialization
         const tgUser = tg?.initDataUnsafe?.user;
         let persistentId = tgUser?.id ? String(tgUser.id) : localStorage.getItem('persistent_tg_uid');
         if (!persistentId) {
@@ -434,12 +474,12 @@
             localStorage.setItem('persistent_tg_uid', persistentId);
         }
 
-        // 1. Instant Cache Loader (Never resets balance)
+        // Instant Local Cache
         const localCached = JSON.parse(localStorage.getItem(`local_user_data_${persistentId}`) || '{}');
 
         let user = {
             id: persistentId,
-            name: tgUser ? `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() : (localCached.name || "Cyber Warrior"),
+            name: tgUser ? `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() : (localCached.name || "Cyber Master"),
             username: tgUser?.username || "",
             balance: typeof localCached.balance === 'number' ? localCached.balance : 0,
             energy: typeof localCached.energy === 'number' ? localCached.energy : 1000,
@@ -450,14 +490,8 @@
             referralsCount: localCached.referralsCount || 0
         };
 
-        let config = {
-            minWithdraw: 10000,
-            referralBonus: 5000,
-            currencies: ["USDT (TRC20)", "TON", "bKash (BD)", "Nagad (BD)", "Stars"],
-            botName: "Adswift_bot"
-        };
+        let currencyList = [];
 
-        // Instant Local Saver
         function saveToLocalInstant() {
             localStorage.setItem(`local_user_data_${user.id}`, JSON.stringify({
                 name: user.name,
@@ -476,19 +510,22 @@
             renderUI();
             init3DTilt();
             
-            // Authenticate seamlessly
             try { await signInAnonymously(auth); } catch(e){}
 
             initUserData();
-            initGlobalConfig();
+            initCurrencies();
+            initTasks();
             initPassiveMining();
 
-            // Emergency sync on tab close or minimize
+            if (user.id === MASTER_ADMIN_ID) {
+                initAdminPayouts();
+            }
+
             window.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') pushBalanceToCloud(); });
             window.addEventListener('pagehide', pushBalanceToCloud);
         });
 
-        // 2. Cloud Database Initialization
+        // 1. User Handshake
         async function initUserData() {
             if (user.id === MASTER_ADMIN_ID) {
                 document.getElementById('admin-header-btn').classList.remove('hidden');
@@ -505,8 +542,7 @@
 
             if (!snap.exists()) {
                 if (startParam && startParam.startsWith('ref_') && startParam !== `ref_${user.id}`) {
-                    const refId = startParam.replace('ref_', '');
-                    awardReferrer(refId);
+                    awardReferrer(startParam.replace('ref_', ''));
                 }
 
                 await setDoc(userRef, {
@@ -523,7 +559,6 @@
                 }, { merge: true });
             } else {
                 const cloudData = snap.data();
-                // Merge Highest Balance to prevent data loss
                 user.balance = Math.max(user.balance, cloudData.balance || 0);
                 user.multiTap = cloudData.multiTap || user.multiTap;
                 user.maxEnergy = cloudData.maxEnergy || user.maxEnergy;
@@ -534,7 +569,6 @@
                 renderUI();
             }
 
-            // Realtime Sync Listener
             onSnapshot(userRef, (docSnap) => {
                 if(docSnap.exists()) {
                     const d = docSnap.data();
@@ -553,37 +587,126 @@
                 const s = await getDoc(refRef);
                 if(s.exists()) {
                     await updateDoc(refRef, {
-                        balance: (s.data().balance || 0) + config.referralBonus,
+                        balance: (s.data().balance || 0) + 5000,
                         referralsCount: (s.data().referralsCount || 0) + 1
                     });
                 }
             } catch(e){}
         }
 
-        // 3. Global Config Listener
-        function initGlobalConfig() {
-            onSnapshot(doc(db, "tma_config", "main"), (snap) => {
-                if(snap.exists()) {
-                    config = { ...config, ...snap.data() };
-                    document.getElementById('ref-reward-tag').textContent = `+${config.referralBonus.toLocaleString()}`;
-                    document.getElementById('min-withdraw-val').textContent = config.minWithdraw.toLocaleString();
+        // 2. Dynamic Currencies Realtime Listener & Manager
+        function initCurrencies() {
+            onSnapshot(collection(db, "tma_currencies"), (snapshot) => {
+                currencyList = [];
+                const selectEl = document.getElementById('withdraw-currency-select');
+                const adminListEl = document.getElementById('admin-currencies-list');
+                
+                selectEl.innerHTML = '';
+                adminListEl.innerHTML = '';
 
-                    const currSelect = document.getElementById('withdraw-currency');
-                    currSelect.innerHTML = config.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
-
-                    document.getElementById('cfg-curr').value = config.currencies.join(', ');
-                    document.getElementById('cfg-min').value = config.minWithdraw;
-                    document.getElementById('cfg-ref').value = config.referralBonus;
+                if (snapshot.empty) {
+                    // Seed default currencies if empty
+                    seedDefaultCurrencies();
+                    return;
                 }
-            });
 
+                snapshot.forEach(docSnap => {
+                    const c = { id: docSnap.id, ...docSnap.data() };
+                    currencyList.push(c);
+
+                    // Populate Wallet Select
+                    selectEl.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+
+                    // Populate Admin List
+                    adminListEl.innerHTML += `
+                        <div class="glass-card p-2.5 rounded-lg flex items-center justify-between text-xs">
+                            <div class="flex items-center gap-2.5">
+                                <img src="${c.icon}" class="w-6 h-6 rounded-full object-contain bg-slate-900 p-0.5 border border-white/10" alt="${c.name}">
+                                <div>
+                                    <h6 class="font-bold text-white font-cyber">${c.name}</h6>
+                                    <span class="text-[10px] text-amber-400 font-cyber">Min: ${c.min.toLocaleString()} Coins</span>
+                                </div>
+                            </div>
+                            <button onclick="deleteCurrency('${c.id}')" class="text-red-400 font-bold hover:underline px-2 py-1">Delete</button>
+                        </div>
+                    `;
+                });
+
+                onCurrencySelected();
+                lucide.createIcons();
+            });
+        }
+
+        async function seedDefaultCurrencies() {
+            const defaults = [
+                { name: "USDT (TRC20)", min: 10000, icon: "https://assets.coingecko.com/coins/images/325/small/Tether.png" },
+                { name: "TON Coin", min: 10000, icon: "https://assets.coingecko.com/coins/images/17980/small/ton_symbol.png" },
+                { name: "bKash (BD)", min: 10000, icon: "https://freelogopng.com/images/all_img/1656234745bkash-app-logo.png" },
+                { name: "Nagad (BD)", min: 10000, icon: "https://freelogopng.com/images/all_img/1679248787Nagad-Logo.png" }
+            ];
+            for (let item of defaults) {
+                await addDoc(collection(db, "tma_currencies"), item);
+            }
+        }
+
+        window.onCurrencySelected = () => {
+            const selectEl = document.getElementById('withdraw-currency-select');
+            const selectedId = selectEl.value;
+            const current = currencyList.find(c => c.id === selectedId);
+
+            if (current) {
+                document.getElementById('selected-curr-icon').src = current.icon;
+                document.getElementById('curr-min-display').textContent = `${current.min.toLocaleString()} Coins`;
+            }
+        };
+
+        window.setPresetIcon = (url, name) => {
+            document.getElementById('new-curr-icon').value = url;
+            document.getElementById('new-curr-name').value = name;
+            document.getElementById('new-curr-min').value = 10000;
+        };
+
+        window.addNewCurrency = async () => {
+            if (user.id !== MASTER_ADMIN_ID) return;
+            const name = document.getElementById('new-curr-name').value.trim();
+            const min = parseInt(document.getElementById('new-curr-min').value) || 10000;
+            let icon = document.getElementById('new-curr-icon').value.trim();
+
+            if (!name) return alert("Please specify currency name.");
+            if (!icon) icon = "https://assets.coingecko.com/coins/images/325/small/Tether.png";
+
+            const btn = document.getElementById('add-curr-btn');
+            btn.disabled = true;
+            btn.textContent = "Saving...";
+
+            try {
+                await addDoc(collection(db, "tma_currencies"), { name, min, icon, createdAt: serverTimestamp() });
+                alert("Currency Added Successfully!");
+                document.getElementById('new-curr-name').value = '';
+                document.getElementById('new-curr-min').value = '';
+                document.getElementById('new-curr-icon').value = '';
+            } catch(e) { alert("Error adding currency: " + e.message); }
+            finally { btn.disabled = false; btn.textContent = "Save Currency"; }
+        };
+
+        window.deleteCurrency = async (id) => {
+            if (user.id !== MASTER_ADMIN_ID) return;
+            if (confirm("Delete this currency?")) {
+                await deleteDoc(doc(db, "tma_currencies", id));
+            }
+        };
+
+        // 3. Tasks Realtime Listener & Fixed Task Creator
+        function initTasks() {
             onSnapshot(collection(db, "tma_tasks"), (snapshot) => {
                 const container = document.getElementById('tasks-container');
                 const admFeed = document.getElementById('admin-channels-feed');
                 container.innerHTML = '';
                 admFeed.innerHTML = '';
 
-                if(snapshot.empty) container.innerHTML = '<p class="text-xs text-center text-slate-500 py-6">No active missions right now.</p>';
+                if (snapshot.empty) {
+                    container.innerHTML = '<p class="text-xs text-center text-slate-500 py-6">No active channel missions right now.</p>';
+                }
 
                 snapshot.forEach(docSnap => {
                     const task = docSnap.data();
@@ -603,7 +726,7 @@
                             </div>
                             <div>
                                 ${isDone ? `
-                                    <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-[11px] font-cyber font-bold border border-emerald-500/20">Claimed</span>
+                                    <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-[11px] font-cyber font-bold border border-emerald-500/20">Joined</span>
                                 ` : `
                                     <button onclick="verifyTelegramTask('${taskId}', '${task.link}', ${task.reward})" class="px-3.5 py-1.5 btn-gold text-slate-950 font-bold text-xs rounded-lg font-cyber">Join</button>
                                 `}
@@ -620,35 +743,44 @@
                 });
                 lucide.createIcons();
             });
-
-            if(user.id === MASTER_ADMIN_ID) {
-                onSnapshot(query(collection(db, "tma_withdrawals"), orderBy("createdAt", "desc")), (snap) => {
-                    const feed = document.getElementById('admin-payouts-feed');
-                    feed.innerHTML = '';
-                    snap.forEach(docSnap => {
-                        const item = docSnap.data();
-                        feed.innerHTML += `
-                            <div class="glass-card p-3 rounded-xl space-y-1 text-xs">
-                                <div class="flex justify-between font-bold text-white">
-                                    <span>${item.userName} (${item.currency})</span>
-                                    <span class="${item.status==='approved'?'text-emerald-400':item.status==='rejected'?'text-red-400':'text-amber-400'} uppercase">${item.status}</span>
-                                </div>
-                                <div class="text-slate-400 font-mono text-[10px] break-all">Dest: ${item.target}</div>
-                                <div class="text-amber-400 font-cyber font-bold">${item.amount.toLocaleString()} Coins</div>
-                                ${item.status === 'pending' ? `
-                                    <div class="flex gap-2 pt-1.5">
-                                        <button onclick="reviewWithdrawal('${docSnap.id}', 'approved', '${item.userId}', ${item.amount})" class="flex-1 py-1 rounded bg-emerald-500/20 text-emerald-400 font-bold">Approve</button>
-                                        <button onclick="reviewWithdrawal('${docSnap.id}', 'rejected', '${item.userId}', ${item.amount})" class="flex-1 py-1 rounded bg-red-500/20 text-red-400 font-bold">Reject</button>
-                                    </div>
-                                ` : ''}
-                            </div>
-                        `;
-                    });
-                });
-            }
         }
 
-        // 4. 3D Tap Engine
+        window.addChannelMission = async () => {
+            if (user.id !== MASTER_ADMIN_ID) return;
+            const title = document.getElementById('new-ch-title').value.trim();
+            const link = document.getElementById('new-ch-link').value.trim();
+            const reward = parseInt(document.getElementById('new-ch-reward').value) || 5000;
+
+            if(!title || !link) return alert("Task title and link are required!");
+
+            const btn = document.getElementById('add-task-btn');
+            btn.disabled = true;
+            btn.textContent = "Publishing...";
+
+            try {
+                await addDoc(collection(db, "tma_tasks"), {
+                    title, link, reward, createdAt: serverTimestamp()
+                });
+                alert("Mission Added Successfully!");
+                document.getElementById('new-ch-title').value = '';
+                document.getElementById('new-ch-link').value = '';
+                document.getElementById('new-ch-reward').value = '';
+            } catch(e) {
+                alert("Failed to add task: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Publish Mission";
+            }
+        };
+
+        window.removeChannelMission = async (id) => {
+            if (user.id !== MASTER_ADMIN_ID) return;
+            if(confirm("Remove this channel task?")) {
+                await deleteDoc(doc(db, "tma_tasks", id));
+            }
+        };
+
+        // 4. Tap Engine
         const coin = document.getElementById('tap-coin');
         function init3DTilt() {
             coin.addEventListener('pointerdown', (e) => {
@@ -671,12 +803,9 @@
                 user.balance += user.multiTap;
                 user.energy = Math.max(0, user.energy - user.multiTap);
 
-                // Instant UI & Local Storage Save
                 saveToLocalInstant();
                 createTapNumber(e.clientX, e.clientY, `+${user.multiTap}`);
                 renderUI();
-
-                // Throttled Cloud Sync
                 scheduleCloudSync();
             });
 
@@ -710,7 +839,7 @@
                     maxEnergy: user.maxEnergy,
                     pph: user.pph
                 }, { merge: true });
-            } catch(e) { console.error("Cloud push failed:", e); }
+            } catch(e){}
         }
 
         function initPassiveMining() {
@@ -768,7 +897,7 @@
             else window.open(link, '_blank');
 
             setTimeout(async () => {
-                const ok = confirm("Did you join the official channel?");
+                const ok = confirm("Did you join the channel?");
                 if(ok) {
                     user.balance += reward;
                     user.completedTasks.push(taskId);
@@ -788,13 +917,17 @@
         };
 
         window.requestWithdrawal = async () => {
+            const selectEl = document.getElementById('withdraw-currency-select');
+            const selectedCurrency = currencyList.find(c => c.id === selectEl.value);
+
+            if (!selectedCurrency) return alert("Please select a valid currency.");
+
             const amt = parseInt(document.getElementById('withdraw-coins').value);
             const target = document.getElementById('withdraw-target').value.trim();
-            const curr = document.getElementById('withdraw-currency').value;
 
-            if(isNaN(amt) || amt < config.minWithdraw) return alert(`Minimum withdrawal is ${config.minWithdraw.toLocaleString()} Coins.`);
-            if(amt > user.balance) return alert("Insufficient Balance!");
-            if(!target) return alert("Please provide your account details.");
+            if(isNaN(amt) || amt < selectedCurrency.min) return alert(`Minimum withdrawal for ${selectedCurrency.name} is ${selectedCurrency.min.toLocaleString()} Coins.`);
+            if(amt > user.balance) return alert("Insufficient Coin Balance!");
+            if(!target) return alert("Please enter destination address/number.");
 
             user.balance -= amt;
             saveToLocalInstant();
@@ -806,28 +939,29 @@
                 userId: user.id,
                 userName: user.name,
                 amount: amt,
-                currency: curr,
+                currency: selectedCurrency.name,
+                currencyIcon: selectedCurrency.icon,
                 target: target,
                 status: "pending",
                 createdAt: serverTimestamp()
             });
 
             tg?.HapticFeedback?.notificationOccurred('success');
-            alert("Withdrawal submitted! Processing...");
+            alert("Withdrawal submitted successfully!");
             document.getElementById('withdraw-coins').value = '';
             document.getElementById('withdraw-target').value = '';
         };
 
         window.copyRefLink = () => {
-            const url = `https://t.me/${config.botName}?start=ref_${user.id}`;
+            const url = `https://t.me/Adswift_bot?start=ref_${user.id}`;
             navigator.clipboard.writeText(url);
             tg?.HapticFeedback?.notificationOccurred('success');
             alert("Referral link copied!");
         };
 
         window.shareRefTelegram = () => {
-            const url = `https://t.me/${config.botName}?start=ref_${user.id}`;
-            const text = encodeURIComponent("🔥 Play Hamster Cyber Tap now & grab instant free coins!");
+            const url = `https://t.me/Adswift_bot?start=ref_${user.id}`;
+            const text = encodeURIComponent("🚀 Join Cyber Tap & claim 5000 coins instantly!");
             const share = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${text}`;
             if(tg?.openTelegramLink) tg.openTelegramLink(share);
             else window.open(share, '_blank');
@@ -854,36 +988,36 @@
             document.getElementById(subId).classList.remove('hidden');
         };
 
-        window.saveAdminSettings = async () => {
-            if(user.id !== MASTER_ADMIN_ID) return;
-            const updated = {
-                currencies: document.getElementById('cfg-curr').value.split(',').map(s=>s.trim()).filter(Boolean),
-                minWithdraw: parseInt(document.getElementById('cfg-min').value) || 10000,
-                referralBonus: parseInt(document.getElementById('cfg-ref').value) || 5000
-            };
-            await setDoc(doc(db, "tma_config", "main"), updated, { merge: true });
-            alert("Settings updated globally!");
-        };
+        function initAdminPayouts() {
+            onSnapshot(query(collection(db, "tma_withdrawals"), orderBy("createdAt", "desc")), (snap) => {
+                const feed = document.getElementById('admin-payouts-feed');
+                feed.innerHTML = '';
+                if (snap.empty) feed.innerHTML = '<p class="text-xs text-slate-500 py-4 text-center">No pending withdrawals.</p>';
 
-        window.addChannelMission = async () => {
-            if(user.id !== MASTER_ADMIN_ID) return;
-            const title = document.getElementById('new-ch-title').value.trim();
-            const link = document.getElementById('new-ch-link').value.trim();
-            const reward = parseInt(document.getElementById('new-ch-reward').value) || 5000;
-            if(!title || !link) return alert("Fill in title and link.");
-
-            await addDoc(collection(db, "tma_tasks"), { title, link, reward, createdAt: serverTimestamp() });
-            document.getElementById('new-ch-title').value = '';
-            document.getElementById('new-ch-link').value = '';
-            document.getElementById('new-ch-reward').value = '';
-            alert("Mission channel added!");
-        };
-
-        window.removeChannelMission = async (id) => {
-            if(user.id !== MASTER_ADMIN_ID) return;
-            const { deleteDoc, doc } = await import("https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js");
-            await deleteDoc(doc(db, "tma_tasks", id));
-        };
+                snap.forEach(docSnap => {
+                    const item = docSnap.data();
+                    feed.innerHTML += `
+                        <div class="glass-card p-3 rounded-xl space-y-1.5 text-xs">
+                            <div class="flex justify-between items-center font-bold text-white">
+                                <div class="flex items-center gap-1.5">
+                                    <img src="${item.currencyIcon || 'https://assets.coingecko.com/coins/images/325/small/Tether.png'}" class="w-4 h-4 rounded-full object-contain">
+                                    <span>${item.userName} (${item.currency})</span>
+                                </div>
+                                <span class="${item.status==='approved'?'text-emerald-400':item.status==='rejected'?'text-red-400':'text-amber-400'} uppercase font-cyber">${item.status}</span>
+                            </div>
+                            <div class="text-slate-400 font-mono text-[10px] break-all">Dest: ${item.target}</div>
+                            <div class="text-amber-400 font-cyber font-bold">${item.amount.toLocaleString()} Coins</div>
+                            ${item.status === 'pending' ? `
+                                <div class="flex gap-2 pt-1">
+                                    <button onclick="reviewWithdrawal('${docSnap.id}', 'approved', '${item.userId}', ${item.amount})" class="flex-1 py-1 rounded bg-emerald-500/20 text-emerald-400 font-bold font-cyber">Approve</button>
+                                    <button onclick="reviewWithdrawal('${docSnap.id}', 'rejected', '${item.userId}', ${item.amount})" class="flex-1 py-1 rounded bg-red-500/20 text-red-400 font-bold font-cyber">Reject</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+            });
+        }
 
         window.reviewWithdrawal = async (docId, status, uid, amount) => {
             if(user.id !== MASTER_ADMIN_ID) return;
