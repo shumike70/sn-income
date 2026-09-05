@@ -13,32 +13,6 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        cyber: {
-                            bg: '#07090e',
-                            card: 'rgba(16, 22, 34, 0.85)',
-                            accent: '#f59e0b',
-                            gold: '#fbbf24',
-                            neon: '#6366f1',
-                            cyan: '#06b6d4',
-                            danger: '#ef4444',
-                            success: '#10b981'
-                        }
-                    },
-                    fontFamily: {
-                        cyber: ['"Chakra Petch"', 'sans-serif'],
-                        mono: ['"Rajdhani"', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
-
     <style>
         * {
             user-select: none;
@@ -55,9 +29,11 @@
             color: #f8fafc;
             height: 100vh;
             overflow: hidden;
+            font-family: 'Rajdhani', sans-serif;
         }
 
-        /* Glassmorphism Classes */
+        .font-cyber { font-family: 'Chakra Petch', sans-serif; }
+
         .glass-panel {
             background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(16px);
@@ -73,9 +49,7 @@
         }
 
         /* 3D Realistic Coin Physics */
-        .coin-stage {
-            perspective: 1000px;
-        }
+        .coin-stage { perspective: 1000px; }
 
         .coin-object {
             transform-style: preserve-3d;
@@ -86,7 +60,6 @@
                 inset 0 -15px 30px rgba(180, 83, 9, 0.8);
         }
 
-        /* Floating Tap Particles */
         @keyframes floatNumber {
             0% { opacity: 1; transform: translateY(0) scale(1) translateZ(50px); }
             100% { opacity: 0; transform: translateY(-140px) scale(1.5) translateZ(80px); }
@@ -103,7 +76,6 @@
             z-index: 9999;
         }
 
-        /* Page View Switcher */
         .page-view {
             display: none;
             opacity: 0;
@@ -117,7 +89,6 @@
             transform: scale(1);
         }
 
-        /* Glowing Buttons */
         .btn-gold {
             background: linear-gradient(135deg, #f59e0b, #d97706);
             box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
@@ -133,11 +104,10 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="flex flex-col justify-between h-screen select-none font-mono">
+<body class="flex flex-col justify-between h-screen select-none">
 
     <!-- Top Master Header -->
     <header class="p-3.5 glass-panel mx-3 mt-3 rounded-2xl flex items-center justify-between z-30 shrink-0">
-        <!-- User Identity Block -->
         <div class="flex items-center gap-2.5">
             <div class="relative">
                 <img id="u-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=hamster" class="w-10 h-10 rounded-xl bg-slate-800 border border-amber-500/30 object-cover shadow-md" alt="Avatar">
@@ -146,15 +116,13 @@
             <div>
                 <h4 id="u-name" class="font-bold text-sm text-white font-cyber tracking-tight leading-none">Connecting...</h4>
                 <div class="flex items-center gap-1.5 mt-1">
-                    <span id="u-rank-badge" class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 font-bold border border-amber-500/20 uppercase tracking-widest font-cyber">Bronze</span>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 font-bold border border-amber-500/20 uppercase tracking-widest font-cyber">Master</span>
                     <span id="u-id-badge" class="text-[10px] text-slate-400 font-medium">ID: ...</span>
                 </div>
             </div>
         </div>
 
-        <!-- Right Quick Action / Admin Icon -->
         <div class="flex items-center gap-2">
-            <!-- Admin Button (Hidden by default, unhides for ID: 8172880871) -->
             <button id="admin-header-btn" onclick="openPage('page-admin')" class="hidden flex items-center gap-1.5 px-3 py-1.5 rounded-xl btn-neon text-white text-[11px] font-cyber font-bold tracking-wider animate-pulse">
                 <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> ADMIN
             </button>
@@ -171,8 +139,6 @@
 
         <!-- ================= PAGE 1: 🎮 EXCHANGE (TAP ENGINE) ================= -->
         <section id="page-exchange" class="page-view active flex-col items-center justify-between h-full py-1">
-            
-            <!-- Balance & League Bar -->
             <div class="w-full text-center shrink-0">
                 <div class="flex items-center justify-center gap-2.5">
                     <div class="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center border border-amber-500/30">
@@ -181,14 +147,13 @@
                     <h1 id="tap-balance-display" class="text-4xl sm:text-5xl font-extrabold font-cyber tracking-tight text-white drop-shadow-[0_0_25px_rgba(245,158,11,0.5)]">0</h1>
                 </div>
 
-                <!-- Level Progress -->
                 <div class="mt-3 px-2">
                     <div class="flex justify-between text-[11px] font-cyber font-bold text-slate-400 mb-1">
-                        <span id="current-rank-label">Rank: Bronze</span>
-                        <span id="rank-progress-percent">0%</span>
+                        <span>Rank: Diamond</span>
+                        <span>Level 5</span>
                     </div>
                     <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden p-0.5 border border-white/5">
-                        <div id="rank-progress-bar" class="h-full bg-gradient-to-r from-amber-500 to-yellow-300 rounded-full transition-all duration-300" style="width: 5%;"></div>
+                        <div class="h-full bg-gradient-to-r from-amber-500 to-yellow-300 rounded-full transition-all duration-300" style="width: 75%;"></div>
                     </div>
                 </div>
             </div>
@@ -225,25 +190,21 @@
                     <i data-lucide="zap" class="w-6 h-6"></i>
                 </div>
                 <h3 class="text-lg font-bold font-cyber text-white">Power Upgrades</h3>
-                <p class="text-xs text-slate-400">Increase tap strength & automated mining rate.</p>
+                <p class="text-xs text-slate-400">Boost tap strength & passive hourly profits.</p>
             </div>
 
             <div class="space-y-2.5">
-                <!-- Boost Card 1 -->
                 <div class="glass-card p-3.5 rounded-xl flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-cyber font-black">
-                            +1
-                        </div>
+                        <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-cyber font-black">+1</div>
                         <div>
                             <h4 class="font-bold text-xs text-white">Multi-Tap Power</h4>
-                            <p class="text-[11px] text-slate-400">+1 per tap • Cost: <span class="text-amber-400 font-cyber font-bold" id="cost-multitap">1,000</span></p>
+                            <p class="text-[11px] text-slate-400">+1 per tap • Cost: <span class="text-amber-400 font-cyber font-bold">1,000</span></p>
                         </div>
                     </div>
                     <button onclick="buyUpgrade('multitap')" class="px-3.5 py-2 btn-gold text-slate-950 font-bold text-xs rounded-xl font-cyber">Upgrade</button>
                 </div>
 
-                <!-- Boost Card 2 -->
                 <div class="glass-card p-3.5 rounded-xl flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
@@ -251,13 +212,12 @@
                         </div>
                         <div>
                             <h4 class="font-bold text-xs text-white">Energy Capacity</h4>
-                            <p class="text-[11px] text-slate-400">+500 Max Pool • Cost: <span class="text-cyan-400 font-cyber font-bold" id="cost-energy">2,000</span></p>
+                            <p class="text-[11px] text-slate-400">+500 Limit • Cost: <span class="text-cyan-400 font-cyber font-bold">2,000</span></p>
                         </div>
                     </div>
                     <button onclick="buyUpgrade('energy')" class="px-3.5 py-2 btn-gold text-slate-950 font-bold text-xs rounded-xl font-cyber">Upgrade</button>
                 </div>
 
-                <!-- Boost Card 3 -->
                 <div class="glass-card p-3.5 rounded-xl flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
@@ -265,7 +225,7 @@
                         </div>
                         <div>
                             <h4 class="font-bold text-xs text-white">Auto Mining Bot</h4>
-                            <p class="text-[11px] text-slate-400">+100 Profit/Hour • Cost: <span class="text-indigo-400 font-cyber font-bold" id="cost-autobot">5,000</span></p>
+                            <p class="text-[11px] text-slate-400">+100 Profit/Hour • Cost: <span class="text-indigo-400 font-cyber font-bold">5,000</span></p>
                         </div>
                     </div>
                     <button onclick="buyUpgrade('autobot')" class="px-3.5 py-2 btn-neon text-white font-bold text-xs rounded-xl font-cyber">Deploy</button>
@@ -279,14 +239,10 @@
                 <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto mb-2">
                     <i data-lucide="radio" class="w-6 h-6"></i>
                 </div>
-                <h3 class="text-lg font-bold font-cyber text-white">Telegram Missions</h3>
-                <p class="text-xs text-slate-400">Join required channels and claim huge instant bounties.</p>
+                <h3 class="text-lg font-bold font-cyber text-white">Channel Missions</h3>
+                <p class="text-xs text-slate-400">Join official channels to claim big bonuses.</p>
             </div>
-
-            <!-- Dynamic Tasks Container -->
-            <div id="tasks-container" class="space-y-2.5 pb-4">
-                <!-- Injected via JS -->
-            </div>
+            <div id="tasks-container" class="space-y-2.5 pb-4"></div>
         </section>
 
         <!-- ================= PAGE 4: 👥 FRIENDS & REFERRAL ================= -->
@@ -296,7 +252,7 @@
                     <i data-lucide="users" class="w-7 h-7"></i>
                 </div>
                 <h3 class="text-xl font-bold font-cyber text-white">Invite Squad</h3>
-                <p class="text-xs text-slate-400 mt-0.5">Earn bonus coins instantly for every friend invited.</p>
+                <p class="text-xs text-slate-400 mt-0.5">Share link and earn rewards for every join.</p>
                 
                 <div class="mt-3 p-3 bg-white/5 rounded-xl border border-white/5 flex items-center justify-around">
                     <div>
@@ -327,14 +283,13 @@
         <!-- ================= PAGE 5: 💳 WALLET & PAYOUT ================= -->
         <section id="page-wallet" class="page-view flex-col h-full overflow-y-auto no-scrollbar py-2 space-y-3">
             <div class="glass-card p-4 rounded-2xl text-center">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 font-cyber">Withdrawable Coins</span>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 font-cyber">Withdrawable Balance</span>
                 <div class="flex items-center justify-center gap-2 mt-1">
                     <i data-lucide="coins" class="w-6 h-6 text-amber-400"></i>
                     <h2 id="wallet-balance-val" class="text-3xl font-extrabold font-cyber text-white">0</h2>
                 </div>
             </div>
 
-            <!-- Withdrawal Form -->
             <div class="glass-card p-4 rounded-2xl space-y-3">
                 <h4 class="font-bold text-xs text-white font-cyber flex items-center gap-1.5">
                     <i data-lucide="arrow-up-right" class="w-4 h-4 text-amber-400"></i> Instant Payout Request
@@ -343,7 +298,6 @@
                 <div>
                     <label class="block text-[11px] text-slate-400 mb-1">Select Currency Gateway</label>
                     <select id="withdraw-currency" class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs font-bold outline-none focus:border-amber-400 transition">
-                        <!-- Loaded dynamically from Firebase -->
                     </select>
                 </div>
 
@@ -362,14 +316,6 @@
                     Submit Request
                 </button>
             </div>
-
-            <!-- Withdrawal History -->
-            <div class="glass-card p-3 rounded-xl">
-                <h5 class="text-[11px] font-bold text-slate-400 uppercase font-cyber mb-2">My Requests</h5>
-                <div id="user-withdraw-history" class="space-y-1.5 text-xs">
-                    <p class="text-slate-500 text-[11px]">No recent withdrawals.</p>
-                </div>
-            </div>
         </section>
 
         <!-- ================= PAGE 6: 👑 ADMIN COMMAND (ID: 8172880871) ================= -->
@@ -381,14 +327,12 @@
                 <button onclick="openPage('page-exchange')" class="text-xs text-slate-400 hover:text-white font-cyber">Back to Game</button>
             </div>
 
-            <!-- Admin Tabs -->
             <div class="flex gap-2 text-xs font-cyber">
                 <button onclick="showAdminSub('adm-settings')" class="flex-1 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">Economy</button>
                 <button onclick="showAdminSub('adm-payouts')" class="flex-1 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold">Payouts</button>
                 <button onclick="showAdminSub('adm-channels')" class="flex-1 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold">Channels</button>
             </div>
 
-            <!-- Sub 1: Settings -->
             <div id="adm-settings" class="admin-subspace space-y-3">
                 <div class="glass-card p-4 rounded-xl space-y-2.5">
                     <h5 class="text-[11px] font-bold text-amber-400 uppercase font-cyber">Currencies & Mechanics</h5>
@@ -410,18 +354,14 @@
                 </div>
             </div>
 
-            <!-- Sub 2: Pending Payouts -->
             <div id="adm-payouts" class="admin-subspace hidden space-y-2">
-                <div id="admin-payouts-feed" class="space-y-2">
-                    <!-- Loaded dynamically -->
-                </div>
+                <div id="admin-payouts-feed" class="space-y-2"></div>
             </div>
 
-            <!-- Sub 3: Channels -->
             <div id="adm-channels" class="admin-subspace hidden space-y-2.5">
                 <div class="glass-card p-3.5 rounded-xl space-y-2">
                     <h5 class="text-[11px] font-bold text-indigo-400 uppercase font-cyber">Add Channel Mission</h5>
-                    <input id="new-ch-title" type="text" placeholder="Channel Title (e.g. Official Channel)" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
+                    <input id="new-ch-title" type="text" placeholder="Channel Title" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
                     <input id="new-ch-link" type="url" placeholder="https://t.me/yourchannel" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
                     <input id="new-ch-reward" type="number" placeholder="Reward (e.g. 5000)" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
                     <button onclick="addChannelMission()" class="w-full py-2 btn-gold text-slate-950 font-bold font-cyber text-xs rounded-lg">Create Mission</button>
@@ -432,7 +372,7 @@
 
     </main>
 
-    <!-- Bottom Ultra-Modern Navigation Dock -->
+    <!-- Bottom Navigation Dock -->
     <nav class="glass-panel mx-3 mb-3 p-2 rounded-2xl flex justify-around items-center z-30 shrink-0">
         <button onclick="openPage('page-exchange')" class="nav-btn active flex flex-col items-center gap-0.5 text-amber-400 transition" data-target="page-exchange">
             <i data-lucide="gamepad-2" class="w-5 h-5"></i>
@@ -456,9 +396,10 @@
         </button>
     </nav>
 
-    <!-- Scripting Layer & Firestore Database Integration -->
+    <!-- Firebase & Persistent Sync Engine -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, addDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -472,9 +413,9 @@
         };
 
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Telegram WebApp Hook
         const tg = window.Telegram?.WebApp;
         if (tg) {
             tg.ready();
@@ -485,59 +426,69 @@
 
         const MASTER_ADMIN_ID = "8172880871";
 
-        // Current Telegram User State
+        // Permanent User Identifier
         const tgUser = tg?.initDataUnsafe?.user;
+        let persistentId = tgUser?.id ? String(tgUser.id) : localStorage.getItem('persistent_tg_uid');
+        if (!persistentId) {
+            persistentId = "guest_" + Math.floor(Math.random() * 899999 + 100000);
+            localStorage.setItem('persistent_tg_uid', persistentId);
+        }
+
+        // 1. Instant Cache Loader (Never resets balance)
+        const localCached = JSON.parse(localStorage.getItem(`local_user_data_${persistentId}`) || '{}');
+
         let user = {
-            id: tgUser?.id ? String(tgUser.id) : (localStorage.getItem('dbg_uid') || (() => {
-                const id = "guest_" + Math.floor(Math.random() * 899999 + 100000);
-                localStorage.setItem('dbg_uid', id);
-                return id;
-            })()),
-            name: tgUser ? `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() : "Cyber Warrior",
+            id: persistentId,
+            name: tgUser ? `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() : (localCached.name || "Cyber Warrior"),
             username: tgUser?.username || "",
-            balance: 0,
-            energy: 1000,
-            maxEnergy: 1000,
-            multiTap: 1,
-            pph: 0,
-            completedTasks: [],
-            referralsCount: 0
+            balance: typeof localCached.balance === 'number' ? localCached.balance : 0,
+            energy: typeof localCached.energy === 'number' ? localCached.energy : 1000,
+            maxEnergy: localCached.maxEnergy || 1000,
+            multiTap: localCached.multiTap || 1,
+            pph: localCached.pph || 0,
+            completedTasks: localCached.completedTasks || [],
+            referralsCount: localCached.referralsCount || 0
         };
 
         let config = {
             minWithdraw: 10000,
             referralBonus: 5000,
-            currencies: ["USDT (TON/TRC20)", "Telegram Stars", "bKash (Personal)", "Nagad", "TON Native"],
+            currencies: ["USDT (TRC20)", "TON", "bKash (BD)", "Nagad (BD)", "Stars"],
             botName: "Adswift_bot"
         };
 
-        // Synthesized Web Audio FX
-        const playCoinSound = () => {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = "sine";
-                osc.frequency.setValueAtTime(800, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(1400, ctx.currentTime + 0.08);
-                gain.gain.setValueAtTime(0.15, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + 0.08);
-            } catch(e) {}
-        };
+        // Instant Local Saver
+        function saveToLocalInstant() {
+            localStorage.setItem(`local_user_data_${user.id}`, JSON.stringify({
+                name: user.name,
+                balance: user.balance,
+                energy: user.energy,
+                maxEnergy: user.maxEnergy,
+                multiTap: user.multiTap,
+                pph: user.pph,
+                completedTasks: user.completedTasks,
+                referralsCount: user.referralsCount
+            }));
+        }
 
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
             lucide.createIcons();
+            renderUI();
             init3DTilt();
+            
+            // Authenticate seamlessly
+            try { await signInAnonymously(auth); } catch(e){}
+
             initUserData();
             initGlobalConfig();
             initPassiveMining();
+
+            // Emergency sync on tab close or minimize
+            window.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') pushBalanceToCloud(); });
+            window.addEventListener('pagehide', pushBalanceToCloud);
         });
 
-        // 1. User Initialization
+        // 2. Cloud Database Initialization
         async function initUserData() {
             if (user.id === MASTER_ADMIN_ID) {
                 document.getElementById('admin-header-btn').classList.remove('hidden');
@@ -562,26 +513,36 @@
                     id: user.id,
                     name: user.name,
                     username: user.username,
-                    balance: 0,
-                    multiTap: 1,
-                    maxEnergy: 1000,
-                    pph: 0,
-                    completedTasks: [],
-                    referralsCount: 0,
+                    balance: user.balance,
+                    multiTap: user.multiTap,
+                    maxEnergy: user.maxEnergy,
+                    pph: user.pph,
+                    completedTasks: user.completedTasks,
+                    referralsCount: user.referralsCount,
                     createdAt: serverTimestamp()
-                });
+                }, { merge: true });
+            } else {
+                const cloudData = snap.data();
+                // Merge Highest Balance to prevent data loss
+                user.balance = Math.max(user.balance, cloudData.balance || 0);
+                user.multiTap = cloudData.multiTap || user.multiTap;
+                user.maxEnergy = cloudData.maxEnergy || user.maxEnergy;
+                user.pph = cloudData.pph || user.pph;
+                user.completedTasks = cloudData.completedTasks || user.completedTasks;
+                user.referralsCount = cloudData.referralsCount || user.referralsCount;
+                saveToLocalInstant();
+                renderUI();
             }
 
+            // Realtime Sync Listener
             onSnapshot(userRef, (docSnap) => {
                 if(docSnap.exists()) {
                     const d = docSnap.data();
-                    user.balance = d.balance || 0;
-                    user.multiTap = d.multiTap || 1;
-                    user.maxEnergy = d.maxEnergy || 1000;
-                    user.pph = d.pph || 0;
-                    user.completedTasks = d.completedTasks || [];
-                    user.referralsCount = d.referralsCount || 0;
-                    renderUI();
+                    if(d.balance > user.balance) {
+                        user.balance = d.balance;
+                        saveToLocalInstant();
+                        renderUI();
+                    }
                 }
             });
         }
@@ -599,7 +560,7 @@
             } catch(e){}
         }
 
-        // 2. Global Sync Config
+        // 3. Global Config Listener
         function initGlobalConfig() {
             onSnapshot(doc(db, "tma_config", "main"), (snap) => {
                 if(snap.exists()) {
@@ -610,14 +571,12 @@
                     const currSelect = document.getElementById('withdraw-currency');
                     currSelect.innerHTML = config.currencies.map(c => `<option value="${c}">${c}</option>`).join('');
 
-                    // Admin Inputs
                     document.getElementById('cfg-curr').value = config.currencies.join(', ');
                     document.getElementById('cfg-min').value = config.minWithdraw;
                     document.getElementById('cfg-ref').value = config.referralBonus;
                 }
             });
 
-            // Listen Tasks
             onSnapshot(collection(db, "tma_tasks"), (snapshot) => {
                 const container = document.getElementById('tasks-container');
                 const admFeed = document.getElementById('admin-channels-feed');
@@ -662,7 +621,6 @@
                 lucide.createIcons();
             });
 
-            // Listen Withdrawals for Admin
             if(user.id === MASTER_ADMIN_ID) {
                 onSnapshot(query(collection(db, "tma_withdrawals"), orderBy("createdAt", "desc")), (snap) => {
                     const feed = document.getElementById('admin-payouts-feed');
@@ -690,7 +648,7 @@
             }
         }
 
-        // 3. 3D Coin Tilt & Multi-Touch Game Engine
+        // 4. 3D Tap Engine
         const coin = document.getElementById('tap-coin');
         function init3DTilt() {
             coin.addEventListener('pointerdown', (e) => {
@@ -708,16 +666,18 @@
                 const tiltY = (x / (rect.width / 2)) * 24;
 
                 coin.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(0.96, 0.96, 0.96)`;
-                
                 tg?.HapticFeedback?.impactOccurred('medium');
-                playCoinSound();
 
                 user.balance += user.multiTap;
                 user.energy = Math.max(0, user.energy - user.multiTap);
 
+                // Instant UI & Local Storage Save
+                saveToLocalInstant();
                 createTapNumber(e.clientX, e.clientY, `+${user.multiTap}`);
                 renderUI();
-                syncUserBalance();
+
+                // Throttled Cloud Sync
+                scheduleCloudSync();
             });
 
             window.addEventListener('pointerup', () => {
@@ -735,31 +695,41 @@
             setTimeout(() => el.remove(), 700);
         }
 
-        let syncTimer = null;
-        function syncUserBalance() {
-            clearTimeout(syncTimer);
-            syncTimer = setTimeout(async () => {
-                try {
-                    await updateDoc(doc(db, "tma_users", user.id), { balance: user.balance });
-                } catch(e){}
-            }, 600);
+        let syncDebounce = null;
+        function scheduleCloudSync() {
+            clearTimeout(syncDebounce);
+            syncDebounce = setTimeout(pushBalanceToCloud, 1000);
         }
 
-        // 4. Passive Mining Loop
+        async function pushBalanceToCloud() {
+            try {
+                await setDoc(doc(db, "tma_users", user.id), {
+                    balance: user.balance,
+                    energy: user.energy,
+                    multiTap: user.multiTap,
+                    maxEnergy: user.maxEnergy,
+                    pph: user.pph
+                }, { merge: true });
+            } catch(e) { console.error("Cloud push failed:", e); }
+        }
+
         function initPassiveMining() {
             setInterval(() => {
-                // Energy Regeneration
+                let changed = false;
                 if (user.energy < user.maxEnergy) {
                     user.energy = Math.min(user.maxEnergy, user.energy + 3);
-                    renderUI();
+                    changed = true;
                 }
-                // Passive Income Per Second
                 if (user.pph > 0) {
-                    const passivePerSec = Math.floor(user.pph / 3600);
-                    if(passivePerSec > 0) {
-                        user.balance += passivePerSec;
-                        renderUI();
+                    const passive = Math.floor(user.pph / 3600);
+                    if(passive > 0) {
+                        user.balance += passive;
+                        changed = true;
                     }
+                }
+                if(changed) {
+                    saveToLocalInstant();
+                    renderUI();
                 }
             }, 1000);
         }
@@ -776,7 +746,6 @@
             document.getElementById('energy-progress-bar').style.width = `${perc}%`;
         }
 
-        // 5. Upgrades System
         window.buyUpgrade = async (type) => {
             const costs = { multitap: 1000, energy: 2000, autobot: 5000 };
             if (user.balance < costs[type]) return alert("Not enough coins!");
@@ -786,41 +755,38 @@
             if (type === 'energy') { user.maxEnergy += 500; user.energy = user.maxEnergy; }
             if (type === 'autobot') user.pph += 100;
 
-            await updateDoc(doc(db, "tma_users", user.id), {
-                balance: user.balance,
-                multiTap: user.multiTap,
-                maxEnergy: user.maxEnergy,
-                pph: user.pph
-            });
+            saveToLocalInstant();
+            renderUI();
+            pushBalanceToCloud();
 
             tg?.HapticFeedback?.notificationOccurred('success');
             alert("Upgrade Successful!");
-            renderUI();
         };
 
-        // 6. Force-Join Verification
         window.verifyTelegramTask = async (taskId, link, reward) => {
             if(tg?.openTelegramLink) tg.openTelegramLink(link);
             else window.open(link, '_blank');
 
             setTimeout(async () => {
-                const ok = confirm("Did you join the official Telegram channel?");
+                const ok = confirm("Did you join the official channel?");
                 if(ok) {
                     user.balance += reward;
                     user.completedTasks.push(taskId);
 
+                    saveToLocalInstant();
+                    renderUI();
+                    
                     await updateDoc(doc(db, "tma_users", user.id), {
                         balance: user.balance,
                         completedTasks: user.completedTasks
                     });
 
                     tg?.HapticFeedback?.notificationOccurred('success');
-                    alert(`Verified! +${reward.toLocaleString()} Coins credited.`);
+                    alert(`Verified! +${reward.toLocaleString()} Coins added.`);
                 }
             }, 2000);
         };
 
-        // 7. Withdrawal Execution
         window.requestWithdrawal = async () => {
             const amt = parseInt(document.getElementById('withdraw-coins').value);
             const target = document.getElementById('withdraw-target').value.trim();
@@ -831,6 +797,9 @@
             if(!target) return alert("Please provide your account details.");
 
             user.balance -= amt;
+            saveToLocalInstant();
+            renderUI();
+
             await updateDoc(doc(db, "tma_users", user.id), { balance: user.balance });
 
             await addDoc(collection(db, "tma_withdrawals"), {
@@ -844,13 +813,11 @@
             });
 
             tg?.HapticFeedback?.notificationOccurred('success');
-            alert("Withdrawal submitted! Funds will be reviewed.");
+            alert("Withdrawal submitted! Processing...");
             document.getElementById('withdraw-coins').value = '';
             document.getElementById('withdraw-target').value = '';
-            renderUI();
         };
 
-        // 8. Referrals
         window.copyRefLink = () => {
             const url = `https://t.me/${config.botName}?start=ref_${user.id}`;
             navigator.clipboard.writeText(url);
@@ -860,13 +827,12 @@
 
         window.shareRefTelegram = () => {
             const url = `https://t.me/${config.botName}?start=ref_${user.id}`;
-            const text = encodeURIComponent("🔥 Play Hamster Cyber Tap now & grab instant free coin bonus!");
+            const text = encodeURIComponent("🔥 Play Hamster Cyber Tap now & grab instant free coins!");
             const share = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${text}`;
             if(tg?.openTelegramLink) tg.openTelegramLink(share);
             else window.open(share, '_blank');
         };
 
-        // 9. Page Navigations
         window.openPage = (pageId) => {
             document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
@@ -883,7 +849,6 @@
             lucide.createIcons();
         };
 
-        // 10. Admin Actions
         window.showAdminSub = (subId) => {
             document.querySelectorAll('.admin-subspace').forEach(s => s.classList.add('hidden'));
             document.getElementById(subId).classList.remove('hidden');
