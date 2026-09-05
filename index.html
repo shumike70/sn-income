@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SN Mini App - Cyber Tap</title>
+    <title>SN Mini App - 3D Cyber Tap Ultra</title>
     <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -22,63 +22,79 @@
         }
 
         body {
-            background-color: #07090e;
+            background-color: #05070d;
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.2), transparent 45%),
-                radial-gradient(circle at 50% 100%, rgba(245, 158, 11, 0.15), transparent 50%);
+                radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.25), transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(245, 158, 11, 0.2), transparent 55%);
             color: #f8fafc;
             height: 100vh;
             overflow: hidden;
             font-family: 'Rajdhani', sans-serif;
         }
 
-        .font-cyber { font-family: 'Chakra Petch', sans-serif; }
+        .font-cyber { font-family: 'Orbitron', sans-serif; }
 
+        /* Glassmorphism & Neon Borders */
         .glass-panel {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(13, 19, 33, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
         .glass-card {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.85) 100%);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(135deg, rgba(26, 35, 58, 0.8) 0%, rgba(10, 15, 26, 0.9) 100%);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.6);
         }
 
-        /* 3D Coin */
-        .coin-stage { perspective: 1000px; }
+        /* 3D Hyper-Realistic Extruded Coin */
+        .coin-stage { perspective: 1200px; }
 
-        .coin-object {
+        .coin-3d {
             transform-style: preserve-3d;
-            transition: transform 0.08s cubic-bezier(0, 0, 0.2, 1);
+            transition: transform 0.09s cubic-bezier(0, 0, 0.2, 1);
             box-shadow: 
-                0 0 60px rgba(245, 158, 11, 0.35),
-                inset 0 0 25px rgba(255, 255, 255, 0.4),
-                inset 0 -15px 30px rgba(180, 83, 9, 0.8);
+                0 0 70px rgba(245, 158, 11, 0.45),
+                0 25px 50px rgba(0, 0, 0, 0.8),
+                inset 0 0 30px rgba(255, 255, 255, 0.6),
+                inset 0 -18px 35px rgba(180, 83, 9, 0.9);
         }
 
-        @keyframes floatNumber {
-            0% { opacity: 1; transform: translateY(0) scale(1) translateZ(50px); }
-            100% { opacity: 0; transform: translateY(-140px) scale(1.5) translateZ(80px); }
+        .coin-rim {
+            background: radial-gradient(circle at 30% 30%, #fef08a 0%, #f59e0b 50%, #b45309 100%);
+            border: 8px solid #fde047;
         }
 
-        .tap-pop {
+        .coin-core {
+            background: radial-gradient(circle at 50% 40%, #1e293b 0%, #090d16 85%);
+            border: 2px solid rgba(253, 224, 71, 0.5);
+            box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.9);
+        }
+
+        /* 3D Particles & Numbers */
+        @keyframes floatNumber3D {
+            0% { opacity: 1; transform: translateY(0) scale(1) translateZ(60px); }
+            100% { opacity: 0; transform: translateY(-150px) scale(1.6) translateZ(100px); }
+        }
+
+        .tap-pop-3d {
             position: fixed;
             pointer-events: none;
-            font-family: 'Chakra Petch', sans-serif;
-            font-weight: 800;
-            color: #fbbf24;
-            text-shadow: 0 0 12px #f59e0b, 0 0 24px #d97706;
-            animation: floatNumber 0.7s ease-out forwards;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            color: #fde047;
+            text-shadow: 0 0 12px #f59e0b, 0 0 25px #d97706, 0 0 40px #b45309;
+            animation: floatNumber3D 0.75s ease-out forwards;
             z-index: 9999;
         }
 
         .page-view {
             display: none;
             opacity: 0;
-            transform: scale(0.98);
+            transform: scale(0.97);
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -88,18 +104,19 @@
             transform: scale(1);
         }
 
+        /* Buttons */
         .btn-gold {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+            background: linear-gradient(135deg, #fbbf24, #d97706);
+            box-shadow: 0 4px 25px rgba(245, 158, 11, 0.45);
         }
-        .btn-gold:active { transform: scale(0.96); }
+        .btn-gold:active { transform: scale(0.95); }
 
         .btn-neon {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            box-shadow: 0 4px 25px rgba(99, 102, 241, 0.45);
         }
+        .btn-neon:active { transform: scale(0.95); }
 
-        /* In-App Toast (No domain popup) */
         #toast {
             transform: translateY(-150%);
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -114,7 +131,7 @@
 
     <!-- Custom In-App Notification (Zero Domain Popup) -->
     <div class="fixed top-3 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
-        <div id="toast" class="glass-panel px-4 py-2.5 rounded-2xl flex items-center gap-2.5 text-xs font-cyber font-bold shadow-2xl border border-amber-500/30 max-w-sm w-full">
+        <div id="toast" class="glass-panel px-4 py-2.5 rounded-2xl flex items-center gap-2.5 text-xs font-cyber font-bold shadow-2xl border border-amber-500/40 max-w-sm w-full">
             <i id="toast-icon" data-lucide="info" class="w-4 h-4 text-amber-400 shrink-0"></i>
             <span id="toast-msg" class="text-white">Notification</span>
         </div>
@@ -124,14 +141,14 @@
     <header class="p-3.5 glass-panel mx-3 mt-3 rounded-2xl flex items-center justify-between z-30 shrink-0">
         <div class="flex items-center gap-2.5">
             <div class="relative">
-                <img id="u-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=hamster" class="w-10 h-10 rounded-xl bg-slate-800 border border-amber-500/30 object-cover shadow-md" alt="Avatar">
-                <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-[#07090e]"></span>
+                <img id="u-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=hamster" class="w-10 h-10 rounded-xl bg-slate-900 border-2 border-amber-400/40 object-cover shadow-lg shadow-amber-500/20" alt="Avatar">
+                <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-[#05070d] shadow-sm shadow-emerald-500"></span>
             </div>
             <div>
                 <h4 id="u-name" class="font-bold text-sm text-white font-cyber tracking-tight leading-none">Connecting...</h4>
                 <div class="flex items-center gap-1.5 mt-1">
-                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 font-bold border border-amber-500/20 uppercase tracking-widest font-cyber">Master</span>
-                    <span id="u-id-badge" class="text-[10px] text-slate-400 font-medium">ID: ...</span>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 font-bold border border-amber-500/30 uppercase tracking-widest font-cyber">Master Rank</span>
+                    <span id="u-id-badge" class="text-[10px] text-slate-400 font-semibold font-mono">ID: ...</span>
                 </div>
             </div>
         </div>
@@ -141,8 +158,8 @@
                 <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> ADMIN HUB
             </button>
             
-            <div class="glass-card px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 border border-white/5">
-                <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+            <div class="glass-card px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 border border-white/10 shadow-inner">
+                <i data-lucide="zap" class="w-4 h-4 text-amber-400 animate-pulse"></i>
                 <span id="header-pph" class="text-xs font-cyber font-bold text-slate-200">+0/hr</span>
             </div>
         </div>
@@ -151,46 +168,48 @@
     <!-- Main Dynamic Application Screen -->
     <main class="flex-1 w-full max-w-md mx-auto px-4 py-2 relative overflow-hidden flex flex-col justify-center">
 
-        <!-- ================= PAGE 1: 🎮 EXCHANGE ================= -->
+        <!-- ================= PAGE 1: 🎮 EXCHANGE (3D TAP ENGINE) ================= -->
         <section id="page-exchange" class="page-view active flex-col items-center justify-between h-full py-1">
             <div class="w-full text-center shrink-0">
                 <div class="flex items-center justify-center gap-2.5">
-                    <div class="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center border border-amber-500/30">
-                        <i data-lucide="coins" class="w-5 h-5 text-amber-400"></i>
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center shadow-lg shadow-amber-500/30">
+                        <i data-lucide="coins" class="w-5 h-5 text-slate-950"></i>
                     </div>
-                    <h1 id="tap-balance-display" class="text-4xl sm:text-5xl font-extrabold font-cyber tracking-tight text-white drop-shadow-[0_0_25px_rgba(245,158,11,0.5)]">0</h1>
+                    <h1 id="tap-balance-display" class="text-4xl sm:text-5xl font-black font-cyber tracking-tight text-white drop-shadow-[0_0_30px_rgba(245,158,11,0.6)]">0</h1>
                 </div>
 
                 <div class="mt-3 px-2">
                     <div class="flex justify-between text-[11px] font-cyber font-bold text-slate-400 mb-1">
-                        <span>Rank: Master Legend</span>
+                        <span class="text-amber-300">Cyber Legend</span>
                         <span>Level 9</span>
                     </div>
-                    <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden p-0.5 border border-white/5">
-                        <div class="h-full bg-gradient-to-r from-amber-500 to-yellow-300 rounded-full transition-all duration-300" style="width: 85%;"></div>
+                    <div class="w-full h-2.5 bg-slate-950/80 rounded-full overflow-hidden p-0.5 border border-white/10 shadow-inner">
+                        <div class="h-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-300 rounded-full transition-all duration-300 shadow-[0_0_15px_#f59e0b]" style="width: 88%;"></div>
                     </div>
                 </div>
             </div>
 
+            <!-- 3D Realistic Extruded Coin -->
             <div class="coin-stage my-auto flex items-center justify-center py-2">
-                <div id="tap-coin" class="coin-object w-64 h-64 sm:w-72 sm:h-72 rounded-full cursor-pointer relative flex items-center justify-center bg-gradient-to-b from-amber-300 via-amber-500 to-yellow-600 border-[7px] border-amber-300/90 select-none">
-                    <div class="w-[88%] h-[88%] rounded-full bg-gradient-to-tr from-amber-600 via-[#0d121f] to-amber-700 flex flex-col items-center justify-center shadow-inner relative overflow-hidden border border-amber-300/40">
-                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(251,191,36,0.4),transparent_65%)]"></div>
-                        <i data-lucide="flame" class="w-24 h-24 text-amber-400 drop-shadow-[0_0_30px_#f59e0b] animate-bounce"></i>
-                        <span class="text-amber-300 font-cyber font-black tracking-widest text-xs mt-1 drop-shadow">TAP TO MINE</span>
+                <div id="tap-coin" class="coin-3d coin-rim w-64 h-64 sm:w-72 sm:h-72 rounded-full cursor-pointer relative flex items-center justify-center select-none">
+                    <div class="coin-core w-[86%] h-[86%] rounded-full flex flex-col items-center justify-center relative overflow-hidden">
+                        <!-- Dynamic Specular Glow -->
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_25%,rgba(253,224,71,0.5),transparent_65%)] pointer-events-none"></div>
+                        <i data-lucide="flame" class="w-24 h-24 text-amber-400 drop-shadow-[0_0_35px_#f59e0b] animate-bounce"></i>
+                        <span class="text-amber-300 font-cyber font-black tracking-widest text-xs mt-1 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">TAP TO MINE</span>
                     </div>
                 </div>
             </div>
 
-            <div class="w-full glass-card p-3.5 rounded-2xl shrink-0">
+            <div class="w-full glass-card p-3.5 rounded-2xl shrink-0 border border-white/10">
                 <div class="flex justify-between items-center text-xs font-cyber font-bold mb-1.5">
-                    <span class="flex items-center gap-1 text-amber-400">
-                        <i data-lucide="battery-charging" class="w-4 h-4"></i> Energy Pool
+                    <span class="flex items-center gap-1.5 text-amber-400">
+                        <i data-lucide="battery-charging" class="w-4 h-4 animate-pulse"></i> Energy Pool
                     </span>
                     <span class="text-slate-300"><span id="energy-current">1000</span> / <span id="energy-max">1000</span></span>
                 </div>
-                <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden p-0.5 border border-white/5">
-                    <div id="energy-progress-bar" class="bg-gradient-to-r from-amber-500 to-yellow-400 h-full rounded-full transition-all duration-150" style="width: 100%;"></div>
+                <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden p-0.5 border border-white/5">
+                    <div id="energy-progress-bar" class="bg-gradient-to-r from-amber-500 to-yellow-300 h-full rounded-full transition-all duration-150 shadow-[0_0_12px_#f59e0b]" style="width: 100%;"></div>
                 </div>
             </div>
         </section>
@@ -198,11 +217,11 @@
         <!-- ================= PAGE 2: ⚡ BOOSTS ================= -->
         <section id="page-boost" class="page-view flex-col h-full overflow-y-auto no-scrollbar py-2 space-y-3">
             <div class="glass-card p-4 rounded-2xl text-center">
-                <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-2">
+                <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-2 shadow-lg shadow-amber-500/20">
                     <i data-lucide="zap" class="w-6 h-6"></i>
                 </div>
-                <h3 class="text-lg font-bold font-cyber text-white">Power Boosts</h3>
-                <p class="text-xs text-slate-400">Upgrade mining speed & tap power multiplier.</p>
+                <h3 class="text-lg font-bold font-cyber text-white">Power Upgrades</h3>
+                <p class="text-xs text-slate-400">Upgrade mining rig output and automated passive revenue.</p>
             </div>
 
             <div class="space-y-2.5">
@@ -223,8 +242,8 @@
                             <i data-lucide="battery-plus" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-xs text-white">Energy Tank</h4>
-                            <p class="text-[11px] text-slate-400">+500 Limit • Cost: <span class="text-cyan-400 font-cyber font-bold">2,000</span></p>
+                            <h4 class="font-bold text-xs text-white">Energy Capacity</h4>
+                            <p class="text-[11px] text-slate-400">+500 Max Limit • Cost: <span class="text-cyan-400 font-cyber font-bold">2,000</span></p>
                         </div>
                     </div>
                     <button onclick="buyUpgrade('energy')" class="px-3.5 py-2 btn-gold text-slate-950 font-bold text-xs rounded-xl font-cyber">Upgrade</button>
@@ -245,10 +264,10 @@
             </div>
         </section>
 
-        <!-- ================= PAGE 3: 📋 MISSIONS (STRICT FORCE JOIN & 1-TIME REWARD) ================= -->
+        <!-- ================= PAGE 3: 📋 MISSIONS ================= -->
         <section id="page-tasks" class="page-view flex-col h-full overflow-y-auto no-scrollbar py-2 space-y-3">
             <div class="glass-card p-4 rounded-2xl text-center">
-                <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto mb-2">
+                <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto mb-2 shadow-lg shadow-indigo-500/20">
                     <i data-lucide="radio" class="w-6 h-6"></i>
                 </div>
                 <h3 class="text-lg font-bold font-cyber text-white">Channel Missions</h3>
@@ -260,10 +279,10 @@
             </div>
         </section>
 
-        <!-- ================= PAGE 4: 👥 FRIENDS & REFERRAL (@sn_mini_app_bot) ================= -->
+        <!-- ================= PAGE 4: 👥 FRIENDS & REFERRAL ================= -->
         <section id="page-friends" class="page-view flex-col h-full overflow-y-auto no-scrollbar py-2 space-y-3">
             <div class="glass-card p-5 rounded-2xl text-center">
-                <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-2">
+                <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-2 shadow-lg shadow-amber-500/20">
                     <i data-lucide="users" class="w-7 h-7"></i>
                 </div>
                 <h3 class="text-xl font-bold font-cyber text-white">Invite Squad</h3>
@@ -272,7 +291,7 @@
                 <div class="mt-3 p-3 bg-white/5 rounded-xl border border-white/5 flex items-center justify-around">
                     <div>
                         <span class="text-[10px] text-slate-400 font-bold uppercase">Per Friend Bounty</span>
-                        <h4 class="text-lg font-black font-cyber text-amber-400">+5,000</h4>
+                        <h4 id="ref-reward-tag" class="text-lg font-black font-cyber text-amber-400">+5,000</h4>
                     </div>
                     <div class="h-8 w-px bg-white/10"></div>
                     <div>
@@ -295,7 +314,7 @@
             </div>
         </section>
 
-        <!-- ================= PAGE 5: 💳 WALLET ================= -->
+        <!-- ================= PAGE 5: 💳 WALLET WITH LIVE COIN CONVERSION ================= -->
         <section id="page-wallet" class="page-view flex-col h-full overflow-y-auto no-scrollbar py-2 space-y-3">
             <div class="glass-card p-4 rounded-2xl text-center">
                 <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 font-cyber">Available Coins</span>
@@ -303,6 +322,7 @@
                     <i data-lucide="coins" class="w-6 h-6 text-amber-400"></i>
                     <h2 id="wallet-balance-val" class="text-3xl font-extrabold font-cyber text-white">0</h2>
                 </div>
+                <p class="text-[11px] text-amber-300/80 font-cyber mt-1 font-semibold" id="wallet-rate-badge">Rate: 10,000 Coins = $1.00 USD</p>
             </div>
 
             <div class="glass-card p-4 rounded-2xl space-y-3.5">
@@ -328,7 +348,10 @@
 
                 <div>
                     <label class="block text-[11px] text-slate-400 mb-1">Coin Amount</label>
-                    <input type="number" id="withdraw-coins" placeholder="Enter coins to withdraw..." class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs outline-none focus:border-amber-400 font-cyber">
+                    <input type="number" id="withdraw-coins" oninput="updateConvertedValue()" placeholder="Enter coins..." class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs outline-none focus:border-amber-400 font-cyber">
+                    <div id="live-convert-preview" class="text-[11px] font-cyber font-bold text-emerald-400 mt-1 flex items-center gap-1">
+                        <span>≈ $0.00 USD</span>
+                    </div>
                 </div>
 
                 <div>
@@ -342,7 +365,7 @@
             </div>
         </section>
 
-        <!-- ================= PAGE 6: 👑 ADMIN COMMAND HUB (ID: 8172880871) ================= -->
+        <!-- ================= PAGE 6: 👑 MASTER ADMIN COMMAND (ID: 8172880871) ================= -->
         <section id="page-admin" class="page-view flex-col h-full overflow-y-auto no-scrollbar py-2 space-y-3">
             <div class="flex items-center justify-between pb-2 border-b border-white/10">
                 <h3 class="text-sm font-bold font-cyber text-indigo-400 flex items-center gap-1.5">
@@ -351,15 +374,87 @@
                 <button onclick="openPage('page-exchange')" class="text-xs text-slate-400 hover:text-white font-cyber">Close</button>
             </div>
 
+            <!-- Subtabs -->
             <div class="flex gap-1 text-xs font-cyber">
-                <button onclick="showAdminSub('adm-channels')" class="flex-1 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">Missions</button>
+                <button onclick="showAdminSub('adm-settings')" class="flex-1 py-1.5 rounded-lg bg-indigo-500/20 text-indigo-300 font-bold border border-indigo-500/30">Economy & Bot</button>
                 <button onclick="showAdminSub('adm-currencies')" class="flex-1 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold">Currencies</button>
-                <button onclick="showAdminSub('adm-settings')" class="flex-1 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold">Bot API</button>
+                <button onclick="showAdminSub('adm-channels')" class="flex-1 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold">Missions</button>
                 <button onclick="showAdminSub('adm-payouts')" class="flex-1 py-1.5 rounded-lg bg-white/5 text-slate-300 font-bold">Payouts</button>
             </div>
 
-            <!-- SUBTAB 1: MISSIONS -->
-            <div id="adm-channels" class="admin-subspace space-y-2.5">
+            <!-- SUBTAB 1: ECONOMY, COIN PRICE, REFERRAL REWARD & BOT CONFIG -->
+            <div id="adm-settings" class="admin-subspace space-y-3">
+                <div class="glass-card p-3.5 rounded-xl space-y-3">
+                    <h5 class="text-[11px] font-bold text-amber-400 uppercase font-cyber flex items-center gap-1">
+                        <i data-lucide="sliders" class="w-3.5 h-3.5"></i> Coin Price & Economy Settings
+                    </h5>
+
+                    <!-- Coin Price / Rate -->
+                    <div class="p-2.5 bg-slate-900/80 rounded-lg border border-white/5 space-y-2">
+                        <label class="block text-[10px] font-bold text-slate-300 uppercase font-cyber">Coin Price / Conversion Rate</label>
+                        <div class="flex items-center gap-2">
+                            <input id="cfg-rate-coins" type="number" placeholder="10000" class="w-1/2 p-2 rounded bg-slate-950 border border-white/10 text-xs text-white text-center font-cyber font-bold">
+                            <span class="text-xs text-slate-400 font-bold">Coins = $</span>
+                            <input id="cfg-rate-usd" type="number" step="0.01" placeholder="1.00" class="w-1/2 p-2 rounded bg-slate-950 border border-white/10 text-xs text-emerald-400 text-center font-cyber font-bold">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] text-slate-400 mb-1">Referral Reward (Coins Per Friend)</label>
+                        <input id="cfg-ref-bonus" type="number" placeholder="5000" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-amber-400 font-cyber font-bold">
+                    </div>
+
+                    <h5 class="text-[11px] font-bold text-cyan-400 uppercase font-cyber pt-2 border-t border-white/10 flex items-center gap-1">
+                        <i data-lucide="bot" class="w-3.5 h-3.5"></i> Telegram Bot API Config
+                    </h5>
+
+                    <div>
+                        <label class="block text-[10px] text-slate-400 mb-1">Bot Token (From @BotFather)</label>
+                        <input id="cfg-bot-token" type="text" placeholder="123456789:ABCdef..." class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] text-slate-400 mb-1">Bot Username</label>
+                        <input id="cfg-bot-user" type="text" placeholder="sn_mini_app_bot" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
+                    </div>
+
+                    <button id="save-settings-btn" onclick="saveMasterSettings()" class="w-full py-2.5 btn-gold text-slate-950 font-bold font-cyber text-xs rounded-lg mt-1">
+                        Save System Settings
+                    </button>
+                </div>
+            </div>
+
+            <!-- SUBTAB 2: CURRENCIES -->
+            <div id="adm-currencies" class="admin-subspace hidden space-y-3">
+                <div class="glass-card p-3.5 rounded-xl space-y-2.5">
+                    <h5 class="text-[11px] font-bold text-amber-400 uppercase font-cyber flex items-center gap-1.5">
+                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Payout Currency
+                    </h5>
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <input id="new-curr-name" type="text" placeholder="Currency Name (e.g. USDT, bKash)" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
+                        <input id="new-curr-min" type="number" placeholder="Min Coins (e.g. 10000)" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
+                    </div>
+
+                    <input id="new-curr-icon" type="url" placeholder="Icon URL (https://...)" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
+
+                    <!-- Presets -->
+                    <div class="flex flex-wrap gap-1.5 pt-1">
+                        <button type="button" onclick="setPresetIcon('https://assets.coingecko.com/coins/images/325/small/Tether.png', 'USDT (TRC20)', 10000)" class="px-2 py-1 bg-white/5 rounded text-[10px] text-emerald-400 border border-white/5">+USDT</button>
+                        <button type="button" onclick="setPresetIcon('https://assets.coingecko.com/coins/images/17980/small/ton_symbol.png', 'TON Coin', 10000)" class="px-2 py-1 bg-white/5 rounded text-[10px] text-blue-400 border border-white/5">+TON</button>
+                        <button type="button" onclick="setPresetIcon('https://freelogopng.com/images/all_img/1656234745bkash-app-logo.png', 'bKash (BD)', 10000)" class="px-2 py-1 bg-white/5 rounded text-[10px] text-pink-400 border border-white/5">+bKash</button>
+                        <button type="button" onclick="setPresetIcon('https://freelogopng.com/images/all_img/1679248787Nagad-Logo.png', 'Nagad (BD)', 10000)" class="px-2 py-1 bg-white/5 rounded text-[10px] text-orange-400 border border-white/5">+Nagad</button>
+                    </div>
+
+                    <button id="add-curr-btn" onclick="addNewCurrency()" class="w-full py-2 btn-neon text-white font-bold font-cyber text-xs rounded-lg mt-1">
+                        Add Currency Gateway
+                    </button>
+                </div>
+                <div id="admin-currencies-list" class="space-y-1.5"></div>
+            </div>
+
+            <!-- SUBTAB 3: MISSIONS -->
+            <div id="adm-channels" class="admin-subspace hidden space-y-2.5">
                 <div class="glass-card p-3.5 rounded-xl space-y-2">
                     <h5 class="text-[11px] font-bold text-indigo-400 uppercase font-cyber flex items-center gap-1.5">
                         <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Channel Mission
@@ -373,56 +468,6 @@
                     </button>
                 </div>
                 <div id="admin-channels-feed" class="space-y-1.5"></div>
-            </div>
-
-            <!-- SUBTAB 2: CURRENCIES -->
-            <div id="adm-currencies" class="admin-subspace hidden space-y-3">
-                <div class="glass-card p-3.5 rounded-xl space-y-2.5">
-                    <h5 class="text-[11px] font-bold text-amber-400 uppercase font-cyber flex items-center gap-1.5">
-                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Payout Currency
-                    </h5>
-                    
-                    <div class="grid grid-cols-2 gap-2">
-                        <input id="new-curr-name" type="text" placeholder="Name (e.g. USDT, bKash)" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
-                        <input id="new-curr-min" type="number" placeholder="Min Coins (e.g. 10000)" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
-                    </div>
-
-                    <input id="new-curr-icon" type="url" placeholder="Icon URL (https://...)" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
-
-                    <div class="flex flex-wrap gap-1.5 pt-1">
-                        <button type="button" onclick="setPresetIcon('https://assets.coingecko.com/coins/images/325/small/Tether.png', 'USDT (TRC20)')" class="px-2 py-1 bg-white/5 rounded text-[10px] text-emerald-400 border border-white/5">+USDT</button>
-                        <button type="button" onclick="setPresetIcon('https://assets.coingecko.com/coins/images/17980/small/ton_symbol.png', 'TON Coin')" class="px-2 py-1 bg-white/5 rounded text-[10px] text-blue-400 border border-white/5">+TON</button>
-                        <button type="button" onclick="setPresetIcon('https://freelogopng.com/images/all_img/1656234745bkash-app-logo.png', 'bKash (BD)')" class="px-2 py-1 bg-white/5 rounded text-[10px] text-pink-400 border border-white/5">+bKash</button>
-                        <button type="button" onclick="setPresetIcon('https://freelogopng.com/images/all_img/1679248787Nagad-Logo.png', 'Nagad (BD)')" class="px-2 py-1 bg-white/5 rounded text-[10px] text-orange-400 border border-white/5">+Nagad</button>
-                    </div>
-
-                    <button id="add-curr-btn" onclick="addNewCurrency()" class="w-full py-2 btn-gold text-slate-950 font-bold font-cyber text-xs rounded-lg mt-1">
-                        Save Currency
-                    </button>
-                </div>
-                <div id="admin-currencies-list" class="space-y-1.5"></div>
-            </div>
-
-            <!-- SUBTAB 3: BOT API -->
-            <div id="adm-settings" class="admin-subspace hidden space-y-3">
-                <div class="glass-card p-3.5 rounded-xl space-y-2.5">
-                    <h5 class="text-[11px] font-bold text-cyan-400 uppercase font-cyber">Telegram Bot API Config</h5>
-                    <p class="text-[10px] text-slate-400">Provide Bot Token to automatically query Telegram API and confirm if users are actually channel members. <b>Note: Your Bot must be an Admin in that Channel.</b></p>
-                    
-                    <div>
-                        <label class="block text-[10px] text-slate-400 mb-1">Bot Token (From @BotFather)</label>
-                        <input id="cfg-bot-token" type="text" placeholder="123456789:ABCdef..." class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] text-slate-400 mb-1">Bot Username</label>
-                        <input id="cfg-bot-user" type="text" placeholder="sn_mini_app_bot" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-white">
-                    </div>
-
-                    <button onclick="saveBotSettings()" class="w-full py-2 btn-neon text-white font-bold font-cyber text-xs rounded-lg">
-                        Save Config
-                    </button>
-                </div>
             </div>
 
             <!-- SUBTAB 4: PAYOUTS -->
@@ -457,7 +502,7 @@
         </button>
     </nav>
 
-    <!-- Firebase & Core State Logic -->
+    <!-- Sound Synthesizer & App Engine -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
@@ -477,12 +522,112 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // ================= 🎵 AUDIO SYNTHESIZER ENGINE =================
+        let audioCtx = null;
+        function getAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        // 1. Arcade Coin Mining Sound (For 3D Coin Tapping)
+        window.playCoinSound = () => {
+            try {
+                const ctx = getAudioContext();
+                const now = ctx.currentTime;
+                
+                // Dual Oscillator for rich arcade chime
+                const osc1 = ctx.createOscillator();
+                const osc2 = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc1.type = 'sine';
+                osc2.type = 'triangle';
+
+                // Pitch variation for natural rapid tapping
+                const baseFreq = 850 + (Math.random() * 120 - 60);
+                osc1.frequency.setValueAtTime(baseFreq, now);
+                osc1.frequency.exponentialRampToValueAtTime(baseFreq * 1.8, now + 0.08);
+
+                osc2.frequency.setValueAtTime(baseFreq * 1.5, now);
+                osc2.frequency.exponentialRampToValueAtTime(baseFreq * 2.2, now + 0.08);
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+
+                osc1.connect(gain);
+                osc2.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc1.start(now);
+                osc2.start(now);
+                osc1.stop(now + 0.09);
+                osc2.stop(now + 0.09);
+            } catch(e) {}
+        };
+
+        // 2. High-Tech UI Button Click Sound
+        window.playClickSound = () => {
+            try {
+                const ctx = getAudioContext();
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(1400, now);
+                osc.frequency.exponentialRampToValueAtTime(400, now + 0.035);
+
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.035);
+            } catch(e) {}
+        };
+
+        // 3. Victory/Claim Chime
+        window.playRewardSound = () => {
+            try {
+                const ctx = getAudioContext();
+                const now = ctx.currentTime;
+                [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + i * 0.06);
+                    gain.gain.setValueAtTime(0.15, now + i * 0.06);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.18);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + i * 0.06);
+                    osc.stop(now + i * 0.06 + 0.18);
+                });
+            } catch(e) {}
+        };
+
+        // Attach UI Click Sound to all interactive buttons globally
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('button, .nav-btn, select, input[type="button"]');
+            if (btn && btn.id !== 'tap-coin') {
+                playClickSound();
+            }
+        });
+
+        // ================= APPLICATION STATE =================
         const tg = window.Telegram?.WebApp;
         if (tg) {
             tg.ready();
             tg.expand();
-            tg.headerColor = '#07090e';
-            tg.backgroundColor = '#07090e';
+            tg.headerColor = '#05070d';
+            tg.backgroundColor = '#05070d';
         }
 
         const MASTER_ADMIN_ID = "8172880871";
@@ -510,12 +655,14 @@
         };
 
         let currencyList = [];
-        let botConfig = {
+        let masterConfig = {
+            rateCoins: 10000,
+            rateUsd: 1.00,
+            referralBonus: 5000,
             botToken: "",
             botUsername: "sn_mini_app_bot"
         };
 
-        // UI Step cache for task buttons: { taskId: 'visited' }
         let taskClickState = {};
 
         window.showToast = (msg, isSuccess = true) => {
@@ -553,9 +700,9 @@
             try { await signInAnonymously(auth); } catch(e){}
 
             initUserData();
+            initMasterConfig();
             initCurrencies();
             initTasks();
-            initBotSettings();
             initPassiveMining();
 
             if (user.id === MASTER_ADMIN_ID) {
@@ -566,7 +713,7 @@
             window.addEventListener('pagehide', pushBalanceToCloud);
         });
 
-        // 1. User Handshake & Cloud Sync
+        // 1. User Handshake
         async function initUserData() {
             if (user.id === MASTER_ADMIN_ID) {
                 document.getElementById('admin-header-btn').classList.remove('hidden');
@@ -630,34 +777,72 @@
                 const refRef = doc(db, "tma_users", refId);
                 const s = await getDoc(refRef);
                 if(s.exists()) {
+                    const bonus = masterConfig.referralBonus || 5000;
                     await updateDoc(refRef, {
-                        balance: (s.data().balance || 0) + 5000,
+                        balance: (s.data().balance || 0) + bonus,
                         referralsCount: (s.data().referralsCount || 0) + 1
                     });
                 }
             } catch(e){}
         }
 
-        function initBotSettings() {
-            onSnapshot(doc(db, "tma_config", "bot"), (snap) => {
+        // 2. Master System Config
+        function initMasterConfig() {
+            onSnapshot(doc(db, "tma_config", "main"), (snap) => {
                 if(snap.exists()) {
-                    botConfig = { ...botConfig, ...snap.data() };
-                    document.getElementById('cfg-bot-token').value = botConfig.botToken || "";
-                    document.getElementById('cfg-bot-user').value = botConfig.botUsername || "sn_mini_app_bot";
+                    masterConfig = { ...masterConfig, ...snap.data() };
+                    
+                    document.getElementById('ref-reward-tag').textContent = `+${masterConfig.referralBonus.toLocaleString()}`;
+                    document.getElementById('wallet-rate-badge').textContent = `Rate: ${masterConfig.rateCoins.toLocaleString()} Coins = $${masterConfig.rateUsd.toFixed(2)} USD`;
+
+                    document.getElementById('cfg-rate-coins').value = masterConfig.rateCoins;
+                    document.getElementById('cfg-rate-usd').value = masterConfig.rateUsd;
+                    document.getElementById('cfg-ref-bonus').value = masterConfig.referralBonus;
+                    document.getElementById('cfg-bot-token').value = masterConfig.botToken || "";
+                    document.getElementById('cfg-bot-user').value = masterConfig.botUsername || "sn_mini_app_bot";
+
+                    updateConvertedValue();
+                } else {
+                    setDoc(doc(db, "tma_config", "main"), masterConfig, { merge: true });
                 }
             });
         }
 
-        window.saveBotSettings = async () => {
+        window.saveMasterSettings = async () => {
             if (user.id !== MASTER_ADMIN_ID) return;
+            const rateCoins = parseInt(document.getElementById('cfg-rate-coins').value) || 10000;
+            const rateUsd = parseFloat(document.getElementById('cfg-rate-usd').value) || 1.00;
+            const referralBonus = parseInt(document.getElementById('cfg-ref-bonus').value) || 5000;
             const botToken = document.getElementById('cfg-bot-token').value.trim();
             const botUsername = document.getElementById('cfg-bot-user').value.trim() || "sn_mini_app_bot";
 
-            await setDoc(doc(db, "tma_config", "bot"), { botToken, botUsername }, { merge: true });
-            showToast("Bot API Config Synchronized!", true);
+            const btn = document.getElementById('save-settings-btn');
+            btn.disabled = true;
+            btn.textContent = "Saving...";
+
+            try {
+                await setDoc(doc(db, "tma_config", "main"), {
+                    rateCoins, rateUsd, referralBonus, botToken, botUsername
+                }, { merge: true });
+                playRewardSound();
+                showToast("System configurations saved successfully!", true);
+            } catch(e) {
+                showToast("Error saving: " + e.message, false);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Save System Settings";
+            }
         };
 
-        // 2. Currencies Manager
+        window.updateConvertedValue = () => {
+            const coins = parseInt(document.getElementById('withdraw-coins').value) || 0;
+            const rateCoins = masterConfig.rateCoins || 10000;
+            const rateUsd = masterConfig.rateUsd || 1.00;
+            const usdVal = (coins / rateCoins) * rateUsd;
+            document.getElementById('live-convert-preview').innerHTML = `<span>≈ $${usdVal.toFixed(2)} USD</span>`;
+        };
+
+        // 3. Currencies Manager
         function initCurrencies() {
             onSnapshot(collection(db, "tma_currencies"), (snapshot) => {
                 currencyList = [];
@@ -719,10 +904,10 @@
             }
         };
 
-        window.setPresetIcon = (url, name) => {
+        window.setPresetIcon = (url, name, min) => {
             document.getElementById('new-curr-icon').value = url;
             document.getElementById('new-curr-name').value = name;
-            document.getElementById('new-curr-min').value = 10000;
+            document.getElementById('new-curr-min').value = min || 10000;
         };
 
         window.addNewCurrency = async () => {
@@ -740,21 +925,22 @@
 
             try {
                 await addDoc(collection(db, "tma_currencies"), { name, min, icon, createdAt: serverTimestamp() });
-                showToast("Currency Added Successfully!", true);
+                playRewardSound();
+                showToast("Currency Gateway Added!", true);
                 document.getElementById('new-curr-name').value = '';
                 document.getElementById('new-curr-min').value = '';
                 document.getElementById('new-curr-icon').value = '';
             } catch(e) { showToast("Error: " + e.message, false); }
-            finally { btn.disabled = false; btn.textContent = "Save Currency"; }
+            finally { btn.disabled = false; btn.textContent = "Add Currency Gateway"; }
         };
 
         window.deleteCurrency = async (id) => {
             if (user.id !== MASTER_ADMIN_ID) return;
             await deleteDoc(doc(db, "tma_currencies", id));
-            showToast("Currency deleted!", true);
+            showToast("Currency removed!", true);
         };
 
-        // 3. Real Missions & 100% Strict Force Join Check
+        // 4. Missions & Strict Verification
         function initTasks() {
             onSnapshot(collection(db, "tma_tasks"), (snapshot) => {
                 const container = document.getElementById('tasks-container');
@@ -793,7 +979,7 @@
                                         <i data-lucide="external-link" class="w-3.5 h-3.5"></i> 1. Join
                                     </button>
                                 ` : `
-                                    <button id="task-btn-${taskId}" onclick="handleTaskStep2('${taskId}', '${task.channelUsername || ''}', ${task.reward})" class="px-3 py-1.5 btn-neon text-white font-bold text-xs rounded-lg font-cyber animate-pulse flex items-center gap-1">
+                                    <button id="task-btn-${taskId}" onclick="handleTaskStep2('${taskId}', '${task.channelUsername || ''}', ${task.reward})" class="px-3.5 py-1.5 btn-neon text-white font-bold text-xs rounded-lg font-cyber animate-pulse flex items-center gap-1">
                                         <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> 2. Verify
                                     </button>
                                 `}
@@ -829,6 +1015,7 @@
                 await addDoc(collection(db, "tma_tasks"), {
                     title, channelUsername, link, reward, createdAt: serverTimestamp()
                 });
+                playRewardSound();
                 showToast("Mission Published Successfully!", true);
                 document.getElementById('new-ch-title').value = '';
                 document.getElementById('new-ch-username').value = '';
@@ -848,19 +1035,16 @@
             showToast("Mission deleted!", true);
         };
 
-        // STEP 1: Click Join Link
         window.handleTaskStep1 = (taskId, link) => {
             if(tg?.openTelegramLink) tg.openTelegramLink(link);
             else window.open(link, '_blank');
 
             taskClickState[taskId] = true;
-            initTasks(); // Refresh to show "Verify & Claim" button
-            showToast("Please join the channel, then tap 'Verify'!", true);
+            initTasks();
+            showToast("Join the channel, then click Verify!", true);
         };
 
-        // STEP 2: Strict Force-Join Verification via Telegram API & One-Time Lock
         window.handleTaskStep2 = async (taskId, channelUsername, reward) => {
-            // Anti-reclaim check:
             if (user.completedTasks.includes(taskId)) {
                 return showToast("Reward already claimed!", false);
             }
@@ -874,14 +1058,14 @@
 
             let isMember = false;
 
-            if (botConfig.botToken && channelUsername) {
+            if (masterConfig.botToken && channelUsername) {
                 try {
                     let cleanChannel = channelUsername.trim();
                     if(!cleanChannel.startsWith('@') && !cleanChannel.startsWith('-100')) {
                         cleanChannel = `@${cleanChannel}`;
                     }
 
-                    const response = await fetch(`https://api.telegram.org/bot${botConfig.botToken}/getChatMember?chat_id=${cleanChannel}&user_id=${user.id}`);
+                    const response = await fetch(`https://api.telegram.org/bot${masterConfig.botToken}/getChatMember?chat_id=${cleanChannel}&user_id=${user.id}`);
                     const data = await response.json();
 
                     if (data.ok && ['creator', 'administrator', 'member', 'restricted'].includes(data.result.status)) {
@@ -891,13 +1075,11 @@
                     console.error("API error:", e);
                 }
             } else {
-                // If bot token is not yet provided by admin in Settings
-                showToast("Admin: Configure Bot Token in Admin Hub for strict verification.", false);
-                isMember = true; // Fallback only if admin has not set bot token
+                showToast("Admin: Configure Bot Token in Admin Hub for strict API verification.", false);
+                isMember = true;
             }
 
             if (isMember) {
-                // 1-TIME REWARD CLAIMED FOREVER
                 user.balance += reward;
                 user.completedTasks.push(taskId);
 
@@ -910,8 +1092,9 @@
                 });
 
                 tg?.HapticFeedback?.notificationOccurred('success');
+                playRewardSound();
                 showToast(`Verified! +${reward.toLocaleString()} Coins Added!`, true);
-                initTasks(); // Renders as "Claimed" permanently
+                initTasks();
             } else {
                 tg?.HapticFeedback?.notificationOccurred('error');
                 showToast("You haven't joined yet! Please join the channel first.", false);
@@ -923,7 +1106,7 @@
             }
         };
 
-        // 4. Tap Engine
+        // 5. 3D Coin Physics Engine
         const coin = document.getElementById('tap-coin');
         function init3DTilt() {
             coin.addEventListener('pointerdown', (e) => {
@@ -937,34 +1120,36 @@
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
 
-                const tiltX = (y / (rect.height / 2)) * -24;
-                const tiltY = (x / (rect.width / 2)) * 24;
+                const tiltX = (y / (rect.height / 2)) * -26;
+                const tiltY = (x / (rect.width / 2)) * 26;
 
-                coin.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(0.96, 0.96, 0.96)`;
+                coin.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(0.95, 0.95, 0.95)`;
+                
                 tg?.HapticFeedback?.impactOccurred('medium');
+                playCoinSound(); // 3D Coin Arcade Sound
 
                 user.balance += user.multiTap;
                 user.energy = Math.max(0, user.energy - user.multiTap);
 
                 saveToLocalInstant();
-                createTapNumber(e.clientX, e.clientY, `+${user.multiTap}`);
+                createTapNumber3D(e.clientX, e.clientY, `+${user.multiTap}`);
                 renderUI();
                 scheduleCloudSync();
             });
 
             window.addEventListener('pointerup', () => {
-                coin.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+                coin.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
             });
         }
 
-        function createTapNumber(x, y, txt) {
+        function createTapNumber3D(x, y, txt) {
             const el = document.createElement('div');
-            el.className = 'tap-pop text-2xl';
+            el.className = 'tap-pop-3d text-2xl';
             el.style.left = `${x - 20}px`;
-            el.style.top = `${y - 40}px`;
+            el.style.top = `${y - 45}px`;
             el.textContent = txt;
             document.body.appendChild(el);
-            setTimeout(() => el.remove(), 700);
+            setTimeout(() => el.remove(), 750);
         }
 
         let syncDebounce = null;
@@ -1032,6 +1217,7 @@
             pushBalanceToCloud();
 
             tg?.HapticFeedback?.notificationOccurred('success');
+            playRewardSound();
             showToast("Upgrade Successful!", true);
         };
 
@@ -1066,24 +1252,26 @@
             });
 
             tg?.HapticFeedback?.notificationOccurred('success');
+            playRewardSound();
             showToast("Withdrawal submitted successfully!", true);
             document.getElementById('withdraw-coins').value = '';
             document.getElementById('withdraw-target').value = '';
+            updateConvertedValue();
         };
 
-        // Referral Links (@sn_mini_app_bot)
         window.copyRefLink = () => {
-            const bot = botConfig.botUsername || "sn_mini_app_bot";
+            const bot = masterConfig.botUsername || "sn_mini_app_bot";
             const url = `https://t.me/${bot}?start=ref_${user.id}`;
             navigator.clipboard.writeText(url);
             tg?.HapticFeedback?.notificationOccurred('success');
+            playRewardSound();
             showToast("Referral link copied!", true);
         };
 
         window.shareRefTelegram = () => {
-            const bot = botConfig.botUsername || "sn_mini_app_bot";
+            const bot = masterConfig.botUsername || "sn_mini_app_bot";
             const url = `https://t.me/${bot}?start=ref_${user.id}`;
-            const text = encodeURIComponent("🚀 Join SN Mini App & claim 5,000 instant coin bounty!");
+            const text = encodeURIComponent(`🚀 Join SN Mini App & claim ${masterConfig.referralBonus.toLocaleString()} instant coins!`);
             const share = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${text}`;
             if(tg?.openTelegramLink) tg.openTelegramLink(share);
             else window.open(share, '_blank');
@@ -1152,6 +1340,7 @@
                 }
             }
             await updateDoc(wRef, { status: status });
+            playRewardSound();
             showToast(`Withdrawal marked as ${status.toUpperCase()}`, true);
         };
     </script>
