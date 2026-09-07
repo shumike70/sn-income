@@ -196,7 +196,7 @@
         </div>
     </div>
 
-    <!-- 🚫 CYBER SECURITY LOCK SCREEN (Always blocks strictly before UI) -->
+    <!-- 🚫 CYBER SECURITY LOCK SCREEN -->
     <div id="security-lock-screen" class="fixed inset-0 bg-[#02040a] z-[9999999] flex flex-col items-center justify-center p-6 text-center">
         <div class="w-20 h-20 rounded-2xl bg-rose-500/20 border-2 border-rose-500 flex items-center justify-center mb-4 shadow-[0_0_40px_rgba(244,63,94,0.7)] animate-pulse">
             <i data-lucide="shield-alert" class="w-10 h-10 text-rose-400"></i>
@@ -843,6 +843,7 @@
         const todayDateStr = new Date().toISOString().slice(0, 10);
         const localCached = JSON.parse(localStorage.getItem(`local_user_data_${persistentId}`) || '{}');
 
+        // NEW USERS ALWAYS DEFAULT TO 0 BALANCE
         let user = {
             id: persistentId,
             name: tgUser ? `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() : (localCached.name || "CYBER MINER"),
@@ -912,13 +913,11 @@
         // ================= 🎯 100% BULLETPROOF REFERRAL EXTRACTOR =================
         function extractReferrerId() {
             try {
-                // 1. Direct Telegram WebApp Start Parameter
                 if (tg?.initDataUnsafe?.start_param) {
                     let p = String(tg.initDataUnsafe.start_param).replace(/^ref_/, '').replace(/^user_/, '').trim();
                     if (p && p !== user.id) return p;
                 }
 
-                // 2. URL Query Params for Telegram links (?tgWebAppStartParam, ?startapp, ?start, ?ref)
                 const urlParams = new URLSearchParams(window.location.search);
                 const queryParam = urlParams.get('tgWebAppStartParam') 
                                 || urlParams.get('startapp') 
@@ -930,7 +929,6 @@
                     if (p && p !== user.id) return p;
                 }
 
-                // 3. Hash Route / Fallback
                 if (window.location.hash) {
                     const match = window.location.hash.match(/(?:tgWebAppStartParam|startapp|ref)=([a-zA-Z0-9_-]+)/);
                     if (match && match[1]) {
@@ -948,7 +946,6 @@
             renderUI();
             initHardware3DTap();
             
-            // Connect Profile UI
             document.getElementById('u-name').textContent = user.name;
             document.getElementById('u-id-badge').textContent = `ID: ${user.id}`;
             if(tgUser?.photo_url) document.getElementById('u-avatar').src = tgUser.photo_url;
@@ -956,7 +953,6 @@
 
             try { await signInAnonymously(auth); } catch(e){}
 
-            // Fast parallel initializations
             await fetchUserIP();
             await initMasterConfig();
             await initUserData();
@@ -966,7 +962,6 @@
             listenToReferralsFeed();
             listenToUserWithdrawals();
 
-            // Run strict anti-cheat gate
             await runSecurityAndAntiCheatCheck();
 
             if (user.id === MASTER_ADMIN_ID) {
@@ -1003,13 +998,12 @@
             }
         }
 
-        // 🛡️ 100% STRICT CYBER SECURITY / BAN / IP / DEVICE GATE
+        // 🛡️ ANTI-CHEAT & CYBER SECURITY CHECK
         async function runSecurityAndAntiCheatCheck() {
             const lockScreen = document.getElementById('security-lock-screen');
             const lockMsg = document.getElementById('security-lock-msg');
             const lockTitle = document.getElementById('security-lock-title');
 
-            // 1. Check if user is banned
             if (user.isBlocked === true) {
                 lockTitle.textContent = "ACCOUNT SUSPENDED";
                 lockMsg.textContent = "Your account has been permanently suspended by the Administrator for security violations.";
@@ -1018,14 +1012,12 @@
                 return;
             }
 
-            // Admin always has full access
             if (user.id === MASTER_ADMIN_ID) {
                 lockScreen.classList.add('hidden');
                 lockScreen.classList.remove('flex');
                 return;
             }
 
-            // 2. Hardware / Single Device Lock (Always persistent)
             if (masterConfig.lockDeviceEnabled === true) {
                 try {
                     const devDocRef = doc(db, "tma_device_registry", user.deviceUUID);
@@ -1051,7 +1043,6 @@
                 } catch (e) {}
             }
 
-            // 3. Same Wi-Fi / IP Lock
             if (masterConfig.lockIPEnabled === true && user.ipAddress && user.ipAddress !== "127.0.0.1") {
                 try {
                     const cleanIPDocId = "ip_" + user.ipAddress.replace(/[^a-zA-Z0-9]/g, '_');
@@ -1078,11 +1069,11 @@
                 } catch (e) {}
             }
 
-            // Passed all checks!
             lockScreen.classList.add('hidden');
             lockScreen.classList.remove('flex');
         }
 
+        // ================= USER INITIALIZATION (STRICT 0 BALANCE FOR NEW USERS) =================
         async function initUserData() {
             const inviterId = extractReferrerId();
 
@@ -1091,15 +1082,28 @@
                 const snap = await getDoc(userRef);
 
                 if (!snap.exists()) {
+                    // NEW USER JOINS: BALANCE IS STRICTLY 0
+                    user.balance = 0;
+                    user.energy = 1000;
+                    user.maxEnergy = 1000;
+                    user.multiTap = 1;
+                    user.pph = 0;
+                    user.completedTasks = [];
+                    user.referralsCount = 0;
+                    user.withdrawCount = 0;
+                    user.isBlocked = false;
+                    user.dailyEnergyUsed = 0;
+                    user.dailyDate = todayDateStr;
+
                     let initialData = {
                         id: user.id,
                         name: user.name,
                         username: user.username,
-                        balance: user.balance,
-                        multiTap: user.multiTap,
-                        maxEnergy: user.maxEnergy,
-                        pph: user.pph,
-                        completedTasks: user.completedTasks,
+                        balance: 0, // NEW USER STARTS AT EXACTLY 0 COINS
+                        multiTap: 1,
+                        maxEnergy: 1000,
+                        pph: 0,
+                        completedTasks: [],
                         referralsCount: 0,
                         withdrawCount: 0,
                         isBlocked: false,
@@ -1117,9 +1121,13 @@
                         user.referredBy = inviterId;
                         await awardReferrerAtomic(inviterId, user.name, user.id);
                     }
+
+                    saveToLocalInstant();
+                    renderUI();
                 } else {
+                    // EXISTING USER: LOAD PERSISTENT DATA FROM FIRESTORE
                     const cloudData = snap.data();
-                    user.balance = Math.max(user.balance, cloudData.balance || 0);
+                    user.balance = typeof cloudData.balance === 'number' ? cloudData.balance : 0;
                     user.multiTap = cloudData.multiTap || user.multiTap;
                     user.maxEnergy = cloudData.maxEnergy || user.maxEnergy;
                     user.pph = cloudData.pph || user.pph;
@@ -1137,7 +1145,6 @@
                         user.dailyEnergyUsed = cloudData.dailyEnergyUsed || user.dailyEnergyUsed;
                     }
 
-                    // If existing user has no referredBy set and opened with a ref link:
                     if (!user.referredBy && inviterId && inviterId !== user.id) {
                         user.referredBy = inviterId;
                         await updateDoc(userRef, { referredBy: inviterId });
@@ -1149,7 +1156,7 @@
                     renderTasks();
                 }
 
-                // Real-time ban & balance listener
+                // Real-time ban & balance updates
                 onSnapshot(userRef, (docSnap) => {
                     if(docSnap.exists()) {
                         const d = docSnap.data();
@@ -1159,7 +1166,7 @@
                         if(Array.isArray(d.completedTasks)) user.completedTasks = Array.from(new Set([...user.completedTasks, ...d.completedTasks]));
                         
                         user.isBlocked = d.isBlocked === true;
-                        runSecurityAndAntiCheatCheck(); // Instantly blocks if admin banned
+                        runSecurityAndAntiCheatCheck();
 
                         saveToLocalInstant();
                         renderUI();
@@ -1177,7 +1184,7 @@
                 
                 const claimLedgerRef = doc(db, "tma_referrals", `${inviterId}_${newUserId}`);
                 const claimSnap = await getDoc(claimLedgerRef);
-                if (claimSnap.exists()) return; // Prevent double reward
+                if (claimSnap.exists()) return;
 
                 const bonus = masterConfig.referralBonus || 5000;
                 const inviterRef = doc(db, "tma_users", inviterId);
@@ -1233,7 +1240,7 @@
             });
         }
 
-        // ================= ⚙️ MASTER SETTINGS ENGINE (FIXED TOGGLE PERSISTENCE) =================
+        // ================= ⚙️ MASTER CONFIG ENGINE =================
         async function initMasterConfig() {
             return new Promise((resolve) => {
                 onSnapshot(doc(db, "tma_config", "main"), (snap) => {
@@ -1244,7 +1251,6 @@
                         masterConfig.referralBonus = data.referralBonus ?? 5000;
                         masterConfig.dailyEnergyLimit = data.dailyEnergyLimit ?? 3000;
                         
-                        // Strict boolean mapping
                         masterConfig.lockDeviceEnabled = data.lockDeviceEnabled === true;
                         masterConfig.lockIPEnabled = data.lockIPEnabled === true;
                         
@@ -1255,7 +1261,6 @@
                         document.getElementById('wallet-rate-badge').textContent = `Rate: ${masterConfig.rateCoins.toLocaleString()} Coins = $${masterConfig.rateUsd.toFixed(2)} USD`;
                         document.getElementById('daily-limit-text').textContent = (masterConfig.dailyEnergyLimit || 3000).toLocaleString();
                         
-                        // Populate Admin Inputs
                         document.getElementById('cfg-rate-coins').value = masterConfig.rateCoins;
                         document.getElementById('cfg-rate-usd').value = masterConfig.rateUsd;
                         document.getElementById('cfg-ref-bonus').value = masterConfig.referralBonus;
@@ -1896,7 +1901,7 @@
             });
         }
 
-        // 🛡️ Bulletproof Realtime Ban / Unban Command
+        // Realtime Ban / Unban
         window.toggleUserBlock = async (uid, blockStatus) => {
             if (user.id !== MASTER_ADMIN_ID) return;
             const targetBtn = document.getElementById(`btn-ban-${uid}`);
@@ -1915,7 +1920,7 @@
             }
         };
 
-        // ADMIN PAYOUTS: Only shows PENDING payouts (Disappears once approved/rejected)
+        // ADMIN PAYOUTS
         function initAdminPayouts() {
             onSnapshot(collection(db, "tma_withdrawals"), (snap) => {
                 const feed = document.getElementById('admin-payouts-feed');
@@ -1981,7 +1986,6 @@
             if(user.id !== MASTER_ADMIN_ID) return;
             const wRef = doc(db, "tma_withdrawals", docId);
             
-            // Refund coins back to user if rejected
             if(status === 'rejected') {
                 const uRef = doc(db, "tma_users", uid);
                 const snap = await getDoc(uRef);
@@ -2040,7 +2044,3 @@
     </script>
 </body>
 </html>
-```
-Citations
-
-https://github.com/atsushikose-arch/molkky-score-app
