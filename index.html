@@ -24,9 +24,9 @@
         body {
             background-color: #02040a;
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.35), transparent 50%),
-                radial-gradient(circle at 50% 100%, rgba(245, 158, 11, 0.28), transparent 55%),
-                radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.75), transparent 100%);
+                radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.4), transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(245, 158, 11, 0.35), transparent 55%),
+                radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.85), transparent 100%);
             color: #f8fafc;
             height: 100vh;
             overflow: hidden;
@@ -74,7 +74,7 @@
             position: absolute;
             inset: 5%;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, rgba(0,0,0,0.9) 70%, transparent 100%);
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.45) 0%, rgba(0,0,0,0.95) 70%, transparent 100%);
             transform: translateZ(-40px) scale(1.15);
             filter: blur(14px);
             pointer-events: none;
@@ -98,9 +98,9 @@
             transform-style: preserve-3d;
             transform: translateZ(0px);
             box-shadow: 
-                inset 0 0 25px rgba(255, 255, 255, 0.7),
+                inset 0 0 25px rgba(255, 255, 255, 0.8),
                 inset 0 -12px 25px rgba(120, 53, 15, 0.9),
-                0 0 50px rgba(245, 158, 11, 0.45);
+                0 0 50px rgba(245, 158, 11, 0.5);
         }
 
         .coin-inner-vault {
@@ -197,7 +197,7 @@
     </div>
 
     <!-- 🚫 CYBER SECURITY LOCK SCREEN -->
-    <div id="security-lock-screen" class="fixed inset-0 bg-[#02040a] z-[9999999] flex flex-col items-center justify-center p-6 text-center">
+    <div id="security-lock-screen" class="fixed inset-0 bg-[#02040a] z-[9999999] hidden flex-col items-center justify-center p-6 text-center">
         <div class="w-20 h-20 rounded-2xl bg-rose-500/20 border-2 border-rose-500 flex items-center justify-center mb-4 shadow-[0_0_40px_rgba(244,63,94,0.7)] animate-pulse">
             <i data-lucide="shield-alert" class="w-10 h-10 text-rose-400"></i>
         </div>
@@ -220,14 +220,14 @@
             <div>
                 <h4 id="u-name" class="font-bold text-sm text-white font-cyber tracking-tight leading-none">Connecting...</h4>
                 <div class="flex items-center gap-1.5 mt-1">
-                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30 uppercase tracking-widest font-cyber">CYBER LORD 3D</span>
+                    <span id="role-badge" class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30 uppercase tracking-widest font-cyber">CYBER MINER</span>
                     <span id="u-id-badge" class="text-[10px] text-slate-400 font-mono">ID: ...</span>
                 </div>
             </div>
         </div>
 
         <div class="flex items-center gap-2">
-            <button id="admin-header-btn" onclick="openPage('page-admin')" class="hidden flex items-center gap-1.5 px-3 py-1.5 rounded-xl btn-neon text-white text-[11px] font-cyber font-bold tracking-wider animate-pulse">
+            <button id="admin-header-btn" onclick="openPage('page-admin')" class="hidden flex items-center gap-1.5 px-3 py-1.5 rounded-xl btn-neon text-white text-[11px] font-cyber font-bold tracking-wider animate-pulse shadow-lg shadow-indigo-500/30">
                 <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> ADMIN HUB
             </button>
             
@@ -241,7 +241,7 @@
     <!-- Main Dynamic Screen -->
     <main class="flex-1 w-full max-w-md mx-auto px-4 py-1 relative overflow-hidden flex flex-col justify-between z-30">
 
-        <!-- ================= PAGE 1: 🎮 3D COIN & HIGH VOLTAGE ENERGY ================= -->
+        <!-- ================= PAGE 1: 🎮 3D COIN & ENERGY ================= -->
         <section id="page-exchange" class="page-view active flex-col items-center justify-between h-full py-1">
             <div class="w-full text-center shrink-0">
                 <div class="flex items-center justify-center gap-2.5">
@@ -693,7 +693,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // ================= 🎵 AUDIO ENGINE =================
+        // ================= 🎵 CYBER AUDIO ENGINE =================
         let audioCtx = null;
         function getAudioContext() {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -832,7 +832,6 @@
             localStorage.setItem('persistent_tg_uid', persistentId);
         }
 
-        // Hardware Device Fingerprint Generation
         let deviceUUID = localStorage.getItem('cyber_device_fingerprint');
         if (!deviceUUID) {
             deviceUUID = 'dev_' + Math.random().toString(36).substring(2, 10) + '_' + navigator.userAgent.replace(/[^a-zA-Z0-9]/g, '').slice(-12) + '_' + Date.now();
@@ -843,7 +842,7 @@
         const todayDateStr = new Date().toISOString().slice(0, 10);
         const localCached = JSON.parse(localStorage.getItem(`local_user_data_${persistentId}`) || '{}');
 
-        // NEW USERS ALWAYS DEFAULT TO 0 BALANCE
+        // NEW USER ALWAYS DEFAULTS TO 0 BALANCE
         let user = {
             id: persistentId,
             name: tgUser ? `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() : (localCached.name || "CYBER MINER"),
@@ -856,7 +855,7 @@
             completedTasks: Array.isArray(localCached.completedTasks) ? localCached.completedTasks : [],
             referralsCount: typeof localCached.referralsCount === 'number' ? localCached.referralsCount : 0,
             withdrawCount: localCached.withdrawCount || 0,
-            isBlocked: localCached.isBlocked === true,
+            isBlocked: persistentId === MASTER_ADMIN_ID ? false : (localCached.isBlocked === true),
             referredBy: localCached.referredBy || null,
             dailyEnergyUsed: localCached.dailyDate === todayDateStr ? (localCached.dailyEnergyUsed || 0) : 0,
             dailyDate: todayDateStr,
@@ -905,7 +904,7 @@
                 referredBy: user.referredBy,
                 dailyEnergyUsed: user.dailyEnergyUsed,
                 dailyDate: user.dailyDate,
-                isBlocked: user.isBlocked,
+                isBlocked: user.id === MASTER_ADMIN_ID ? false : user.isBlocked,
                 withdrawCount: user.withdrawCount
             }));
         }
@@ -949,7 +948,13 @@
             document.getElementById('u-name').textContent = user.name;
             document.getElementById('u-id-badge').textContent = `ID: ${user.id}`;
             if(tgUser?.photo_url) document.getElementById('u-avatar').src = tgUser.photo_url;
-            if (user.id === MASTER_ADMIN_ID) document.getElementById('admin-header-btn').classList.remove('hidden');
+            
+            // ADMIN SPECIAL ROLE BADGE
+            if (user.id === MASTER_ADMIN_ID) {
+                document.getElementById('admin-header-btn').classList.remove('hidden');
+                document.getElementById('role-badge').textContent = "👑 MASTER OWNER";
+                document.getElementById('role-badge').className = "text-[9px] px-2 py-0.5 rounded bg-gradient-to-r from-amber-500/30 to-yellow-500/30 text-amber-300 font-extrabold border border-amber-400/60 uppercase tracking-widest font-cyber shadow-[0_0_12px_rgba(245,158,11,0.5)]";
+            }
 
             try { await signInAnonymously(auth); } catch(e){}
 
@@ -962,6 +967,7 @@
             listenToReferralsFeed();
             listenToUserWithdrawals();
 
+            // Run anti-cheat (Master Admin is 100% immune)
             await runSecurityAndAntiCheatCheck();
 
             if (user.id === MASTER_ADMIN_ID) {
@@ -998,12 +1004,21 @@
             }
         }
 
-        // 🛡️ ANTI-CHEAT & CYBER SECURITY CHECK
+        // 🛡️ ANTI-CHEAT & CYBER SECURITY CHECK (MASTER ADMIN IS 100% IMMUNE)
         async function runSecurityAndAntiCheatCheck() {
             const lockScreen = document.getElementById('security-lock-screen');
             const lockMsg = document.getElementById('security-lock-msg');
             const lockTitle = document.getElementById('security-lock-title');
 
+            // 👑 1. MASTER ADMIN IS 100% UNTOUCHABLE (NO IP / DEVICE / BAN EVER)
+            if (user.id === MASTER_ADMIN_ID) {
+                lockScreen.classList.add('hidden');
+                lockScreen.classList.remove('flex');
+                user.isBlocked = false;
+                return;
+            }
+
+            // 2. Regular User Ban Check
             if (user.isBlocked === true) {
                 lockTitle.textContent = "ACCOUNT SUSPENDED";
                 lockMsg.textContent = "Your account has been permanently suspended by the Administrator for security violations.";
@@ -1012,12 +1027,7 @@
                 return;
             }
 
-            if (user.id === MASTER_ADMIN_ID) {
-                lockScreen.classList.add('hidden');
-                lockScreen.classList.remove('flex');
-                return;
-            }
-
+            // 3. Regular User Device Lock Check
             if (masterConfig.lockDeviceEnabled === true) {
                 try {
                     const devDocRef = doc(db, "tma_device_registry", user.deviceUUID);
@@ -1025,7 +1035,7 @@
 
                     if (devSnap.exists()) {
                         const registeredUID = devSnap.data().userId;
-                        if (registeredUID && registeredUID !== user.id) {
+                        if (registeredUID && registeredUID !== user.id && registeredUID !== MASTER_ADMIN_ID) {
                             lockTitle.textContent = "DEVICE RESTRICTED";
                             lockMsg.textContent = "Multi-Account Violation: This physical device is already tied to another Cyber account!";
                             lockScreen.classList.remove('hidden');
@@ -1043,6 +1053,7 @@
                 } catch (e) {}
             }
 
+            // 4. Regular User IP Lock Check
             if (masterConfig.lockIPEnabled === true && user.ipAddress && user.ipAddress !== "127.0.0.1") {
                 try {
                     const cleanIPDocId = "ip_" + user.ipAddress.replace(/[^a-zA-Z0-9]/g, '_');
@@ -1051,7 +1062,7 @@
 
                     if (ipSnap.exists()) {
                         const registeredIPUser = ipSnap.data().userId;
-                        if (registeredIPUser && registeredIPUser !== user.id) {
+                        if (registeredIPUser && registeredIPUser !== user.id && registeredIPUser !== MASTER_ADMIN_ID) {
                             lockTitle.textContent = "IP RESTRICTED";
                             lockMsg.textContent = "Same Network Violation: Another account is already linked on this Wi-Fi / IP network!";
                             lockScreen.classList.remove('hidden');
@@ -1082,7 +1093,7 @@
                 const snap = await getDoc(userRef);
 
                 if (!snap.exists()) {
-                    // NEW USER JOINS: BALANCE IS STRICTLY 0
+                    // NEW USER INITIAL STATE: STRICTLY 0 COINS
                     user.balance = 0;
                     user.energy = 1000;
                     user.maxEnergy = 1000;
@@ -1099,7 +1110,7 @@
                         id: user.id,
                         name: user.name,
                         username: user.username,
-                        balance: 0, // NEW USER STARTS AT EXACTLY 0 COINS
+                        balance: 0, // STRICTLY 0 FOR NEW REGISTRATION
                         multiTap: 1,
                         maxEnergy: 1000,
                         pph: 0,
@@ -1125,7 +1136,7 @@
                     saveToLocalInstant();
                     renderUI();
                 } else {
-                    // EXISTING USER: LOAD PERSISTENT DATA FROM FIRESTORE
+                    // EXISTING USER: LOAD FROM FIRESTORE
                     const cloudData = snap.data();
                     user.balance = typeof cloudData.balance === 'number' ? cloudData.balance : 0;
                     user.multiTap = cloudData.multiTap || user.multiTap;
@@ -1134,7 +1145,7 @@
                     user.completedTasks = Array.from(new Set([...user.completedTasks, ...(cloudData.completedTasks || [])]));
                     user.referralsCount = typeof cloudData.referralsCount === 'number' ? cloudData.referralsCount : user.referralsCount;
                     user.referredBy = cloudData.referredBy || user.referredBy;
-                    user.isBlocked = cloudData.isBlocked === true;
+                    user.isBlocked = user.id === MASTER_ADMIN_ID ? false : (cloudData.isBlocked === true);
                     user.withdrawCount = cloudData.withdrawCount || 0;
 
                     if (cloudData.dailyDate !== todayDateStr) {
@@ -1156,7 +1167,7 @@
                     renderTasks();
                 }
 
-                // Real-time ban & balance updates
+                // Real-time listener
                 onSnapshot(userRef, (docSnap) => {
                     if(docSnap.exists()) {
                         const d = docSnap.data();
@@ -1165,7 +1176,7 @@
                         if(typeof d.withdrawCount === 'number') user.withdrawCount = d.withdrawCount;
                         if(Array.isArray(d.completedTasks)) user.completedTasks = Array.from(new Set([...user.completedTasks, ...d.completedTasks]));
                         
-                        user.isBlocked = d.isBlocked === true;
+                        user.isBlocked = user.id === MASTER_ADMIN_ID ? false : (d.isBlocked === true);
                         runSecurityAndAntiCheatCheck();
 
                         saveToLocalInstant();
@@ -1520,7 +1531,7 @@
                 if (user.isBlocked) return false;
                 const dailyLimit = masterConfig.dailyEnergyLimit || 3000;
 
-                if (user.dailyEnergyUsed >= dailyLimit) {
+                if (user.dailyEnergyUsed >= dailyLimit && user.id !== MASTER_ADMIN_ID) {
                     tg?.HapticFeedback?.notificationOccurred('error');
                     showToast("Daily Mining Quota Reached! Resets tomorrow.", false);
                     return false;
@@ -1873,17 +1884,26 @@
                     totalBal += (u.balance || 0);
                     totalWithdraws += (u.withdrawCount || 0);
 
+                    const isOwner = u.id === MASTER_ADMIN_ID;
+
                     feed.innerHTML += `
-                        <div class="glass-card p-3 rounded-xl space-y-1.5 text-xs border ${isBanned ? 'border-rose-500/50 bg-rose-950/30' : 'border-white/5'}">
+                        <div class="glass-card p-3 rounded-xl space-y-1.5 text-xs border ${isOwner ? 'border-amber-400/50 bg-amber-950/20 shadow-[0_0_20px_rgba(245,158,11,0.2)]' : isBanned ? 'border-rose-500/50 bg-rose-950/30' : 'border-white/5'}">
                             <div class="flex items-center justify-between font-cyber">
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full ${isBanned ? 'bg-rose-500 shadow-sm shadow-rose-500' : 'bg-emerald-500 shadow-sm shadow-emerald-500'}"></span>
+                                    <span class="w-2 h-2 rounded-full ${isOwner ? 'bg-amber-400 shadow-sm shadow-amber-400' : isBanned ? 'bg-rose-500 shadow-sm shadow-rose-500' : 'bg-emerald-500 shadow-sm shadow-emerald-500'}"></span>
                                     <h6 class="font-bold text-white">${u.name || 'Anonymous'}</h6>
                                     <span class="text-[10px] text-slate-400 font-mono">(${u.id})</span>
                                 </div>
-                                <button id="btn-ban-${u.id}" onclick="toggleUserBlock('${u.id}', ${!isBanned})" class="px-2.5 py-1 rounded text-[10px] font-bold font-cyber transition ${isBanned ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/40 hover:bg-rose-500/30'}">
-                                    ${isBanned ? 'UNBAN USER' : 'BAN USER'}
-                                </button>
+
+                                ${isOwner ? `
+                                    <span class="px-2.5 py-1 rounded-lg bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-amber-300 border border-amber-400/50 text-[10px] font-black font-cyber flex items-center gap-1 shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+                                        <i data-lucide="crown" class="w-3 h-3 text-amber-400"></i> MASTER OWNER
+                                    </span>
+                                ` : `
+                                    <button id="btn-ban-${u.id}" onclick="toggleUserBlock('${u.id}', ${!isBanned})" class="px-2.5 py-1 rounded text-[10px] font-bold font-cyber transition ${isBanned ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/40 hover:bg-rose-500/30'}">
+                                        ${isBanned ? 'UNBAN USER' : 'BAN USER'}
+                                    </button>
+                                `}
                             </div>
                             
                             <div class="grid grid-cols-4 gap-1 p-1.5 bg-black/40 rounded-lg text-center font-cyber text-[10px]">
@@ -1898,12 +1918,20 @@
 
                 document.getElementById('adm-stat-balance').textContent = totalBal.toLocaleString();
                 document.getElementById('adm-stat-payouts').textContent = totalWithdraws;
+                lucide.createIcons();
             });
         }
 
-        // Realtime Ban / Unban
+        // Realtime Ban / Unban (Master Admin Protected)
         window.toggleUserBlock = async (uid, blockStatus) => {
             if (user.id !== MASTER_ADMIN_ID) return;
+            
+            // SECURITY OVERRIDE: CANNOT BAN MASTER OWNER
+            if (uid === MASTER_ADMIN_ID) {
+                showToast("Security Alert: Master Owner cannot be restricted!", false);
+                return;
+            }
+
             const targetBtn = document.getElementById(`btn-ban-${uid}`);
             if (targetBtn) {
                 targetBtn.disabled = true;
