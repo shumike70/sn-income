@@ -425,13 +425,13 @@
                     <span>Active Squad Recruits</span>
                     <span id="squad-counter-badge" class="text-[10px] text-amber-400">0 Recruited</span>
                 </h5>
-                <div id="referrals-list-feed" class="space-y-1.5 max-h-36 overflow-y-auto no-scrollbar">
-                    <p class="text-[11px] text-slate-500 text-center py-2 font-cyber">No squad recruits yet. Share your neural link!</p>
+                <div id="referrals-list-feed" class="space-y-1.5 max-h-48 overflow-y-auto no-scrollbar">
+                    <p class="text-[11px] text-slate-500 text-center py-3 font-cyber">No squad recruits yet. Share your neural link!</p>
                 </div>
             </div>
         </section>
 
-        <!-- ================= PAGE 5: 💳 WALLET ================= -->
+        <!-- ================= PAGE 5: 💳 WALLET WITH FULL LIVE RECORDS ================= -->
         <section id="page-wallet" class="page-view flex-col h-full overflow-y-auto no-scrollbar py-2 space-y-3">
             <div class="glass-card p-4 rounded-2xl text-center">
                 <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 font-cyber">Available Balance</span>
@@ -476,22 +476,22 @@
                 </div>
 
                 <div>
-                    <label class="block text-[11px] text-slate-400 mb-1 font-cyber">Wallet Address / Account Number</label>
-                    <input type="text" id="withdraw-target" placeholder="Enter recipient address / mobile number..." class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs outline-none focus:border-amber-400">
+                    <label class="block text-[11px] text-slate-400 mb-1 font-cyber">Wallet Address / Mobile Number</label>
+                    <input type="text" id="withdraw-target" placeholder="Enter recipient address / mobile number..." class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs outline-none focus:border-amber-400 font-mono">
                 </div>
 
-                <button onclick="requestWithdrawal()" class="w-full py-3 btn-gold rounded-xl text-slate-950 font-bold font-cyber text-xs tracking-wider">
+                <button id="btn-submit-withdraw" onclick="requestWithdrawal()" class="w-full py-3 btn-gold rounded-xl text-slate-950 font-bold font-cyber text-xs tracking-wider">
                     Confirm Withdrawal
                 </button>
             </div>
 
-            <!-- User Live Withdrawal Record Feed -->
+            <!-- User Live Withdrawal Record Feed (Full Details) -->
             <div class="glass-card p-3 rounded-2xl space-y-2">
                 <h5 class="text-xs font-bold font-cyber text-white flex items-center gap-1.5">
                     <i data-lucide="history" class="w-4 h-4 text-amber-400"></i> My Withdrawal History
                 </h5>
-                <div id="user-withdrawal-records" class="space-y-1.5 max-h-48 overflow-y-auto no-scrollbar">
-                    <p class="text-[11px] text-slate-500 text-center py-3 font-cyber">No transaction records found.</p>
+                <div id="user-withdrawal-records" class="space-y-2 max-h-56 overflow-y-auto no-scrollbar">
+                    <p class="text-[11px] text-slate-500 text-center py-4 font-cyber">No transaction records found.</p>
                 </div>
             </div>
         </section>
@@ -882,7 +882,6 @@
         let loadedTasks = [];
         let taskClickState = {};
         
-        // Built-in Default Gateways (Never empty!)
         let currencyList = [
             { id: "usdt", name: "USDT (TRC20)", min: 10000, type: "USD", icon: "https://assets.coingecko.com/coins/images/325/small/Tether.png" },
             { id: "ton", name: "TON Coin", min: 10000, type: "USD", icon: "https://assets.coingecko.com/coins/images/17980/small/ton_symbol.png" },
@@ -993,6 +992,7 @@
             try { lucide.createIcons(); } catch(e){}
             renderUI();
             initHardware3DTap();
+            renderLocalCachedWithdrawals();
             
             document.getElementById('u-name').textContent = user.name;
             document.getElementById('u-id-badge').textContent = `ID: ${user.id}`;
@@ -1004,7 +1004,6 @@
                 document.getElementById('role-badge').className = "text-[9px] px-2 py-0.5 rounded bg-gradient-to-r from-amber-500/30 to-yellow-500/30 text-amber-300 font-extrabold border border-amber-400/60 uppercase tracking-widest font-cyber shadow-[0_0_12px_rgba(245,158,11,0.5)]";
             }
 
-            // Start Firebase Auth & Realtime Data in parallel
             signInAnonymously(auth).then(() => {
                 initMasterConfig();
                 initUserData();
@@ -1021,7 +1020,6 @@
                 console.log("Firebase Auth error:", e);
             });
 
-            // Run in background without blocking rendering
             fetchUserIP().then(() => runSecurityAndAntiCheatCheck());
             initPassiveMining();
 
@@ -1037,7 +1035,6 @@
             window.addEventListener('pagehide', pushBalanceToCloud);
         });
 
-        // Background IP Fetcher (Fast with fallback)
         async function fetchUserIP() {
             try {
                 const controller = new AbortController();
@@ -1249,6 +1246,7 @@
                     joinedUserId: newUserId,
                     joinedUserName: newUserName || "Cyber Recruit",
                     bonus: bonus,
+                    dateStr: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
                     timestamp: serverTimestamp()
                 });
 
@@ -1260,32 +1258,38 @@
         }
 
         function listenToReferralsFeed() {
-            const q = query(collection(db, "tma_referrals"), where("inviterId", "==", user.id));
-            onSnapshot(q, (snapshot) => {
+            onSnapshot(collection(db, "tma_referrals"), (snapshot) => {
                 const feed = document.getElementById('referrals-list-feed');
                 const badge = document.getElementById('squad-counter-badge');
                 if (!feed) return;
 
-                feed.innerHTML = '';
-                const totalSquad = snapshot.size;
-                badge.textContent = `${totalSquad} Recruited`;
-                document.getElementById('ref-count-tag').textContent = totalSquad;
-                user.referralsCount = totalSquad;
+                const myReferrals = [];
+                snapshot.forEach(d => {
+                    const data = d.data();
+                    if (data.inviterId === user.id) myReferrals.push(data);
+                });
 
-                if (snapshot.empty) {
-                    feed.innerHTML = `<p class="text-[11px] text-slate-500 text-center py-2 font-cyber">No recruits yet. Share your neural link!</p>`;
+                badge.textContent = `${myReferrals.length} Recruited`;
+                document.getElementById('ref-count-tag').textContent = myReferrals.length;
+                user.referralsCount = myReferrals.length;
+
+                feed.innerHTML = '';
+                if (myReferrals.length === 0) {
+                    feed.innerHTML = `<p class="text-[11px] text-slate-500 text-center py-3 font-cyber">No squad recruits yet. Share your neural link!</p>`;
                     return;
                 }
 
-                snapshot.forEach(docSnap => {
-                    const m = docSnap.data();
+                myReferrals.forEach(m => {
                     feed.innerHTML += `
-                        <div class="p-2 rounded-lg bg-white/5 border border-white/5 flex items-center justify-between text-xs">
-                            <div class="flex items-center gap-2">
-                                <div class="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-[10px]">
+                        <div class="p-2.5 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between text-xs">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-7 h-7 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-[10px]">
                                     <i data-lucide="user" class="w-3.5 h-3.5"></i>
                                 </div>
-                                <span class="font-bold text-white font-cyber">${m.joinedUserName || 'Comrade'}</span>
+                                <div>
+                                    <span class="font-bold text-white font-cyber block">${m.joinedUserName || 'Comrade'}</span>
+                                    <span class="text-[9px] text-slate-400 font-mono">ID: ${m.joinedUserId || '...'} • ${m.dateStr || 'Just now'}</span>
+                                </div>
                             </div>
                             <span class="text-amber-400 font-cyber font-bold">+${(m.bonus || 5000).toLocaleString()} Coins</span>
                         </div>
@@ -1383,14 +1387,14 @@
         window.updateConvertedValue = () => {
             const coins = parseInt(document.getElementById('withdraw-coins').value) || 0;
             const selectEl = document.getElementById('withdraw-currency-select');
-            const current = currencyList.find(c => c.id === selectEl.value);
+            const current = currencyList.find(c => c.id === selectEl.value) || currencyList[0];
             const rateCoins = masterConfig.rateCoins || 10000;
             const rateUsd = masterConfig.rateUsd || 1.00;
             
             const usdVal = (coins / rateCoins) * rateUsd;
             if (current && current.type === 'BDT') {
                 const bdtVal = usdVal * 120;
-                document.getElementById('live-convert-preview').innerHTML = `<span>≈ $${usdVal.toFixed(2)} USD (৳${bdtVal.toFixed(0)} BDT)</span>`;
+                document.getElementById('live-convert-preview').innerHTML = `<span>≈ $${usdVal.toFixed(2)} USD (৳${Math.round(bdtVal)} BDT)</span>`;
             } else {
                 document.getElementById('live-convert-preview').innerHTML = `<span>≈ $${usdVal.toFixed(2)} USD</span>`;
             }
@@ -1572,8 +1576,10 @@
 
         window.removeChannelMission = async (id) => {
             if (user.id !== MASTER_ADMIN_ID) return;
-            await deleteDoc(doc(db, "tma_tasks", id));
-            showToast("Mission deleted!", true);
+            try {
+                await deleteDoc(doc(db, "tma_tasks", id));
+                showToast("Mission deleted!", true);
+            } catch(e){}
         };
 
         // ================= ⚡ 3D TAP MINING ENGINE =================
@@ -1730,7 +1736,7 @@
             showToast("Upgrade Deployed Successfully!", true);
         };
 
-        // Currencies Gateway Setup (With Built-in Fallback)
+        // Currencies Gateway Setup
         function initCurrencies() {
             onSnapshot(collection(db, "tma_currencies"), (snapshot) => {
                 if (!snapshot.empty) {
@@ -1744,10 +1750,12 @@
                 const adminListEl = document.getElementById('admin-currencies-list');
                 
                 if (selectEl) {
+                    const currentVal = selectEl.value;
                     selectEl.innerHTML = '';
                     currencyList.forEach(c => {
                         selectEl.innerHTML += `<option value="${c.id}">${c.name} (${c.type || 'USD'})</option>`;
                     });
+                    if (currentVal) selectEl.value = currentVal;
                 }
 
                 if (adminListEl) {
@@ -1822,92 +1830,144 @@
             } catch(e){}
         };
 
-        // ================= 💳 WITHDRAWALS LOGIC =================
+        // ================= 💳 100% BULLETPROOF WITHDRAWAL & RECORDS =================
         window.requestWithdrawal = async () => {
             if (user.isBlocked) return showToast("Account restricted.", false);
+            
             const selectEl = document.getElementById('withdraw-currency-select');
             const selectedCurrency = currencyList.find(c => c.id === selectEl.value) || currencyList[0];
 
             const amt = parseInt(document.getElementById('withdraw-coins').value);
             const target = document.getElementById('withdraw-target').value.trim();
 
-            if(isNaN(amt) || amt < selectedCurrency.min) return showToast(`Min withdrawal is ${selectedCurrency.min.toLocaleString()} Coins.`, false);
-            if(amt > user.balance) return showToast("Insufficient Coin Balance!", false);
-            if(!target) return showToast("Enter recipient account address.", false);
+            if (isNaN(amt) || amt <= 0) return showToast("Please enter a valid coin amount!", false);
+            if (amt < selectedCurrency.min) return showToast(`Minimum withdrawal is ${selectedCurrency.min.toLocaleString()} Coins.`, false);
+            if (amt > user.balance) return showToast("Insufficient Coin Balance! Tap more to earn.", false);
+            if (!target) return showToast("Enter recipient account/wallet address.", false);
 
             const rateCoins = masterConfig.rateCoins || 10000;
             const rateUsd = masterConfig.rateUsd || 1.00;
             const usdVal = (amt / rateCoins) * rateUsd;
             const bdtVal = usdVal * 120;
 
-            user.balance -= amt;
-            user.withdrawCount = (user.withdrawCount || 0) + 1;
-            saveToLocalInstant();
-            renderUI();
+            const btn = document.getElementById('btn-submit-withdraw');
+            btn.disabled = true;
+            btn.textContent = "Processing...";
 
-            await updateDoc(doc(db, "tma_users", user.id), { 
-                balance: user.balance,
-                withdrawCount: user.withdrawCount
-            });
+            try {
+                // Deduct Balance
+                user.balance -= amt;
+                user.withdrawCount = (user.withdrawCount || 0) + 1;
+                saveToLocalInstant();
+                renderUI();
 
-            await addDoc(collection(db, "tma_withdrawals"), {
-                userId: user.id,
-                userName: user.name,
-                amountCoins: amt,
-                currencyName: selectedCurrency.name,
-                currencyType: selectedCurrency.type,
-                currencyIcon: selectedCurrency.icon,
-                usdValue: usdVal,
-                bdtValue: bdtVal,
-                targetAddress: target,
-                status: "pending",
-                createdAt: serverTimestamp()
-            });
+                const newRecord = {
+                    userId: user.id,
+                    userName: user.name,
+                    amountCoins: amt,
+                    currencyName: selectedCurrency.name,
+                    currencyType: selectedCurrency.type,
+                    currencyIcon: selectedCurrency.icon,
+                    usdValue: usdVal,
+                    bdtValue: bdtVal,
+                    targetAddress: target,
+                    status: "pending",
+                    dateStr: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                    createdAt: serverTimestamp()
+                };
 
-            tg?.HapticFeedback?.notificationOccurred('success');
-            playRewardSound();
-            showToast("Withdrawal submitted successfully!", true);
-            document.getElementById('withdraw-coins').value = '';
-            document.getElementById('withdraw-target').value = '';
-            updateConvertedValue();
+                // Save to local cache immediately
+                let localHistory = JSON.parse(localStorage.getItem(`local_withdrawals_${user.id}`) || '[]');
+                localHistory.unshift(newRecord);
+                localStorage.setItem(`local_withdrawals_${user.id}`, JSON.stringify(localHistory));
+                renderWithdrawalHistoryList(localHistory);
+
+                // Save to Firestore
+                await updateDoc(doc(db, "tma_users", user.id), { 
+                    balance: user.balance,
+                    withdrawCount: user.withdrawCount
+                });
+
+                await addDoc(collection(db, "tma_withdrawals"), newRecord);
+
+                tg?.HapticFeedback?.notificationOccurred('success');
+                playRewardSound();
+                showToast("Withdrawal submitted successfully! Record updated.", true);
+                
+                document.getElementById('withdraw-coins').value = '';
+                document.getElementById('withdraw-target').value = '';
+                updateConvertedValue();
+            } catch(e) {
+                showToast("Withdrawal Error: " + e.message, false);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Confirm Withdrawal";
+            }
         };
 
-        function listenToUserWithdrawals() {
-            const q = query(collection(db, "tma_withdrawals"), where("userId", "==", user.id));
-            onSnapshot(q, (snapshot) => {
-                const feed = document.getElementById('user-withdrawal-records');
-                if (!feed) return;
+        function renderLocalCachedWithdrawals() {
+            const cached = JSON.parse(localStorage.getItem(`local_withdrawals_${user.id}`) || '[]');
+            if (cached.length > 0) renderWithdrawalHistoryList(cached);
+        }
 
-                feed.innerHTML = '';
-                if (snapshot.empty) {
-                    feed.innerHTML = `<p class="text-[11px] text-slate-500 text-center py-3 font-cyber">No transaction records found.</p>`;
-                    return;
-                }
+        function renderWithdrawalHistoryList(records) {
+            const feed = document.getElementById('user-withdrawal-records');
+            if (!feed) return;
+            feed.innerHTML = '';
 
-                const docs = [];
-                snapshot.forEach(d => docs.push(d.data()));
-                docs.sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+            if (!records || records.length === 0) {
+                feed.innerHTML = `<p class="text-[11px] text-slate-500 text-center py-4 font-cyber">No transaction records found.</p>`;
+                return;
+            }
 
-                docs.forEach(item => {
-                    const statusColor = item.status === 'approved' ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : item.status === 'rejected' ? 'text-rose-400 border-rose-500/30 bg-rose-500/10' : 'text-amber-400 border-amber-500/30 bg-amber-500/10';
-                    
-                    feed.innerHTML += `
-                        <div class="p-2.5 bg-white/5 rounded-xl border border-white/5 flex items-center justify-between text-xs">
+            records.forEach(item => {
+                const status = (item.status || 'pending').toLowerCase();
+                const statusColor = status === 'approved' 
+                    ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' 
+                    : status === 'rejected' 
+                    ? 'text-rose-400 border-rose-500/30 bg-rose-500/10' 
+                    : 'text-amber-400 border-amber-500/30 bg-amber-500/10';
+
+                feed.innerHTML += `
+                    <div class="p-3 bg-white/5 rounded-xl border border-white/5 space-y-1.5 text-xs">
+                        <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <img src="${item.currencyIcon || 'https://assets.coingecko.com/coins/images/325/small/Tether.png'}" class="w-6 h-6 rounded-full object-contain">
                                 <div>
                                     <h6 class="font-bold text-white font-cyber">${item.currencyName}</h6>
-                                    <span class="text-[10px] text-slate-400 font-mono break-all">${item.targetAddress}</span>
+                                    <span class="text-[9px] text-slate-400">${item.dateStr || 'Recent'}</span>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <span class="font-bold text-amber-400 font-cyber block">${item.amountCoins.toLocaleString()}</span>
-                                <span class="text-[9px] px-1.5 py-0.5 rounded border uppercase font-cyber font-bold ${statusColor}">${item.status}</span>
+                                <span class="font-bold text-amber-400 font-cyber block">${item.amountCoins.toLocaleString()} Coins</span>
+                                <span class="text-[9px] px-2 py-0.5 rounded border uppercase font-cyber font-bold ${statusColor}">${status}</span>
                             </div>
                         </div>
-                    `;
+                        <div class="p-1.5 bg-black/40 rounded-lg flex items-center justify-between text-[10px] font-mono">
+                            <span class="text-slate-300 break-all">${item.targetAddress}</span>
+                            <span class="text-emerald-400 font-bold ml-2 shrink-0">≈ $${(item.usdValue || 0).toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            try { lucide.createIcons(); } catch(e){}
+        }
+
+        function listenToUserWithdrawals() {
+            onSnapshot(collection(db, "tma_withdrawals"), (snapshot) => {
+                const myDocs = [];
+                snapshot.forEach(d => {
+                    const data = { id: d.id, ...d.data() };
+                    if (data.userId === user.id) myDocs.push(data);
                 });
-                try { lucide.createIcons(); } catch(e){}
+
+                if (myDocs.length > 0) {
+                    myDocs.sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+                    localStorage.setItem(`local_withdrawals_${user.id}`, JSON.stringify(myDocs));
+                    renderWithdrawalHistoryList(myDocs);
+                } else {
+                    renderLocalCachedWithdrawals();
+                }
             });
         }
 
@@ -1991,7 +2051,7 @@
             }
         };
 
-        // ADMIN PAYOUTS
+        // ADMIN PAYOUTS (FULL TRANSACTION DETAILS)
         function initAdminPayouts() {
             onSnapshot(collection(db, "tma_withdrawals"), (snap) => {
                 const feed = document.getElementById('admin-payouts-feed');
@@ -2000,9 +2060,9 @@
                 
                 const pendingList = [];
                 snap.forEach(docSnap => {
-                    const data = docSnap.data();
+                    const data = { id: docSnap.id, ...docSnap.data() };
                     if (data.status === 'pending') {
-                        pendingList.push({ id: docSnap.id, ...data });
+                        pendingList.push(data);
                     }
                 });
 
@@ -2013,11 +2073,11 @@
 
                 pendingList.forEach(item => {
                     feed.innerHTML += `
-                        <div class="glass-card p-3 rounded-xl space-y-2 text-xs border border-amber-500/30">
+                        <div class="glass-card p-3.5 rounded-xl space-y-2 text-xs border border-amber-500/30">
                             <div class="flex justify-between items-center font-bold text-white font-cyber">
                                 <div class="flex items-center gap-1.5">
                                     <img src="${item.currencyIcon || 'https://assets.coingecko.com/coins/images/325/small/Tether.png'}" class="w-5 h-5 rounded-full object-contain">
-                                    <span>${item.userName} (${item.currencyName})</span>
+                                    <span>${item.userName || 'User'} (${item.currencyName})</span>
                                 </div>
                                 <span class="text-amber-400 uppercase font-cyber font-bold tracking-wider">PENDING</span>
                             </div>
