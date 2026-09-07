@@ -50,7 +50,7 @@
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
         }
 
-        /* ================= 💎 GPU ACCELERATED 3D COIN ================= */
+        /* 3D Coin Stage */
         .coin-stage { 
             perspective: 1000px; 
             touch-action: manipulation;
@@ -158,15 +158,6 @@
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* Cyber Toggle Switch */
-        .toggle-checkbox:checked {
-            right: 0;
-            border-color: #10b981;
-        }
-        .toggle-checkbox:checked + .toggle-label {
-            background-color: #10b981;
-        }
     </style>
 </head>
 <body class="flex flex-col justify-between h-screen select-none relative overflow-hidden">
@@ -182,14 +173,14 @@
         </div>
     </div>
 
-    <!-- 🚫 SECURITY LOCK SCREEN (FOR MULTI-ACCOUNT VIOLATIONS) -->
+    <!-- 🚫 SECURITY LOCK SCREEN -->
     <div id="security-lock-screen" class="fixed inset-0 bg-[#030712]/98 z-[999999] hidden flex-col items-center justify-center p-6 text-center">
         <div class="w-20 h-20 rounded-2xl bg-rose-500/20 border-2 border-rose-500 flex items-center justify-center mb-4 shadow-[0_0_40px_rgba(244,63,94,0.6)] animate-pulse">
             <i data-lucide="shield-alert" class="w-10 h-10 text-rose-400"></i>
         </div>
-        <h2 class="text-2xl font-black font-cyber text-rose-400 mb-2">ACCESS TERMINATED</h2>
+        <h2 class="text-2xl font-black font-cyber text-rose-400 mb-2">ACCESS RESTRICTED</h2>
         <p id="security-lock-msg" class="text-xs text-slate-300 max-w-xs font-cyber leading-relaxed">
-            Multiple accounts detected on this device or Wi-Fi network. Fair play policy strictly enforced.
+            Multi-account violation detected. Fair play policy strictly enforced.
         </p>
         <div class="mt-6 p-3 bg-white/5 rounded-xl border border-white/10 text-[10px] font-mono text-slate-400">
             SECURITY HASH: <span id="sec-device-hash" class="text-amber-400 font-bold">...</span>
@@ -342,7 +333,7 @@
             </div>
         </section>
 
-        <!-- ================= PAGE 3: 📋 MISSIONS (AUTO-REFRESHING) ================= -->
+        <!-- ================= PAGE 3: 📋 MISSIONS ================= -->
         <section id="page-tasks" class="page-view flex-col h-full overflow-y-auto no-scrollbar py-2 space-y-3">
             <div class="glass-card p-4 rounded-2xl text-center">
                 <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto mb-2 shadow-lg shadow-indigo-500/20">
@@ -360,7 +351,7 @@
         <!-- ================= PAGE 4: 👥 SQUAD & LIVE REFERRALS ================= -->
         <section id="page-friends" class="page-view flex-col h-full overflow-y-auto no-scrollbar py-2 space-y-3">
             <div class="glass-card p-4 rounded-2xl text-center">
-                <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-1.5 shadow-lg shadow-amber-500/20">
+                <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-1.5 shadow-lg shadow-amber-500/20">
                     <i data-lucide="users" class="w-6 h-6"></i>
                 </div>
                 <h3 class="text-lg font-bold font-cyber text-white">Invite Squad</h3>
@@ -473,7 +464,7 @@
             <!-- SUBTAB 1: SETTINGS, SECURITY, REFERRAL & ENERGY LIMITS -->
             <div id="adm-settings" class="admin-subspace space-y-3">
                 
-                <!-- 🛡️ ANTI-CHEAT & MULTI-ACCOUNT CONTROLS -->
+                <!-- 🛡️ ANTI-CHEAT CONTROLS -->
                 <div class="glass-card p-3.5 rounded-xl space-y-3 border border-rose-500/30">
                     <h5 class="text-[11px] font-bold text-rose-400 uppercase font-cyber flex items-center gap-1">
                         <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Multi-Account & Anti-Cheat Controls
@@ -662,18 +653,14 @@
                 const now = ctx.currentTime;
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
-
                 osc.type = 'sine';
                 const baseFreq = 850 + Math.random() * 80;
                 osc.frequency.setValueAtTime(baseFreq, now);
                 osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.8, now + 0.08);
-
                 gain.gain.setValueAtTime(0.2, now);
                 gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-
                 osc.connect(gain);
                 gain.connect(ctx.destination);
-
                 osc.start(now);
                 osc.stop(now + 0.08);
             } catch(e) {}
@@ -791,7 +778,6 @@
             localStorage.setItem('persistent_tg_uid', persistentId);
         }
 
-        // Hardware Device Fingerprint for Anti-Multi-Account
         let deviceUUID = localStorage.getItem('cyber_device_fingerprint');
         if (!deviceUUID) {
             deviceUUID = 'dev_' + Math.random().toString(36).substring(2, 12) + '_' + Date.now();
@@ -870,16 +856,27 @@
             renderUI();
             initHardware3DTap();
             
+            // 1. Instantly Connect Profile from Cache / Telegram UI
+            document.getElementById('u-name').textContent = user.name;
+            document.getElementById('u-id-badge').textContent = `ID: ${user.id}`;
+            if(tgUser?.photo_url) document.getElementById('u-avatar').src = tgUser.photo_url;
+            if (user.id === MASTER_ADMIN_ID) document.getElementById('admin-header-btn').classList.remove('hidden');
+
             try { await signInAnonymously(auth); } catch(e){}
 
-            await fetchUserIP();
-            await initMasterConfig();
-            await runSecurityAndAntiCheatCheck();
+            // 2. Load Master System Config & Sync Profile in Parallel
+            initMasterConfig();
             initUserData();
             initCurrencies();
             initTasksListener();
             initPassiveMining();
             listenToReferralsFeed();
+
+            // 3. Fast Non-blocking Security & Anti-Cheat Handshake
+            (async () => {
+                await fetchUserIP();
+                await runSecurityAndAntiCheatCheck();
+            })();
 
             if (user.id === MASTER_ADMIN_ID) {
                 initAdminPayouts();
@@ -897,20 +894,23 @@
             window.addEventListener('pagehide', pushBalanceToCloud);
         });
 
-        // 1. Fetch IP for Same Wi-Fi / IP Lock
+        // Safe Fast IP Fetcher with 2.5s Timeout
         async function fetchUserIP() {
             try {
-                const res = await fetch('https://api.ipify.org?format=json');
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 2500);
+                const res = await fetch('https://api.ipify.org?format=json', { signal: controller.signal });
+                clearTimeout(timeoutId);
                 const data = await res.json();
                 user.ipAddress = data.ip || "127.0.0.1";
             } catch(e) {
-                user.ipAddress = "unknown_ip";
+                user.ipAddress = "127_0_0_1";
             }
         }
 
-        // 2. Anti-Multi-Account & Security Validation Engine
+        // Anti-Cheat & Multi-Account Validation
         async function runSecurityAndAntiCheatCheck() {
-            if (user.id === MASTER_ADMIN_ID) return; // Master Admin is exempted
+            if (user.id === MASTER_ADMIN_ID) return;
 
             const lockScreen = document.getElementById('security-lock-screen');
             const lockMsg = document.getElementById('security-lock-msg');
@@ -919,44 +919,41 @@
             if (masterConfig.lockDeviceEnabled) {
                 const lastBoundUser = localStorage.getItem('cyber_bound_user_id');
                 if (lastBoundUser && lastBoundUser !== user.id) {
-                    lockMsg.textContent = "Security Alert: Multiple accounts detected on this device. You can only use 1 account per device!";
+                    lockMsg.textContent = "Security Alert: Multiple accounts detected on this device. Only 1 account is permitted per device!";
                     lockScreen.classList.remove('hidden');
                     lockScreen.classList.add('flex');
-                    throw new Error("Device Multi-Account Blocked");
+                    return;
                 }
                 localStorage.setItem('cyber_bound_user_id', user.id);
             }
 
-            // B. Same Wi-Fi / IP Multi-Account Check
-            if (masterConfig.lockIPEnabled && user.ipAddress && user.ipAddress !== "unknown_ip") {
-                const cleanIP = user.ipAddress.replace(/\./g, '_');
-                const ipDocRef = doc(db, "tma_ip_registry", cleanIP);
-                const ipSnap = await getDoc(ipDocRef);
+            // B. Same Wi-Fi / IP Multi-Account Check (Safely Sanitized for IPv4 & IPv6)
+            if (masterConfig.lockIPEnabled && user.ipAddress && user.ipAddress !== "127_0_0_1") {
+                try {
+                    // Sanitize all illegal Firestore document characters (dots, colons, slashes)
+                    const cleanIPDocId = "ip_" + user.ipAddress.replace(/[^a-zA-Z0-9]/g, '_');
+                    const ipDocRef = doc(db, "tma_ip_registry", cleanIPDocId);
+                    const ipSnap = await getDoc(ipDocRef);
 
-                if (ipSnap.exists()) {
-                    const registeredUID = ipSnap.data().userId;
-                    if (registeredUID && registeredUID !== user.id) {
-                        lockMsg.textContent = "Security Alert: Another account is already registered on this same Wi-Fi/IP network!";
-                        lockScreen.classList.remove('hidden');
-                        lockScreen.classList.add('flex');
-                        throw new Error("IP Multi-Account Blocked");
+                    if (ipSnap.exists()) {
+                        const registeredUID = ipSnap.data().userId;
+                        if (registeredUID && registeredUID !== user.id) {
+                            lockMsg.textContent = "Security Alert: Another account is already registered on this same Wi-Fi/IP network!";
+                            lockScreen.classList.remove('hidden');
+                            lockScreen.classList.add('flex');
+                            return;
+                        }
+                    } else {
+                        await setDoc(ipDocRef, { userId: user.id, updatedAt: serverTimestamp() }, { merge: true });
                     }
-                } else {
-                    await setDoc(ipDocRef, { userId: user.id, updatedAt: serverTimestamp() });
+                } catch (e) {
+                    console.warn("IP Check bypassed due to network/rules:", e);
                 }
             }
         }
 
-        // 3. User Handshake & 100% Reliable Invite Tracker
+        // User Data Sync
         async function initUserData() {
-            if (user.id === MASTER_ADMIN_ID) {
-                document.getElementById('admin-header-btn').classList.remove('hidden');
-            }
-
-            document.getElementById('u-name').textContent = user.name;
-            document.getElementById('u-id-badge').textContent = `ID: ${user.id}`;
-            if(tgUser?.photo_url) document.getElementById('u-avatar').src = tgUser.photo_url;
-
             const urlParams = new URLSearchParams(window.location.search);
             const rawParam = tg?.initDataUnsafe?.start_param || urlParams.get('tgWebAppStartParam') || urlParams.get('startapp') || "";
             let inviterId = null;
@@ -967,79 +964,83 @@
                 inviterId = rawParam.trim();
             }
 
-            const userRef = doc(db, "tma_users", user.id);
-            const snap = await getDoc(userRef);
+            try {
+                const userRef = doc(db, "tma_users", user.id);
+                const snap = await getDoc(userRef);
 
-            if (!snap.exists()) {
-                let initialData = {
-                    id: user.id,
-                    name: user.name,
-                    username: user.username,
-                    balance: user.balance,
-                    multiTap: user.multiTap,
-                    maxEnergy: user.maxEnergy,
-                    pph: user.pph,
-                    completedTasks: user.completedTasks,
-                    referralsCount: 0,
-                    referredBy: null,
-                    dailyEnergyUsed: 0,
-                    dailyDate: todayDateStr,
-                    deviceUUID: user.deviceUUID,
-                    ipAddress: user.ipAddress,
-                    createdAt: serverTimestamp()
-                };
+                if (!snap.exists()) {
+                    let initialData = {
+                        id: user.id,
+                        name: user.name,
+                        username: user.username,
+                        balance: user.balance,
+                        multiTap: user.multiTap,
+                        maxEnergy: user.maxEnergy,
+                        pph: user.pph,
+                        completedTasks: user.completedTasks,
+                        referralsCount: 0,
+                        referredBy: null,
+                        dailyEnergyUsed: 0,
+                        dailyDate: todayDateStr,
+                        deviceUUID: user.deviceUUID,
+                        ipAddress: user.ipAddress,
+                        createdAt: serverTimestamp()
+                    };
 
-                if (inviterId && inviterId !== user.id) {
-                    initialData.referredBy = inviterId;
-                    user.referredBy = inviterId;
-                    await awardReferrerAtomic(inviterId, user.name, user.id);
-                }
+                    if (inviterId && inviterId !== user.id) {
+                        initialData.referredBy = inviterId;
+                        user.referredBy = inviterId;
+                        awardReferrerAtomic(inviterId, user.name, user.id);
+                    }
 
-                await setDoc(userRef, initialData, { merge: true });
-            } else {
-                const cloudData = snap.data();
-                user.balance = Math.max(user.balance, cloudData.balance || 0);
-                user.multiTap = cloudData.multiTap || user.multiTap;
-                user.maxEnergy = cloudData.maxEnergy || user.maxEnergy;
-                user.pph = cloudData.pph || user.pph;
-                user.completedTasks = Array.from(new Set([...user.completedTasks, ...(cloudData.completedTasks || [])]));
-                user.referralsCount = typeof cloudData.referralsCount === 'number' ? cloudData.referralsCount : user.referralsCount;
-                user.referredBy = cloudData.referredBy || user.referredBy;
-
-                // Reset daily quota if new day
-                if (cloudData.dailyDate !== todayDateStr) {
-                    user.dailyEnergyUsed = 0;
-                    user.dailyDate = todayDateStr;
-                    await updateDoc(userRef, { dailyEnergyUsed: 0, dailyDate: todayDateStr });
+                    await setDoc(userRef, initialData, { merge: true });
                 } else {
-                    user.dailyEnergyUsed = cloudData.dailyEnergyUsed || user.dailyEnergyUsed;
-                }
+                    const cloudData = snap.data();
+                    user.balance = Math.max(user.balance, cloudData.balance || 0);
+                    user.multiTap = cloudData.multiTap || user.multiTap;
+                    user.maxEnergy = cloudData.maxEnergy || user.maxEnergy;
+                    user.pph = cloudData.pph || user.pph;
+                    user.completedTasks = Array.from(new Set([...user.completedTasks, ...(cloudData.completedTasks || [])]));
+                    user.referralsCount = typeof cloudData.referralsCount === 'number' ? cloudData.referralsCount : user.referralsCount;
+                    user.referredBy = cloudData.referredBy || user.referredBy;
 
-                if (!user.referredBy && inviterId && inviterId !== user.id) {
-                    user.referredBy = inviterId;
-                    await updateDoc(userRef, { referredBy: inviterId });
-                    await awardReferrerAtomic(inviterId, user.name, user.id);
-                }
+                    if (cloudData.dailyDate !== todayDateStr) {
+                        user.dailyEnergyUsed = 0;
+                        user.dailyDate = todayDateStr;
+                        updateDoc(userRef, { dailyEnergyUsed: 0, dailyDate: todayDateStr });
+                    } else {
+                        user.dailyEnergyUsed = cloudData.dailyEnergyUsed || user.dailyEnergyUsed;
+                    }
 
-                saveToLocalInstant();
-                renderUI();
-                renderTasks();
-            }
+                    if (!user.referredBy && inviterId && inviterId !== user.id) {
+                        user.referredBy = inviterId;
+                        updateDoc(userRef, { referredBy: inviterId });
+                        awardReferrerAtomic(inviterId, user.name, user.id);
+                    }
 
-            onSnapshot(userRef, (docSnap) => {
-                if(docSnap.exists()) {
-                    const d = docSnap.data();
-                    if(typeof d.balance === 'number' && d.balance > user.balance) user.balance = d.balance;
-                    if(typeof d.referralsCount === 'number') user.referralsCount = d.referralsCount;
-                    if(Array.isArray(d.completedTasks)) user.completedTasks = Array.from(new Set([...user.completedTasks, ...d.completedTasks]));
                     saveToLocalInstant();
                     renderUI();
                     renderTasks();
                 }
-            });
+
+                onSnapshot(userRef, (docSnap) => {
+                    if(docSnap.exists()) {
+                        const d = docSnap.data();
+                        if(typeof d.balance === 'number' && d.balance > user.balance) user.balance = d.balance;
+                        if(typeof d.referralsCount === 'number') user.referralsCount = d.referralsCount;
+                        if(Array.isArray(d.completedTasks)) user.completedTasks = Array.from(new Set([...user.completedTasks, ...d.completedTasks]));
+                        saveToLocalInstant();
+                        renderUI();
+                        renderTasks();
+                    }
+                });
+            } catch(e) {
+                console.warn("User data sync fallback:", e);
+                renderUI();
+            }
         }
 
-        // Atomic Referral Awarding
+        // Referral Awarding
         async function awardReferrerAtomic(inviterId, newUserName, newUserId) {
             try {
                 const inviterRef = doc(db, "tma_users", inviterId);
@@ -1047,7 +1048,6 @@
                 
                 if (inviterSnap.exists()) {
                     const bonus = masterConfig.referralBonus || 5000;
-                    
                     await updateDoc(inviterRef, {
                         balance: increment(bonus),
                         referralsCount: increment(1)
@@ -1096,32 +1096,29 @@
             });
         }
 
-        // 4. Master Config & Admin Controls
-        async function initMasterConfig() {
-            return new Promise((resolve) => {
-                onSnapshot(doc(db, "tma_config", "main"), (snap) => {
-                    if(snap.exists()) {
-                        masterConfig = { ...masterConfig, ...snap.data() };
-                        document.getElementById('ref-reward-tag').textContent = `+${masterConfig.referralBonus.toLocaleString()}`;
-                        document.getElementById('wallet-rate-badge').textContent = `Rate: ${masterConfig.rateCoins.toLocaleString()} Coins = $${masterConfig.rateUsd.toFixed(2)} USD`;
-                        document.getElementById('daily-limit-text').textContent = (masterConfig.dailyEnergyLimit || 3000).toLocaleString();
-                        
-                        document.getElementById('cfg-rate-coins').value = masterConfig.rateCoins;
-                        document.getElementById('cfg-rate-usd').value = masterConfig.rateUsd;
-                        document.getElementById('cfg-ref-bonus').value = masterConfig.referralBonus;
-                        document.getElementById('cfg-daily-energy').value = masterConfig.dailyEnergyLimit || 3000;
-                        document.getElementById('cfg-lock-device').checked = masterConfig.lockDeviceEnabled !== false;
-                        document.getElementById('cfg-lock-ip').checked = masterConfig.lockIPEnabled === true;
-                        document.getElementById('cfg-bot-token').value = masterConfig.botToken || "";
-                        document.getElementById('cfg-bot-user').value = masterConfig.botUsername || "sn_mini_app_bot";
-                        
-                        updateConvertedValue();
-                        renderUI();
-                    } else {
-                        setDoc(doc(db, "tma_config", "main"), masterConfig, { merge: true });
-                    }
-                    resolve();
-                });
+        // Master Config & Admin Controls
+        function initMasterConfig() {
+            onSnapshot(doc(db, "tma_config", "main"), (snap) => {
+                if(snap.exists()) {
+                    masterConfig = { ...masterConfig, ...snap.data() };
+                    document.getElementById('ref-reward-tag').textContent = `+${masterConfig.referralBonus.toLocaleString()}`;
+                    document.getElementById('wallet-rate-badge').textContent = `Rate: ${masterConfig.rateCoins.toLocaleString()} Coins = $${masterConfig.rateUsd.toFixed(2)} USD`;
+                    document.getElementById('daily-limit-text').textContent = (masterConfig.dailyEnergyLimit || 3000).toLocaleString();
+                    
+                    document.getElementById('cfg-rate-coins').value = masterConfig.rateCoins;
+                    document.getElementById('cfg-rate-usd').value = masterConfig.rateUsd;
+                    document.getElementById('cfg-ref-bonus').value = masterConfig.referralBonus;
+                    document.getElementById('cfg-daily-energy').value = masterConfig.dailyEnergyLimit || 3000;
+                    document.getElementById('cfg-lock-device').checked = masterConfig.lockDeviceEnabled !== false;
+                    document.getElementById('cfg-lock-ip').checked = masterConfig.lockIPEnabled === true;
+                    document.getElementById('cfg-bot-token').value = masterConfig.botToken || "";
+                    document.getElementById('cfg-bot-user').value = masterConfig.botUsername || "sn_mini_app_bot";
+                    
+                    updateConvertedValue();
+                    renderUI();
+                } else {
+                    setDoc(doc(db, "tma_config", "main"), masterConfig, { merge: true });
+                }
             });
         }
 
@@ -1145,7 +1142,7 @@
                     rateCoins, rateUsd, referralBonus, dailyEnergyLimit, lockDeviceEnabled, lockIPEnabled, botToken, botUsername
                 }, { merge: true });
                 playRewardSound();
-                showToast("System configurations & security saved!", true);
+                showToast("Settings & Security Saved!", true);
             } catch(e) {
                 showToast("Error: " + e.message, false);
             } finally {
@@ -1160,7 +1157,7 @@
             document.getElementById('live-convert-preview').innerHTML = `<span>≈ $${usdVal.toFixed(2)} USD</span>`;
         };
 
-        // 5. Missions (Auto-Refresh View)
+        // Missions Engine
         function initTasksListener() {
             onSnapshot(collection(db, "tma_tasks"), (snapshot) => {
                 loadedTasks = [];
@@ -1332,27 +1329,24 @@
             showToast("Mission deleted!", true);
         };
 
-        // ================= ⚡ GPU 60-120FPS HARDWARE 3D TAP ENGINE =================
+        // 60-120FPS 3D Tap Engine
         const coin = document.getElementById('tap-coin');
 
         function initHardware3DTap() {
             function handleTapAction(clientX, clientY) {
                 const dailyLimit = masterConfig.dailyEnergyLimit || 3000;
 
-                // 1. Daily Energy Limit Check
                 if (user.dailyEnergyUsed >= dailyLimit) {
                     tg?.HapticFeedback?.notificationOccurred('error');
-                    showToast("Daily Energy Limit Reached! Resets at midnight.", false);
+                    showToast("Daily Energy Limit Reached! Resets tomorrow.", false);
                     return false;
                 }
 
-                // 2. Tank Energy Check
                 if (user.energy < user.multiTap) {
                     tg?.HapticFeedback?.notificationOccurred('warning');
                     return false;
                 }
 
-                // GPU Hardware Tilt transform
                 const rect = coin.getBoundingClientRect();
                 const x = clientX - rect.left - rect.width / 2;
                 const y = clientY - rect.top - rect.height / 2;
@@ -1362,7 +1356,6 @@
 
                 coin.style.transform = `translate3d(0,0,0) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(0.96, 0.96, 0.96)`;
 
-                // Mining Calculations
                 user.balance += user.multiTap;
                 user.energy = Math.max(0, user.energy - user.multiTap);
                 user.dailyEnergyUsed += user.multiTap;
@@ -1378,7 +1371,6 @@
                 return true;
             }
 
-            // Mobile Touch
             coin.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 for (let i = 0; i < e.changedTouches.length; i++) {
@@ -1391,7 +1383,6 @@
                 coin.style.transform = `translate3d(0,0,0) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
             });
 
-            // Desktop Mouse
             coin.addEventListener('pointerdown', (e) => {
                 if (e.pointerType === 'touch') return;
                 e.preventDefault();
@@ -1489,7 +1480,7 @@
             showToast("Upgrade Successful!", true);
         };
 
-        // 6. Currencies
+        // Currencies
         function initCurrencies() {
             onSnapshot(collection(db, "tma_currencies"), (snapshot) => {
                 currencyList = [];
@@ -1584,7 +1575,7 @@
             showToast("Currency removed!", true);
         };
 
-        // 7. Withdrawals
+        // Withdrawals
         window.requestWithdrawal = async () => {
             const selectEl = document.getElementById('withdraw-currency-select');
             const selectedCurrency = currencyList.find(c => c.id === selectEl.value);
