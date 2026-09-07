@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SN Mini App - Ultra Max 3D Cyber Engine</title>
+    <title>SN Mini App - Ultra Max Cyber Engine</title>
     <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- Tailwind CSS -->
@@ -50,7 +50,7 @@
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
         }
 
-        /* 3D True Extruded Coin Stage */
+        /* 3D Coin Stage */
         .coin-stage { 
             perspective: 1200px; 
             touch-action: manipulation;
@@ -185,28 +185,28 @@
 </head>
 <body class="flex flex-col justify-between h-screen select-none relative overflow-hidden">
 
-    <!-- Particle FX Canvas -->
+    <!-- Canvas Particle FX -->
     <canvas id="fx-canvas" class="fixed inset-0 pointer-events-none z-20"></canvas>
 
-    <!-- In-App Notification Toast -->
+    <!-- Notification Toast -->
     <div class="fixed top-3 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
         <div id="toast" class="glass-panel px-4 py-2.5 rounded-2xl flex items-center gap-2.5 text-xs font-cyber font-bold shadow-2xl border border-amber-500/40 max-w-sm w-full">
             <i id="toast-icon" data-lucide="info" class="w-4 h-4 text-amber-400 shrink-0"></i>
-            <span id="toast-msg" class="text-white">System Notification</span>
+            <span id="toast-msg" class="text-white">System Message</span>
         </div>
     </div>
 
-    <!-- 🚫 ULTRA 3D CYBER SECURITY LOCK SCREEN -->
+    <!-- 🚫 CYBER SECURITY LOCK SCREEN -->
     <div id="security-lock-screen" class="fixed inset-0 bg-[#02040a]/98 z-[999999] hidden flex-col items-center justify-center p-6 text-center">
         <div class="w-20 h-20 rounded-2xl bg-rose-500/20 border-2 border-rose-500 flex items-center justify-center mb-4 shadow-[0_0_40px_rgba(244,63,94,0.7)] animate-pulse">
             <i data-lucide="shield-alert" class="w-10 h-10 text-rose-400"></i>
         </div>
-        <h2 class="text-2xl font-black font-cyber text-rose-400 mb-2">ACCESS RESTRICTED</h2>
+        <h2 class="text-2xl font-black font-cyber text-rose-400 mb-2">ACCESS TERMINATED</h2>
         <p id="security-lock-msg" class="text-xs text-slate-300 max-w-xs font-cyber leading-relaxed">
-            Multi-account or hardware spoofing detected. Single-device integrity policy violated.
+            Security policy violation detected. Account or device access restricted.
         </p>
         <div class="mt-6 p-3 bg-white/5 rounded-xl border border-white/10 text-[10px] font-mono text-slate-400">
-            HARDWARE HASH: <span id="sec-device-hash" class="text-amber-400 font-bold">...</span>
+            SECURITY HASH: <span id="sec-device-hash" class="text-amber-400 font-bold">...</span>
         </div>
     </div>
 
@@ -254,7 +254,7 @@
                 <div class="mt-2 px-2">
                     <div class="flex justify-between text-[11px] font-cyber font-bold text-slate-400 mb-1">
                         <span class="text-amber-300">Ultra Cyber Engine</span>
-                        <span>Tier MAX</span>
+                        <span>Level MAX</span>
                     </div>
                     <div class="w-full h-2 bg-slate-950/80 rounded-full overflow-hidden p-0.5 border border-white/10 shadow-inner">
                         <div class="h-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-300 rounded-full transition-all duration-300 shadow-[0_0_15px_#f59e0b]" style="width: 95%;"></div>
@@ -262,7 +262,7 @@
                 </div>
             </div>
 
-            <!-- 3D True Extruded Coin -->
+            <!-- 3D Extruded Coin -->
             <div class="coin-stage my-auto flex items-center justify-center py-1 relative">
                 <div id="tap-coin" class="coin-container-3d flex items-center justify-center">
                     <div class="coin-shadow-3d"></div>
@@ -313,8 +313,8 @@
                 <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-2 shadow-lg shadow-amber-500/20">
                     <i data-lucide="zap" class="w-6 h-6"></i>
                 </div>
-                <h3 class="text-lg font-bold font-cyber text-white">Power Core Upgrades</h3>
-                <p class="text-xs text-slate-400">Enhance tap yield, energy tanks, and automated neural mining.</p>
+                <h3 class="text-lg font-bold font-cyber text-white">Power Upgrades</h3>
+                <p class="text-xs text-slate-400">Upgrade multi-tap speed, energy capacitors and neural mining rigs.</p>
             </div>
 
             <div class="space-y-2.5">
@@ -322,8 +322,8 @@
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-cyber font-black">+1</div>
                         <div>
-                            <h4 class="font-bold text-xs text-white">Multi-Tap Yield</h4>
-                            <p class="text-[11px] text-slate-400">+1 Coin per tap • Cost: <span class="text-amber-400 font-cyber font-bold">1,000</span></p>
+                            <h4 class="font-bold text-xs text-white">Multi-Tap Power</h4>
+                            <p class="text-[11px] text-slate-400">+1 per tap • Cost: <span class="text-amber-400 font-cyber font-bold">1,000</span></p>
                         </div>
                     </div>
                     <button onclick="buyUpgrade('multitap')" class="px-3.5 py-2 btn-gold text-slate-950 font-bold text-xs rounded-xl font-cyber">Upgrade</button>
@@ -363,8 +363,8 @@
                 <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto mb-2 shadow-lg shadow-indigo-500/20">
                     <i data-lucide="radio" class="w-6 h-6"></i>
                 </div>
-                <h3 class="text-lg font-bold font-cyber text-white">Network Missions</h3>
-                <p class="text-xs text-slate-400">Join verified Telegram channels to claim high-yield bounty rewards.</p>
+                <h3 class="text-lg font-bold font-cyber text-white">Channel Missions</h3>
+                <p class="text-xs text-slate-400">Join required Telegram channels to claim instant bounty rewards.</p>
             </div>
             
             <div id="tasks-container" class="space-y-2.5 pb-4">
@@ -378,17 +378,17 @@
                 <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-1.5 shadow-lg shadow-amber-500/20">
                     <i data-lucide="users" class="w-6 h-6"></i>
                 </div>
-                <h3 class="text-lg font-bold font-cyber text-white">Neural Squad</h3>
-                <p class="text-xs text-slate-400">Real-time squad bounty ledger & affiliate network.</p>
+                <h3 class="text-lg font-bold font-cyber text-white">Invite Squad</h3>
+                <p class="text-xs text-slate-400">Real-time instant invite count & reward ledger.</p>
                 
                 <div class="mt-3 p-3 bg-white/5 rounded-xl border border-white/5 flex items-center justify-around">
                     <div>
-                        <span class="text-[10px] text-slate-400 font-bold uppercase font-cyber">Friend Bounty</span>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase font-cyber">Per Friend Bounty</span>
                         <h4 id="ref-reward-tag" class="text-lg font-black font-cyber text-amber-400">+5,000</h4>
                     </div>
                     <div class="h-8 w-px bg-white/10"></div>
                     <div>
-                        <span class="text-[10px] text-slate-400 font-bold uppercase font-cyber">Squad Size</span>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase font-cyber">Squad Recruits</span>
                         <h4 id="ref-count-tag" class="text-lg font-black font-cyber text-cyan-400 drop-shadow-[0_0_10px_#06b6d4]">0</h4>
                     </div>
                 </div>
@@ -413,7 +413,7 @@
                     <span id="squad-counter-badge" class="text-[10px] text-amber-400">0 Recruited</span>
                 </h5>
                 <div id="referrals-list-feed" class="space-y-1.5 max-h-36 overflow-y-auto no-scrollbar">
-                    <p class="text-[11px] text-slate-500 text-center py-2">No squad members yet. Share your neural link!</p>
+                    <p class="text-[11px] text-slate-500 text-center py-2 font-cyber">No squad recruits yet. Share your neural link!</p>
                 </div>
             </div>
         </section>
@@ -460,7 +460,7 @@
 
                 <div>
                     <label class="block text-[11px] text-slate-400 mb-1 font-cyber">Wallet Address / Account Number</label>
-                    <input type="text" id="withdraw-target" placeholder="Enter recipient address or mobile account..." class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs outline-none focus:border-amber-400">
+                    <input type="text" id="withdraw-target" placeholder="Enter recipient address / mobile number..." class="w-full p-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs outline-none focus:border-amber-400">
                 </div>
 
                 <button onclick="requestWithdrawal()" class="w-full py-3 btn-gold rounded-xl text-slate-950 font-bold font-cyber text-xs tracking-wider">
@@ -471,7 +471,7 @@
             <!-- User Live Withdrawal Record Feed -->
             <div class="glass-card p-3 rounded-2xl space-y-2">
                 <h5 class="text-xs font-bold font-cyber text-white flex items-center gap-1.5">
-                    <i data-lucide="history" class="w-4 h-4 text-amber-400"></i> Withdrawal History
+                    <i data-lucide="history" class="w-4 h-4 text-amber-400"></i> My Withdrawal History
                 </h5>
                 <div id="user-withdrawal-records" class="space-y-1.5 max-h-48 overflow-y-auto no-scrollbar">
                     <p class="text-[11px] text-slate-500 text-center py-3 font-cyber">No transaction records found.</p>
@@ -479,7 +479,7 @@
             </div>
         </section>
 
-        <!-- ================= PAGE 6: 👑 MASTER ADMIN COMMAND HUB ================= -->
+        <!-- ================= PAGE 6: 👑 MASTER ADMIN COMMAND HUB (ID: 8172880871) ================= -->
         <section id="page-admin" class="page-view flex-col h-full overflow-y-auto no-scrollbar py-2 space-y-3">
             <div class="flex items-center justify-between pb-2 border-b border-white/10">
                 <h3 class="text-sm font-bold font-cyber text-indigo-400 flex items-center gap-1.5">
@@ -501,11 +501,11 @@
             <div id="adm-users" class="admin-subspace space-y-2.5">
                 <div class="grid grid-cols-3 gap-2">
                     <div class="glass-card p-2.5 rounded-xl text-center">
-                        <span class="text-[9px] text-slate-400 font-cyber font-bold uppercase block">TOTAL CADETS</span>
+                        <span class="text-[9px] text-slate-400 font-cyber font-bold uppercase block">TOTAL USERS</span>
                         <h4 id="adm-stat-users" class="text-lg font-black font-cyber text-cyan-400">0</h4>
                     </div>
                     <div class="glass-card p-2.5 rounded-xl text-center">
-                        <span class="text-[9px] text-slate-400 font-cyber font-bold uppercase block">TOTAL BALANCE</span>
+                        <span class="text-[9px] text-slate-400 font-cyber font-bold uppercase block">TOTAL COINS</span>
                         <h4 id="adm-stat-balance" class="text-lg font-black font-cyber text-amber-400">0</h4>
                     </div>
                     <div class="glass-card p-2.5 rounded-xl text-center">
@@ -519,7 +519,7 @@
                 </div>
             </div>
 
-            <!-- SUBTAB 2: ONLY PENDING PAYOUTS -->
+            <!-- SUBTAB 2: PAYOUTS (ONLY PENDING) -->
             <div id="adm-payouts" class="admin-subspace hidden space-y-2">
                 <div id="admin-payouts-feed" class="space-y-2 max-h-96 overflow-y-auto no-scrollbar">
                     <p class="text-xs text-slate-500 text-center py-4 font-cyber">No pending payout requests.</p>
@@ -530,53 +530,47 @@
             <div id="adm-settings" class="admin-subspace hidden space-y-3">
                 <div class="glass-card p-3.5 rounded-xl space-y-3 border border-rose-500/30">
                     <h5 class="text-[11px] font-bold text-rose-400 uppercase font-cyber flex items-center gap-1">
-                        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Hardware & Network Security Controls
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Multi-Account & Anti-Cheat Controls
                     </h5>
 
                     <div class="flex items-center justify-between p-2 rounded-lg bg-slate-900/80 border border-white/5">
                         <div>
                             <h6 class="text-xs font-bold text-white font-cyber">Single Device Lock</h6>
-                            <p class="text-[10px] text-slate-400">Strictly 1 account per physical device</p>
+                            <p class="text-[10px] text-slate-400">Strictly 1 account per physical phone/PC</p>
                         </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input id="cfg-lock-device" type="checkbox" class="sr-only peer">
-                            <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
-                        </label>
+                        <input id="cfg-lock-device" type="checkbox" class="w-5 h-5 accent-emerald-500 cursor-pointer">
                     </div>
 
                     <div class="flex items-center justify-between p-2 rounded-lg bg-slate-900/80 border border-white/5">
                         <div>
                             <h6 class="text-xs font-bold text-white font-cyber">Same Wi-Fi / IP Lock</h6>
-                            <p class="text-[10px] text-slate-400">Block multiple accounts on same network</p>
+                            <p class="text-[10px] text-slate-400">Block multiple accounts on same Wi-Fi network</p>
                         </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input id="cfg-lock-ip" type="checkbox" class="sr-only peer">
-                            <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
-                        </label>
+                        <input id="cfg-lock-ip" type="checkbox" class="w-5 h-5 accent-emerald-500 cursor-pointer">
                     </div>
 
                     <div>
-                        <label class="block text-[10px] text-slate-300 mb-1 font-cyber uppercase font-bold">Daily Energy Cap (Coins)</label>
+                        <label class="block text-[10px] text-slate-300 mb-1 font-cyber uppercase font-bold">Daily Mining Quota (Coins)</label>
                         <input id="cfg-daily-energy" type="number" placeholder="3000" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-amber-400 font-cyber font-bold">
                     </div>
                 </div>
 
                 <div class="glass-card p-3.5 rounded-xl space-y-3">
                     <h5 class="text-[11px] font-bold text-amber-400 uppercase font-cyber flex items-center gap-1">
-                        <i data-lucide="sliders" class="w-3.5 h-3.5"></i> Economy & Affiliate Configuration
+                        <i data-lucide="sliders" class="w-3.5 h-3.5"></i> Economy & Affiliate Settings
                     </h5>
 
                     <div class="p-2.5 bg-slate-900/80 rounded-lg border border-white/5 space-y-2">
                         <label class="block text-[10px] font-bold text-slate-300 uppercase font-cyber">Exchange Conversion Rate</label>
                         <div class="flex items-center gap-2">
                             <input id="cfg-rate-coins" type="number" placeholder="10000" class="w-1/2 p-2 rounded bg-slate-950 border border-white/10 text-xs text-white text-center font-cyber font-bold">
-                            <span class="text-xs text-slate-400 font-bold">Coins = $</span>
+                            <span class="text-xs text-slate-400 font-bold font-cyber">Coins = $</span>
                             <input id="cfg-rate-usd" type="number" step="0.01" placeholder="1.00" class="w-1/2 p-2 rounded bg-slate-950 border border-white/10 text-xs text-emerald-400 text-center font-cyber font-bold">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-[10px] text-slate-400 mb-1 font-cyber">Squad Referral Bounty (Coins Per Friend)</label>
+                        <label class="block text-[10px] text-slate-400 mb-1 font-cyber">Squad Bounty (Coins Per Friend)</label>
                         <input id="cfg-ref-bonus" type="number" placeholder="5000" class="w-full p-2 rounded-lg bg-slate-900 border border-white/10 text-xs text-amber-400 font-cyber font-bold">
                     </div>
 
@@ -604,7 +598,7 @@
             <div id="adm-currencies" class="admin-subspace hidden space-y-3">
                 <div class="glass-card p-3.5 rounded-xl space-y-2.5">
                     <h5 class="text-[11px] font-bold text-amber-400 uppercase font-cyber flex items-center gap-1.5">
-                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Payout Gateway
+                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Gateway
                     </h5>
                     
                     <div class="grid grid-cols-2 gap-2">
@@ -699,7 +693,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // ================= 🎵 AUDIO SYNTHESIS ENGINE =================
+        // ================= 🎵 AUDIO ENGINE =================
         let audioCtx = null;
         function getAudioContext() {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -768,7 +762,7 @@
             if (btn && !btn.closest('#tap-coin')) playClickSound();
         });
 
-        // ================= 💥 60FPS CANVAS PARTICLES =================
+        // ================= 💥 CANVAS PARTICLES =================
         const canvas = document.getElementById('fx-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -938,7 +932,6 @@
             listenToReferralsFeed();
             listenToUserWithdrawals();
 
-            // Run strict anti-cheat verification
             await fetchUserIP();
             await runSecurityAndAntiCheatCheck();
 
@@ -959,7 +952,7 @@
             window.addEventListener('pagehide', pushBalanceToCloud);
         });
 
-        // Fast Multi-Source IP Fetcher
+        // Fast IP Fetcher
         async function fetchUserIP() {
             try {
                 const res = await fetch('https://api.ipify.org?format=json', { cache: 'no-store' });
@@ -976,28 +969,27 @@
             }
         }
 
-        // 🛡️ 100% BULLETPROOF DEVICE & WI-FI SECURITY LOCK CHECK
+        // 🛡️ 100% BULLETPROOF SECURITY & REAL-TIME BAN/LOCK CHECK
         async function runSecurityAndAntiCheatCheck() {
-            if (user.id === MASTER_ADMIN_ID) return; // Admin is exempt
-
             const lockScreen = document.getElementById('security-lock-screen');
             const lockMsg = document.getElementById('security-lock-msg');
 
-            const triggerLock = (reason) => {
-                lockMsg.textContent = reason;
+            // 1. Check if user is banned
+            if (user.isBlocked) {
+                lockMsg.textContent = "Your account has been banned by the Administrator for policy violation.";
                 lockScreen.classList.remove('hidden');
                 lockScreen.classList.add('flex');
-                user.isBlocked = true;
-            };
-
-            // 1. Check if user is manually banned by Admin
-            if (user.isBlocked) {
-                triggerLock("Your account has been permanently terminated by the Administrator.");
                 return;
             }
 
-            // 2. Hardware / Single Device Lock (1 Account Per Physical Device)
-            if (masterConfig.lockDeviceEnabled !== false) {
+            if (user.id === MASTER_ADMIN_ID) {
+                lockScreen.classList.add('hidden');
+                lockScreen.classList.remove('flex');
+                return;
+            }
+
+            // 2. Hardware / Single Device Lock
+            if (masterConfig.lockDeviceEnabled === true) {
                 try {
                     const devDocRef = doc(db, "tma_device_registry", user.deviceUUID);
                     const devSnap = await getDoc(devDocRef);
@@ -1005,7 +997,9 @@
                     if (devSnap.exists()) {
                         const registeredUID = devSnap.data().userId;
                         if (registeredUID && registeredUID !== user.id) {
-                            triggerLock("Security Violation: This physical device is already bound to another registered account! Only 1 account is permitted per device.");
+                            lockMsg.textContent = "Security Alert: This physical device is already registered with another account! Only 1 account per device is permitted.";
+                            lockScreen.classList.remove('hidden');
+                            lockScreen.classList.add('flex');
                             return;
                         }
                     } else {
@@ -1019,8 +1013,8 @@
                 } catch (e) {}
             }
 
-            // 3. Same Wi-Fi / IP Multi-Account Lock
-            if (masterConfig.lockIPEnabled && user.ipAddress && user.ipAddress !== "127.0.0.1") {
+            // 3. Same Wi-Fi / IP Lock
+            if (masterConfig.lockIPEnabled === true && user.ipAddress && user.ipAddress !== "127.0.0.1") {
                 try {
                     const cleanIPDocId = "ip_" + user.ipAddress.replace(/[^a-zA-Z0-9]/g, '_');
                     const ipDocRef = doc(db, "tma_ip_registry", cleanIPDocId);
@@ -1029,7 +1023,9 @@
                     if (ipSnap.exists()) {
                         const registeredIPUser = ipSnap.data().userId;
                         if (registeredIPUser && registeredIPUser !== user.id) {
-                            triggerLock("Security Violation: Another active account has already been registered on this same Wi-Fi / IP Network!");
+                            lockMsg.textContent = "Security Alert: Another account is already registered on this same Wi-Fi / IP Network!";
+                            lockScreen.classList.remove('hidden');
+                            lockScreen.classList.add('flex');
                             return;
                         }
                     } else {
@@ -1042,6 +1038,10 @@
                     }
                 } catch (e) {}
             }
+
+            // If all security checks pass and not blocked, remove lock screen
+            lockScreen.classList.add('hidden');
+            lockScreen.classList.remove('flex');
         }
 
         // ================= 🎯 REFERRAL DETECTOR =================
@@ -1102,15 +1102,8 @@
                     user.completedTasks = Array.from(new Set([...user.completedTasks, ...(cloudData.completedTasks || [])]));
                     user.referralsCount = typeof cloudData.referralsCount === 'number' ? cloudData.referralsCount : user.referralsCount;
                     user.referredBy = cloudData.referredBy || user.referredBy;
-                    user.isBlocked = cloudData.isBlocked || false;
+                    user.isBlocked = cloudData.isBlocked === true;
                     user.withdrawCount = cloudData.withdrawCount || 0;
-
-                    if (user.isBlocked) {
-                        const lockScreen = document.getElementById('security-lock-screen');
-                        document.getElementById('security-lock-msg').textContent = "Your account has been permanently terminated by the Administrator.";
-                        lockScreen.classList.remove('hidden');
-                        lockScreen.classList.add('flex');
-                    }
 
                     if (cloudData.dailyDate !== todayDateStr) {
                         user.dailyEnergyUsed = 0;
@@ -1129,23 +1122,20 @@
                     saveToLocalInstant();
                     renderUI();
                     renderTasks();
+                    runSecurityAndAntiCheatCheck();
                 }
 
+                // Live Real-Time User Listener (Handles Ban / Unban Immediately)
                 onSnapshot(userRef, (docSnap) => {
                     if(docSnap.exists()) {
                         const d = docSnap.data();
-                        if(typeof d.balance === 'number' && d.balance > user.balance) user.balance = d.balance;
+                        if(typeof d.balance === 'number') user.balance = d.balance;
                         if(typeof d.referralsCount === 'number') user.referralsCount = d.referralsCount;
                         if(typeof d.withdrawCount === 'number') user.withdrawCount = d.withdrawCount;
                         if(Array.isArray(d.completedTasks)) user.completedTasks = Array.from(new Set([...user.completedTasks, ...d.completedTasks]));
                         
-                        user.isBlocked = d.isBlocked || false;
-                        if (user.isBlocked) {
-                            const lockScreen = document.getElementById('security-lock-screen');
-                            document.getElementById('security-lock-msg').textContent = "Your account has been permanently terminated by the Administrator.";
-                            lockScreen.classList.remove('hidden');
-                            lockScreen.classList.add('flex');
-                        }
+                        user.isBlocked = d.isBlocked === true;
+                        runSecurityAndAntiCheatCheck(); // Instantly Lock / Unlock UI
 
                         saveToLocalInstant();
                         renderUI();
@@ -1217,10 +1207,20 @@
             });
         }
 
+        // Master Settings Listener (Accurate Boolean Parsing)
         function initMasterConfig() {
             onSnapshot(doc(db, "tma_config", "main"), (snap) => {
                 if(snap.exists()) {
-                    masterConfig = { ...masterConfig, ...snap.data() };
+                    const data = snap.data();
+                    masterConfig.rateCoins = data.rateCoins ?? 10000;
+                    masterConfig.rateUsd = data.rateUsd ?? 1.00;
+                    masterConfig.referralBonus = data.referralBonus ?? 5000;
+                    masterConfig.dailyEnergyLimit = data.dailyEnergyLimit ?? 3000;
+                    masterConfig.lockDeviceEnabled = data.lockDeviceEnabled === true;
+                    masterConfig.lockIPEnabled = data.lockIPEnabled === true;
+                    masterConfig.botToken = data.botToken || "";
+                    masterConfig.botUsername = data.botUsername || "sn_mini_app_bot";
+
                     document.getElementById('ref-reward-tag').textContent = `+${masterConfig.referralBonus.toLocaleString()}`;
                     document.getElementById('wallet-rate-badge').textContent = `Rate: ${masterConfig.rateCoins.toLocaleString()} Coins = $${masterConfig.rateUsd.toFixed(2)} USD`;
                     document.getElementById('daily-limit-text').textContent = (masterConfig.dailyEnergyLimit || 3000).toLocaleString();
@@ -1228,14 +1228,15 @@
                     document.getElementById('cfg-rate-coins').value = masterConfig.rateCoins;
                     document.getElementById('cfg-rate-usd').value = masterConfig.rateUsd;
                     document.getElementById('cfg-ref-bonus').value = masterConfig.referralBonus;
-                    document.getElementById('cfg-daily-energy').value = masterConfig.dailyEnergyLimit || 3000;
-                    document.getElementById('cfg-lock-device').checked = masterConfig.lockDeviceEnabled !== false;
-                    document.getElementById('cfg-lock-ip').checked = masterConfig.lockIPEnabled !== false;
-                    document.getElementById('cfg-bot-token').value = masterConfig.botToken || "";
-                    document.getElementById('cfg-bot-user').value = masterConfig.botUsername || "sn_mini_app_bot";
+                    document.getElementById('cfg-daily-energy').value = masterConfig.dailyEnergyLimit;
+                    document.getElementById('cfg-lock-device').checked = masterConfig.lockDeviceEnabled;
+                    document.getElementById('cfg-lock-ip').checked = masterConfig.lockIPEnabled;
+                    document.getElementById('cfg-bot-token').value = masterConfig.botToken;
+                    document.getElementById('cfg-bot-user').value = masterConfig.botUsername;
                     
                     updateConvertedValue();
                     renderUI();
+                    runSecurityAndAntiCheatCheck();
                 } else {
                     setDoc(doc(db, "tma_config", "main"), masterConfig, { merge: true });
                 }
@@ -1248,8 +1249,8 @@
             const rateUsd = parseFloat(document.getElementById('cfg-rate-usd').value) || 1.00;
             const referralBonus = parseInt(document.getElementById('cfg-ref-bonus').value) || 5000;
             const dailyEnergyLimit = parseInt(document.getElementById('cfg-daily-energy').value) || 3000;
-            const lockDeviceEnabled = document.getElementById('cfg-lock-device').checked;
-            const lockIPEnabled = document.getElementById('cfg-lock-ip').checked;
+            const lockDeviceEnabled = document.getElementById('cfg-lock-device').checked === true;
+            const lockIPEnabled = document.getElementById('cfg-lock-ip').checked === true;
             const botToken = document.getElementById('cfg-bot-token').value.trim();
             const botUsername = document.getElementById('cfg-bot-user').value.trim() || "sn_mini_app_bot";
 
@@ -1259,7 +1260,14 @@
 
             try {
                 await setDoc(doc(db, "tma_config", "main"), {
-                    rateCoins, rateUsd, referralBonus, dailyEnergyLimit, lockDeviceEnabled, lockIPEnabled, botToken, botUsername
+                    rateCoins,
+                    rateUsd,
+                    referralBonus,
+                    dailyEnergyLimit,
+                    lockDeviceEnabled,
+                    lockIPEnabled,
+                    botToken,
+                    botUsername
                 }, { merge: true });
                 playRewardSound();
                 showToast("System Security & Economy Settings Saved!", true);
@@ -1280,7 +1288,7 @@
             
             const usdVal = (coins / rateCoins) * rateUsd;
             if (current && current.type === 'BDT') {
-                const bdtVal = usdVal * 120; // 1 USD = 120 BDT
+                const bdtVal = usdVal * 120;
                 document.getElementById('live-convert-preview').innerHTML = `<span>≈ $${usdVal.toFixed(2)} USD (৳${bdtVal.toFixed(0)} BDT)</span>`;
             } else {
                 document.getElementById('live-convert-preview').innerHTML = `<span>≈ $${usdVal.toFixed(2)} USD</span>`;
@@ -1781,7 +1789,6 @@
                     return;
                 }
 
-                // Sort newest first
                 const docs = [];
                 snapshot.forEach(d => docs.push(d.data()));
                 docs.sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
@@ -1809,7 +1816,7 @@
             });
         }
 
-        // ================= 👑 ADMIN CRM & ONLY-PENDING PAYOUT HUB =================
+        // ================= 👑 ADMIN CRM & INSTANT BAN/UNBAN HUB =================
         function initAdminUsersCRM() {
             onSnapshot(collection(db, "tma_users"), (snapshot) => {
                 const feed = document.getElementById('admin-users-list');
@@ -1823,19 +1830,20 @@
 
                 snapshot.forEach(docSnap => {
                     const u = docSnap.data();
+                    const isBanned = u.isBlocked === true;
                     totalBal += (u.balance || 0);
                     totalWithdraws += (u.withdrawCount || 0);
 
                     feed.innerHTML += `
-                        <div class="glass-card p-3 rounded-xl space-y-1.5 text-xs border ${u.isBlocked ? 'border-rose-500/50 bg-rose-950/20' : 'border-white/5'}">
+                        <div class="glass-card p-3 rounded-xl space-y-1.5 text-xs border ${isBanned ? 'border-rose-500/50 bg-rose-950/30' : 'border-white/5'}">
                             <div class="flex items-center justify-between font-cyber">
                                 <div class="flex items-center gap-2">
-                                    <span class="w-2 h-2 rounded-full ${u.isBlocked ? 'bg-rose-500' : 'bg-emerald-500'}"></span>
-                                    <h6 class="font-bold text-white">${u.name}</h6>
+                                    <span class="w-2 h-2 rounded-full ${isBanned ? 'bg-rose-500 shadow-sm shadow-rose-500' : 'bg-emerald-500 shadow-sm shadow-emerald-500'}"></span>
+                                    <h6 class="font-bold text-white">${u.name || 'Anonymous'}</h6>
                                     <span class="text-[10px] text-slate-400 font-mono">(${u.id})</span>
                                 </div>
-                                <button onclick="toggleUserBlock('${u.id}', ${!u.isBlocked})" class="px-2.5 py-1 rounded text-[10px] font-bold font-cyber ${u.isBlocked ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}">
-                                    ${u.isBlocked ? 'UNBAN USER' : 'BAN USER'}
+                                <button id="btn-ban-${u.id}" onclick="toggleUserBlock('${u.id}', ${!isBanned})" class="px-2.5 py-1 rounded text-[10px] font-bold font-cyber transition ${isBanned ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/40 hover:bg-rose-500/30'}">
+                                    ${isBanned ? 'UNBAN USER' : 'BAN USER'}
                                 </button>
                             </div>
                             
@@ -1854,11 +1862,23 @@
             });
         }
 
+        // 🛡️ Bulletproof Ban / Unban Command
         window.toggleUserBlock = async (uid, blockStatus) => {
             if (user.id !== MASTER_ADMIN_ID) return;
-            await updateDoc(doc(db, "tma_users", uid), { isBlocked: blockStatus });
-            playRewardSound();
-            showToast(`User ${blockStatus ? 'TERMINATED & BANNED' : 'UNBANNED'} Successfully!`, true);
+            const targetBtn = document.getElementById(`btn-ban-${uid}`);
+            if (targetBtn) {
+                targetBtn.disabled = true;
+                targetBtn.textContent = "Updating...";
+            }
+
+            try {
+                const userRef = doc(db, "tma_users", uid);
+                await updateDoc(userRef, { isBlocked: blockStatus });
+                playRewardSound();
+                showToast(`User ${blockStatus ? 'BANNED' : 'UNBANNED'} Successfully!`, true);
+            } catch(e) {
+                showToast("Action Failed: " + e.message, false);
+            }
         };
 
         // ADMIN PAYOUTS: Only shows PENDING payouts (Disappears once approved/rejected)
@@ -1927,7 +1947,7 @@
             if(user.id !== MASTER_ADMIN_ID) return;
             const wRef = doc(db, "tma_withdrawals", docId);
             
-            // If rejected, refund coins back to user's balance automatically
+            // Refund coins back to user if rejected
             if(status === 'rejected') {
                 const uRef = doc(db, "tma_users", uid);
                 const snap = await getDoc(uRef);
@@ -1936,10 +1956,9 @@
                 }
             }
             
-            // Update the withdrawal record status in Firestore
             await updateDoc(wRef, { status: status, processedAt: serverTimestamp() });
             playRewardSound();
-            showToast(`Withdrawal successfully marked as ${status.toUpperCase()}!`, true);
+            showToast(`Withdrawal marked as ${status.toUpperCase()}!`, true);
         };
 
         // Referral Links
