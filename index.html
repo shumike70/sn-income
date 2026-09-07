@@ -218,7 +218,7 @@
                 <span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-[#05070d] shadow-sm shadow-emerald-500"></span>
             </div>
             <div>
-                <h4 id="u-name" class="font-bold text-sm text-white font-cyber tracking-tight leading-none">Connecting...</h4>
+                <h4 id="u-name" class="font-bold text-sm text-white font-cyber tracking-tight leading-none">Cyber Comrade</h4>
                 <div class="flex items-center gap-1.5 mt-1">
                     <span id="role-badge" class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30 uppercase tracking-widest font-cyber">CYBER MINER</span>
                     <span id="u-id-badge" class="text-[10px] text-slate-400 font-mono">ID: ...</span>
@@ -241,7 +241,7 @@
     <!-- Main Dynamic Screen -->
     <main class="flex-1 w-full max-w-md mx-auto px-4 py-1 relative overflow-hidden flex flex-col justify-between z-30">
 
-        <!-- ================= PAGE 1: 🎮 3D COIN & ENERGY ================= -->
+        <!-- ================= PAGE 1: 🎮 3D COIN ================= -->
         <section id="page-exchange" class="page-view active flex-col items-center justify-between h-full py-1">
             <div class="w-full text-center shrink-0">
                 <div class="flex items-center justify-center gap-2.5">
@@ -394,6 +394,19 @@
                 </div>
             </div>
 
+            <!-- Manual Referral Code Box -->
+            <div id="manual-ref-container" class="glass-card p-3 rounded-xl space-y-2">
+                <label class="text-[11px] font-bold text-amber-400 uppercase tracking-wider font-cyber flex items-center gap-1.5">
+                    <i data-lucide="gift" class="w-3.5 h-3.5"></i> Have an Inviter's ID?
+                </label>
+                <div class="flex gap-2">
+                    <input type="text" id="manual-ref-input" placeholder="Enter Friend's Telegram ID" class="flex-1 p-2 rounded-xl bg-slate-900 border border-white/10 text-white text-xs font-mono outline-none focus:border-amber-400">
+                    <button onclick="claimManualReferral()" class="px-4 py-2 btn-gold text-slate-950 font-bold text-xs rounded-xl font-cyber">
+                        Claim
+                    </button>
+                </div>
+            </div>
+
             <div class="glass-card p-3 rounded-xl space-y-2">
                 <label class="text-[11px] font-bold text-slate-300 uppercase tracking-wider font-cyber">Your Personal Neural Link</label>
                 <div class="flex gap-2">
@@ -418,7 +431,7 @@
             </div>
         </section>
 
-        <!-- ================= PAGE 5: 💳 WALLET WITH LIVE RECORD SHOW ================= -->
+        <!-- ================= PAGE 5: 💳 WALLET ================= -->
         <section id="page-wallet" class="page-view flex-col h-full overflow-y-auto no-scrollbar py-2 space-y-3">
             <div class="glass-card p-4 rounded-2xl text-center">
                 <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 font-cyber">Available Balance</span>
@@ -438,6 +451,10 @@
                     <label class="block text-[11px] text-slate-400 mb-1.5 font-cyber">Select Gateway</label>
                     <div class="relative">
                         <select id="withdraw-currency-select" onchange="onCurrencySelected()" class="w-full p-3 pl-12 rounded-xl bg-slate-900 border border-white/10 text-white text-xs font-bold outline-none focus:border-amber-400 transition font-cyber">
+                            <option value="usdt">USDT (TRC20)</option>
+                            <option value="ton">TON Coin</option>
+                            <option value="bkash">bKash (BD)</option>
+                            <option value="nagad">Nagad (BD)</option>
                         </select>
                         <div class="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full overflow-hidden flex items-center justify-center bg-slate-800">
                             <img id="selected-curr-icon" src="https://assets.coingecko.com/coins/images/325/small/Tether.png" class="w-5 h-5 object-contain" alt="Icon">
@@ -479,7 +496,7 @@
             </div>
         </section>
 
-        <!-- ================= PAGE 6: 👑 MASTER ADMIN COMMAND HUB (ID: 8172880871) ================= -->
+        <!-- ================= PAGE 6: 👑 MASTER ADMIN HUB ================= -->
         <section id="page-admin" class="page-view flex-col h-full overflow-y-auto no-scrollbar py-2 space-y-3">
             <div class="flex items-center justify-between pb-2 border-b border-white/10">
                 <h3 class="text-sm font-bold font-cyber text-indigo-400 flex items-center gap-1.5">
@@ -519,14 +536,14 @@
                 </div>
             </div>
 
-            <!-- SUBTAB 2: PAYOUTS (ONLY PENDING) -->
+            <!-- SUBTAB 2: PAYOUTS (PENDING ONLY) -->
             <div id="adm-payouts" class="admin-subspace hidden space-y-2">
                 <div id="admin-payouts-feed" class="space-y-2 max-h-96 overflow-y-auto no-scrollbar">
                     <p class="text-xs text-slate-500 text-center py-4 font-cyber">No pending payout requests.</p>
                 </div>
             </div>
 
-            <!-- SUBTAB 3: SETTINGS & SECURITY -->
+            <!-- SUBTAB 3: SETTINGS -->
             <div id="adm-settings" class="admin-subspace hidden space-y-3">
                 <div class="glass-card p-3.5 rounded-xl space-y-3 border border-rose-500/30">
                     <h5 class="text-[11px] font-bold text-rose-400 uppercase font-cyber flex items-center gap-1">
@@ -842,10 +859,9 @@
         const todayDateStr = new Date().toISOString().slice(0, 10);
         const localCached = JSON.parse(localStorage.getItem(`local_user_data_${persistentId}`) || '{}');
 
-        // NEW USER ALWAYS DEFAULTS TO 0 BALANCE
         let user = {
             id: persistentId,
-            name: tgUser ? `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() : (localCached.name || "CYBER MINER"),
+            name: tgUser ? `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim() : (localCached.name || "Cyber Comrade"),
             username: tgUser?.username || "",
             balance: typeof localCached.balance === 'number' ? localCached.balance : 0,
             energy: typeof localCached.energy === 'number' ? localCached.energy : 1000,
@@ -865,16 +881,25 @@
 
         let loadedTasks = [];
         let taskClickState = {};
-        let currencyList = [];
+        
+        // Built-in Default Gateways (Never empty!)
+        let currencyList = [
+            { id: "usdt", name: "USDT (TRC20)", min: 10000, type: "USD", icon: "https://assets.coingecko.com/coins/images/325/small/Tether.png" },
+            { id: "ton", name: "TON Coin", min: 10000, type: "USD", icon: "https://assets.coingecko.com/coins/images/17980/small/ton_symbol.png" },
+            { id: "bkash", name: "bKash (BD)", min: 10000, type: "BDT", icon: "https://freelogopng.com/images/all_img/1656234745bkash-app-logo.png" },
+            { id: "nagad", name: "Nagad (BD)", min: 10000, type: "BDT", icon: "https://freelogopng.com/images/all_img/1679248787Nagad-Logo.png" }
+        ];
+        
+        const localSavedConfig = JSON.parse(localStorage.getItem('tma_master_config_cache') || '{}');
         let masterConfig = {
-            rateCoins: 10000,
-            rateUsd: 1.00,
-            referralBonus: 5000,
-            dailyEnergyLimit: 3000,
-            lockDeviceEnabled: true,
-            lockIPEnabled: true,
-            botToken: "",
-            botUsername: "sn_mini_app_bot"
+            rateCoins: localSavedConfig.rateCoins || 10000,
+            rateUsd: localSavedConfig.rateUsd || 1.00,
+            referralBonus: localSavedConfig.referralBonus || 5000,
+            dailyEnergyLimit: localSavedConfig.dailyEnergyLimit || 3000,
+            lockDeviceEnabled: localSavedConfig.lockDeviceEnabled === true,
+            lockIPEnabled: localSavedConfig.lockIPEnabled === true,
+            botToken: localSavedConfig.botToken || "",
+            botUsername: localSavedConfig.botUsername || "sn_mini_app_bot"
         };
 
         window.showToast = (msg, isSuccess = true) => {
@@ -887,7 +912,7 @@
             iconEl.className = isSuccess ? 'w-4 h-4 text-emerald-400 shrink-0' : 'w-4 h-4 text-rose-400 shrink-0';
             
             toast.classList.add('show');
-            lucide.createIcons();
+            try { lucide.createIcons(); } catch(e){}
             setTimeout(() => toast.classList.remove('show'), 3000);
         };
 
@@ -909,7 +934,6 @@
             }));
         }
 
-        // ================= 🎯 100% BULLETPROOF REFERRAL EXTRACTOR =================
         function extractReferrerId() {
             try {
                 if (tg?.initDataUnsafe?.start_param) {
@@ -939,9 +963,34 @@
             return null;
         }
 
-        // ================= LIFECYCLE INITIALIZATION =================
-        window.addEventListener('DOMContentLoaded', async () => {
-            lucide.createIcons();
+        window.claimManualReferral = async () => {
+            const input = document.getElementById('manual-ref-input');
+            const inviterId = input.value.trim().replace(/^ref_/, '');
+
+            if (!inviterId) return showToast("Please enter a valid Referral ID!", false);
+            if (inviterId === user.id) return showToast("You cannot refer yourself!", false);
+            if (user.referredBy) return showToast("You have already used a referral link!", false);
+
+            try {
+                const inviterRef = doc(db, "tma_users", inviterId);
+                const invSnap = await getDoc(inviterRef);
+                if (!invSnap.exists()) return showToast("Referral ID not found in database!", false);
+
+                user.referredBy = inviterId;
+                await updateDoc(doc(db, "tma_users", user.id), { referredBy: inviterId });
+                await awardReferrerAtomic(inviterId, user.name, user.id);
+
+                saveToLocalInstant();
+                showToast("Referral claimed successfully! Inviter rewarded.", true);
+                document.getElementById('manual-ref-container').classList.add('hidden');
+            } catch(e) {
+                showToast("Failed: " + e.message, false);
+            }
+        };
+
+        // ================= ⚡ NON-BLOCKING LIFECYCLE INIT =================
+        window.addEventListener('DOMContentLoaded', () => {
+            try { lucide.createIcons(); } catch(e){}
             renderUI();
             initHardware3DTap();
             
@@ -949,31 +998,32 @@
             document.getElementById('u-id-badge').textContent = `ID: ${user.id}`;
             if(tgUser?.photo_url) document.getElementById('u-avatar').src = tgUser.photo_url;
             
-            // ADMIN SPECIAL ROLE BADGE
             if (user.id === MASTER_ADMIN_ID) {
                 document.getElementById('admin-header-btn').classList.remove('hidden');
                 document.getElementById('role-badge').textContent = "👑 MASTER OWNER";
                 document.getElementById('role-badge').className = "text-[9px] px-2 py-0.5 rounded bg-gradient-to-r from-amber-500/30 to-yellow-500/30 text-amber-300 font-extrabold border border-amber-400/60 uppercase tracking-widest font-cyber shadow-[0_0_12px_rgba(245,158,11,0.5)]";
             }
 
-            try { await signInAnonymously(auth); } catch(e){}
+            // Start Firebase Auth & Realtime Data in parallel
+            signInAnonymously(auth).then(() => {
+                initMasterConfig();
+                initUserData();
+                initCurrencies();
+                initTasksListener();
+                listenToReferralsFeed();
+                listenToUserWithdrawals();
 
-            await fetchUserIP();
-            await initMasterConfig();
-            await initUserData();
-            initCurrencies();
-            initTasksListener();
+                if (user.id === MASTER_ADMIN_ID) {
+                    initAdminPayouts();
+                    initAdminUsersCRM();
+                }
+            }).catch(e => {
+                console.log("Firebase Auth error:", e);
+            });
+
+            // Run in background without blocking rendering
+            fetchUserIP().then(() => runSecurityAndAntiCheatCheck());
             initPassiveMining();
-            listenToReferralsFeed();
-            listenToUserWithdrawals();
-
-            // Run anti-cheat (Master Admin is 100% immune)
-            await runSecurityAndAntiCheatCheck();
-
-            if (user.id === MASTER_ADMIN_ID) {
-                initAdminPayouts();
-                initAdminUsersCRM();
-            }
 
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'visible') {
@@ -987,30 +1037,25 @@
             window.addEventListener('pagehide', pushBalanceToCloud);
         });
 
-        // Fast IP Fetcher
+        // Background IP Fetcher (Fast with fallback)
         async function fetchUserIP() {
             try {
-                const res = await fetch('https://api.ipify.org?format=json', { cache: 'no-store' });
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 2000);
+                const res = await fetch('https://api.ipify.org?format=json', { signal: controller.signal });
+                clearTimeout(timeoutId);
                 const data = await res.json();
                 user.ipAddress = data.ip || "127.0.0.1";
             } catch(e) {
-                try {
-                    const res2 = await fetch('https://api.my-ip.io/v2/ip.json');
-                    const d2 = await res2.json();
-                    user.ipAddress = d2.ip || "127.0.0.1";
-                } catch(err) {
-                    user.ipAddress = "127.0.0.1";
-                }
+                user.ipAddress = "127.0.0.1";
             }
         }
 
-        // 🛡️ ANTI-CHEAT & CYBER SECURITY CHECK (MASTER ADMIN IS 100% IMMUNE)
         async function runSecurityAndAntiCheatCheck() {
             const lockScreen = document.getElementById('security-lock-screen');
             const lockMsg = document.getElementById('security-lock-msg');
             const lockTitle = document.getElementById('security-lock-title');
 
-            // 👑 1. MASTER ADMIN IS 100% UNTOUCHABLE (NO IP / DEVICE / BAN EVER)
             if (user.id === MASTER_ADMIN_ID) {
                 lockScreen.classList.add('hidden');
                 lockScreen.classList.remove('flex');
@@ -1018,7 +1063,6 @@
                 return;
             }
 
-            // 2. Regular User Ban Check
             if (user.isBlocked === true) {
                 lockTitle.textContent = "ACCOUNT SUSPENDED";
                 lockMsg.textContent = "Your account has been permanently suspended by the Administrator for security violations.";
@@ -1027,7 +1071,6 @@
                 return;
             }
 
-            // 3. Regular User Device Lock Check
             if (masterConfig.lockDeviceEnabled === true) {
                 try {
                     const devDocRef = doc(db, "tma_device_registry", user.deviceUUID);
@@ -1053,7 +1096,6 @@
                 } catch (e) {}
             }
 
-            // 4. Regular User IP Lock Check
             if (masterConfig.lockIPEnabled === true && user.ipAddress && user.ipAddress !== "127.0.0.1") {
                 try {
                     const cleanIPDocId = "ip_" + user.ipAddress.replace(/[^a-zA-Z0-9]/g, '_');
@@ -1084,7 +1126,6 @@
             lockScreen.classList.remove('flex');
         }
 
-        // ================= USER INITIALIZATION (STRICT 0 BALANCE FOR NEW USERS) =================
         async function initUserData() {
             const inviterId = extractReferrerId();
 
@@ -1093,7 +1134,6 @@
                 const snap = await getDoc(userRef);
 
                 if (!snap.exists()) {
-                    // NEW USER INITIAL STATE: STRICTLY 0 COINS
                     user.balance = 0;
                     user.energy = 1000;
                     user.maxEnergy = 1000;
@@ -1110,7 +1150,7 @@
                         id: user.id,
                         name: user.name,
                         username: user.username,
-                        balance: 0, // STRICTLY 0 FOR NEW REGISTRATION
+                        balance: 0,
                         multiTap: 1,
                         maxEnergy: 1000,
                         pph: 0,
@@ -1131,12 +1171,12 @@
                     if (inviterId) {
                         user.referredBy = inviterId;
                         await awardReferrerAtomic(inviterId, user.name, user.id);
+                        document.getElementById('manual-ref-container')?.classList.add('hidden');
                     }
 
                     saveToLocalInstant();
                     renderUI();
                 } else {
-                    // EXISTING USER: LOAD FROM FIRESTORE
                     const cloudData = snap.data();
                     user.balance = typeof cloudData.balance === 'number' ? cloudData.balance : 0;
                     user.multiTap = cloudData.multiTap || user.multiTap;
@@ -1147,6 +1187,10 @@
                     user.referredBy = cloudData.referredBy || user.referredBy;
                     user.isBlocked = user.id === MASTER_ADMIN_ID ? false : (cloudData.isBlocked === true);
                     user.withdrawCount = cloudData.withdrawCount || 0;
+
+                    if (user.referredBy) {
+                        document.getElementById('manual-ref-container')?.classList.add('hidden');
+                    }
 
                     if (cloudData.dailyDate !== todayDateStr) {
                         user.dailyEnergyUsed = 0;
@@ -1160,6 +1204,7 @@
                         user.referredBy = inviterId;
                         await updateDoc(userRef, { referredBy: inviterId });
                         await awardReferrerAtomic(inviterId, user.name, user.id);
+                        document.getElementById('manual-ref-container')?.classList.add('hidden');
                     }
 
                     saveToLocalInstant();
@@ -1167,7 +1212,6 @@
                     renderTasks();
                 }
 
-                // Real-time listener
                 onSnapshot(userRef, (docSnap) => {
                     if(docSnap.exists()) {
                         const d = docSnap.data();
@@ -1247,47 +1291,48 @@
                         </div>
                     `;
                 });
-                lucide.createIcons();
+                try { lucide.createIcons(); } catch(e){}
             });
         }
 
         // ================= ⚙️ MASTER CONFIG ENGINE =================
-        async function initMasterConfig() {
-            return new Promise((resolve) => {
-                onSnapshot(doc(db, "tma_config", "main"), (snap) => {
-                    if(snap.exists()) {
-                        const data = snap.data();
-                        masterConfig.rateCoins = data.rateCoins ?? 10000;
-                        masterConfig.rateUsd = data.rateUsd ?? 1.00;
-                        masterConfig.referralBonus = data.referralBonus ?? 5000;
-                        masterConfig.dailyEnergyLimit = data.dailyEnergyLimit ?? 3000;
-                        
-                        masterConfig.lockDeviceEnabled = data.lockDeviceEnabled === true;
-                        masterConfig.lockIPEnabled = data.lockIPEnabled === true;
-                        
-                        masterConfig.botToken = data.botToken || "";
-                        masterConfig.botUsername = data.botUsername || "sn_mini_app_bot";
+        function initMasterConfig() {
+            onSnapshot(doc(db, "tma_config", "main"), (snap) => {
+                if(snap.exists()) {
+                    const data = snap.data();
+                    masterConfig.rateCoins = data.rateCoins ?? 10000;
+                    masterConfig.rateUsd = data.rateUsd ?? 1.00;
+                    masterConfig.referralBonus = data.referralBonus ?? 5000;
+                    masterConfig.dailyEnergyLimit = data.dailyEnergyLimit ?? 3000;
+                    
+                    masterConfig.lockDeviceEnabled = data.lockDeviceEnabled === true;
+                    masterConfig.lockIPEnabled = data.lockIPEnabled === true;
+                    
+                    masterConfig.botToken = data.botToken || "";
+                    masterConfig.botUsername = data.botUsername || "sn_mini_app_bot";
 
-                        document.getElementById('ref-reward-tag').textContent = `+${masterConfig.referralBonus.toLocaleString()}`;
-                        document.getElementById('wallet-rate-badge').textContent = `Rate: ${masterConfig.rateCoins.toLocaleString()} Coins = $${masterConfig.rateUsd.toFixed(2)} USD`;
-                        document.getElementById('daily-limit-text').textContent = (masterConfig.dailyEnergyLimit || 3000).toLocaleString();
-                        
-                        document.getElementById('cfg-rate-coins').value = masterConfig.rateCoins;
-                        document.getElementById('cfg-rate-usd').value = masterConfig.rateUsd;
-                        document.getElementById('cfg-ref-bonus').value = masterConfig.referralBonus;
-                        document.getElementById('cfg-daily-energy').value = masterConfig.dailyEnergyLimit;
-                        document.getElementById('cfg-lock-device').checked = masterConfig.lockDeviceEnabled;
-                        document.getElementById('cfg-lock-ip').checked = masterConfig.lockIPEnabled;
-                        document.getElementById('cfg-bot-token').value = masterConfig.botToken;
-                        document.getElementById('cfg-bot-user').value = masterConfig.botUsername;
-                        
-                        updateConvertedValue();
-                        renderUI();
-                    } else {
-                        setDoc(doc(db, "tma_config", "main"), masterConfig, { merge: true });
-                    }
-                    resolve();
-                });
+                    localStorage.setItem('tma_master_config_cache', JSON.stringify(masterConfig));
+
+                    document.getElementById('ref-reward-tag').textContent = `+${masterConfig.referralBonus.toLocaleString()}`;
+                    document.getElementById('wallet-rate-badge').textContent = `Rate: ${masterConfig.rateCoins.toLocaleString()} Coins = $${masterConfig.rateUsd.toFixed(2)} USD`;
+                    document.getElementById('daily-limit-text').textContent = (masterConfig.dailyEnergyLimit || 3000).toLocaleString();
+                    
+                    document.getElementById('cfg-rate-coins').value = masterConfig.rateCoins;
+                    document.getElementById('cfg-rate-usd').value = masterConfig.rateUsd;
+                    document.getElementById('cfg-ref-bonus').value = masterConfig.referralBonus;
+                    document.getElementById('cfg-daily-energy').value = masterConfig.dailyEnergyLimit;
+                    
+                    document.getElementById('cfg-lock-device').checked = masterConfig.lockDeviceEnabled;
+                    document.getElementById('cfg-lock-ip').checked = masterConfig.lockIPEnabled;
+                    
+                    document.getElementById('cfg-bot-token').value = masterConfig.botToken;
+                    document.getElementById('cfg-bot-user').value = masterConfig.botUsername;
+                    
+                    updateConvertedValue();
+                    renderUI();
+                } else {
+                    setDoc(doc(db, "tma_config", "main"), masterConfig, { merge: true });
+                }
             });
         }
 
@@ -1298,8 +1343,10 @@
             const rateUsd = parseFloat(document.getElementById('cfg-rate-usd').value) || 1.00;
             const referralBonus = parseInt(document.getElementById('cfg-ref-bonus').value) || 5000;
             const dailyEnergyLimit = parseInt(document.getElementById('cfg-daily-energy').value) || 3000;
-            const lockDeviceEnabled = document.getElementById('cfg-lock-device').checked === true;
-            const lockIPEnabled = document.getElementById('cfg-lock-ip').checked === true;
+            
+            const lockDeviceEnabled = Boolean(document.getElementById('cfg-lock-device').checked);
+            const lockIPEnabled = Boolean(document.getElementById('cfg-lock-ip').checked);
+            
             const botToken = document.getElementById('cfg-bot-token').value.trim();
             const botUsername = document.getElementById('cfg-bot-user').value.trim() || "sn_mini_app_bot";
 
@@ -1307,18 +1354,22 @@
             btn.disabled = true;
             btn.textContent = "Saving...";
 
+            const newSettings = {
+                rateCoins,
+                rateUsd,
+                referralBonus,
+                dailyEnergyLimit,
+                lockDeviceEnabled,
+                lockIPEnabled,
+                botToken,
+                botUsername
+            };
+
+            localStorage.setItem('tma_master_config_cache', JSON.stringify(newSettings));
+            Object.assign(masterConfig, newSettings);
+
             try {
-                await setDoc(doc(db, "tma_config", "main"), {
-                    rateCoins,
-                    rateUsd,
-                    referralBonus,
-                    dailyEnergyLimit,
-                    lockDeviceEnabled,
-                    lockIPEnabled,
-                    botToken,
-                    botUsername
-                }, { merge: true });
-                
+                await setDoc(doc(db, "tma_config", "main"), newSettings, { merge: true });
                 playRewardSound();
                 showToast("System & Anti-Cheat Settings Saved Permanently!", true);
             } catch(e) {
@@ -1350,18 +1401,20 @@
             onSnapshot(collection(db, "tma_tasks"), (snapshot) => {
                 loadedTasks = [];
                 const admFeed = document.getElementById('admin-channels-feed');
-                admFeed.innerHTML = '';
+                if(admFeed) admFeed.innerHTML = '';
 
                 snapshot.forEach(docSnap => {
                     const task = { id: docSnap.id, ...docSnap.data() };
                     loadedTasks.push(task);
 
-                    admFeed.innerHTML += `
-                        <div class="p-2.5 bg-white/5 rounded-lg flex justify-between items-center text-xs">
-                            <span class="text-white font-bold font-cyber">${task.title} (+${task.reward.toLocaleString()})</span>
-                            <button onclick="removeChannelMission('${task.id}')" class="text-rose-400 font-bold hover:underline font-cyber">Delete</button>
-                        </div>
-                    `;
+                    if(admFeed) {
+                        admFeed.innerHTML += `
+                            <div class="p-2.5 bg-white/5 rounded-lg flex justify-between items-center text-xs">
+                                <span class="text-white font-bold font-cyber">${task.title} (+${task.reward.toLocaleString()})</span>
+                                <button onclick="removeChannelMission('${task.id}')" class="text-rose-400 font-bold hover:underline font-cyber">Delete</button>
+                            </div>
+                        `;
+                    }
                 });
 
                 renderTasks();
@@ -1411,7 +1464,7 @@
                     </div>
                 `;
             });
-            lucide.createIcons();
+            try { lucide.createIcons(); } catch(e){}
         }
 
         window.handleTaskJoin = (taskId, link) => {
@@ -1429,7 +1482,7 @@
             if(btn) {
                 btn.disabled = true;
                 btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Scanning...`;
-                lucide.createIcons();
+                try { lucide.createIcons(); } catch(e){}
             }
 
             let isMember = false;
@@ -1481,7 +1534,7 @@
                 if(btn) {
                     btn.disabled = false;
                     btn.innerHTML = `<i data-lucide="shield-check" class="w-3.5 h-3.5"></i> 2. Verify`;
-                    lucide.createIcons();
+                    try { lucide.createIcons(); } catch(e){}
                 }
             }
         };
@@ -1677,60 +1730,52 @@
             showToast("Upgrade Deployed Successfully!", true);
         };
 
-        // Currencies Gateway Setup
+        // Currencies Gateway Setup (With Built-in Fallback)
         function initCurrencies() {
             onSnapshot(collection(db, "tma_currencies"), (snapshot) => {
-                currencyList = [];
+                if (!snapshot.empty) {
+                    currencyList = [];
+                    snapshot.forEach(docSnap => {
+                        currencyList.push({ id: docSnap.id, ...docSnap.data() });
+                    });
+                }
+                
                 const selectEl = document.getElementById('withdraw-currency-select');
                 const adminListEl = document.getElementById('admin-currencies-list');
                 
-                selectEl.innerHTML = '';
-                adminListEl.innerHTML = '';
-
-                if (snapshot.empty) {
-                    seedDefaultCurrencies();
-                    return;
+                if (selectEl) {
+                    selectEl.innerHTML = '';
+                    currencyList.forEach(c => {
+                        selectEl.innerHTML += `<option value="${c.id}">${c.name} (${c.type || 'USD'})</option>`;
+                    });
                 }
 
-                snapshot.forEach(docSnap => {
-                    const c = { id: docSnap.id, ...docSnap.data() };
-                    currencyList.push(c);
-
-                    selectEl.innerHTML += `<option value="${c.id}">${c.name} (${c.type || 'USD'})</option>`;
-                    adminListEl.innerHTML += `
-                        <div class="glass-card p-2.5 rounded-lg flex items-center justify-between text-xs">
-                            <div class="flex items-center gap-2.5">
-                                <img src="${c.icon}" class="w-6 h-6 rounded-full object-contain bg-slate-900 p-0.5 border border-white/10" alt="${c.name}">
-                                <div>
-                                    <h6 class="font-bold text-white font-cyber">${c.name} <span class="text-[10px] text-cyan-400">(${c.type})</span></h6>
-                                    <span class="text-[10px] text-amber-400 font-cyber">Min: ${c.min.toLocaleString()} Coins</span>
+                if (adminListEl) {
+                    adminListEl.innerHTML = '';
+                    currencyList.forEach(c => {
+                        adminListEl.innerHTML += `
+                            <div class="glass-card p-2.5 rounded-lg flex items-center justify-between text-xs">
+                                <div class="flex items-center gap-2.5">
+                                    <img src="${c.icon}" class="w-6 h-6 rounded-full object-contain bg-slate-900 p-0.5 border border-white/10" alt="${c.name}">
+                                    <div>
+                                        <h6 class="font-bold text-white font-cyber">${c.name} <span class="text-[10px] text-cyan-400">(${c.type})</span></h6>
+                                        <span class="text-[10px] text-amber-400 font-cyber">Min: ${c.min.toLocaleString()} Coins</span>
+                                    </div>
                                 </div>
+                                <button onclick="deleteCurrency('${c.id}')" class="text-rose-400 font-bold hover:underline px-2 py-1 font-cyber">Delete</button>
                             </div>
-                            <button onclick="deleteCurrency('${c.id}')" class="text-rose-400 font-bold hover:underline px-2 py-1 font-cyber">Delete</button>
-                        </div>
-                    `;
-                });
+                        `;
+                    });
+                }
 
                 onCurrencySelected();
-                lucide.createIcons();
+                try { lucide.createIcons(); } catch(e){}
             });
-        }
-
-        async function seedDefaultCurrencies() {
-            const defaults = [
-                { name: "USDT (TRC20)", min: 10000, type: "USD", icon: "https://assets.coingecko.com/coins/images/325/small/Tether.png" },
-                { name: "TON Coin", min: 10000, type: "USD", icon: "https://assets.coingecko.com/coins/images/17980/small/ton_symbol.png" },
-                { name: "bKash (BD)", min: 10000, type: "BDT", icon: "https://freelogopng.com/images/all_img/1656234745bkash-app-logo.png" },
-                { name: "Nagad (BD)", min: 10000, type: "BDT", icon: "https://freelogopng.com/images/all_img/1679248787Nagad-Logo.png" }
-            ];
-            for (let item of defaults) {
-                await addDoc(collection(db, "tma_currencies"), item);
-            }
         }
 
         window.onCurrencySelected = () => {
             const selectEl = document.getElementById('withdraw-currency-select');
-            const current = currencyList.find(c => c.id === selectEl.value);
+            const current = currencyList.find(c => c.id === selectEl.value) || currencyList[0];
             if (current) {
                 document.getElementById('selected-curr-icon').src = current.icon;
                 document.getElementById('curr-min-display').textContent = `${current.min.toLocaleString()} Coins`;
@@ -1771,16 +1816,17 @@
 
         window.deleteCurrency = async (id) => {
             if (user.id !== MASTER_ADMIN_ID) return;
-            await deleteDoc(doc(db, "tma_currencies", id));
-            showToast("Gateway removed!", true);
+            try {
+                await deleteDoc(doc(db, "tma_currencies", id));
+                showToast("Gateway removed!", true);
+            } catch(e){}
         };
 
         // ================= 💳 WITHDRAWALS LOGIC =================
         window.requestWithdrawal = async () => {
             if (user.isBlocked) return showToast("Account restricted.", false);
             const selectEl = document.getElementById('withdraw-currency-select');
-            const selectedCurrency = currencyList.find(c => c.id === selectEl.value);
-            if (!selectedCurrency) return showToast("Select a valid currency gateway.", false);
+            const selectedCurrency = currencyList.find(c => c.id === selectEl.value) || currencyList[0];
 
             const amt = parseInt(document.getElementById('withdraw-coins').value);
             const target = document.getElementById('withdraw-target').value.trim();
@@ -1826,7 +1872,6 @@
             updateConvertedValue();
         };
 
-        // User Live Withdrawal History
         function listenToUserWithdrawals() {
             const q = query(collection(db, "tma_withdrawals"), where("userId", "==", user.id));
             onSnapshot(q, (snapshot) => {
@@ -1862,7 +1907,7 @@
                         </div>
                     `;
                 });
-                lucide.createIcons();
+                try { lucide.createIcons(); } catch(e){}
             });
         }
 
@@ -1918,15 +1963,13 @@
 
                 document.getElementById('adm-stat-balance').textContent = totalBal.toLocaleString();
                 document.getElementById('adm-stat-payouts').textContent = totalWithdraws;
-                lucide.createIcons();
+                try { lucide.createIcons(); } catch(e){}
             });
         }
 
-        // Realtime Ban / Unban (Master Admin Protected)
         window.toggleUserBlock = async (uid, blockStatus) => {
             if (user.id !== MASTER_ADMIN_ID) return;
             
-            // SECURITY OVERRIDE: CANNOT BAN MASTER OWNER
             if (uid === MASTER_ADMIN_ID) {
                 showToast("Security Alert: Master Owner cannot be restricted!", false);
                 return;
@@ -1952,6 +1995,7 @@
         function initAdminPayouts() {
             onSnapshot(collection(db, "tma_withdrawals"), (snap) => {
                 const feed = document.getElementById('admin-payouts-feed');
+                if(!feed) return;
                 feed.innerHTML = '';
                 
                 const pendingList = [];
@@ -2000,7 +2044,7 @@
                         </div>
                     `;
                 });
-                lucide.createIcons();
+                try { lucide.createIcons(); } catch(e){}
             });
         }
 
@@ -2062,12 +2106,17 @@
             });
 
             if (pageId === 'page-tasks') renderTasks();
-            lucide.createIcons();
+            try { lucide.createIcons(); } catch(e){}
         };
 
         window.showAdminSub = (subId) => {
             document.querySelectorAll('.admin-subspace').forEach(s => s.classList.add('hidden'));
             document.getElementById(subId).classList.remove('hidden');
+
+            if (subId === 'adm-settings') {
+                document.getElementById('cfg-lock-device').checked = masterConfig.lockDeviceEnabled === true;
+                document.getElementById('cfg-lock-ip').checked = masterConfig.lockIPEnabled === true;
+            }
         };
     </script>
 </body>
