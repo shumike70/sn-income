@@ -3,217 +3,171 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Telebot Creator - Custom Bot Builder & Dashboard</title>
+  <title>Telebot Creator - Pure Dynamic Platform</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body class="bg-slate-900 text-gray-100 min-h-screen flex flex-col font-sans">
 
-  <!-- Top Navbar -->
+  <!-- Header -->
   <header class="bg-slate-800 border-b border-slate-700 px-6 py-3 flex flex-wrap justify-between items-center gap-4">
     <div class="flex items-center space-x-3">
-      <div class="bg-blue-600 text-white font-black p-2 rounded-lg text-lg shadow-md">TC</div>
-      <div>
-        <h1 class="font-bold text-base text-white">Telebot Creator Dashboard</h1>
-        <p class="text-xs text-slate-400">GitHub & Vercel Edition • 24/7 Free Hosting</p>
-      </div>
+      <div class="bg-blue-600 text-white font-black px-3 py-1.5 rounded-lg shadow">TC</div>
+      <h1 class="font-bold text-base text-white">Telebot Creator (Universal Runner)</h1>
     </div>
-    <div class="flex items-center space-x-3">
-      <button onclick="connectWebhook()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs px-4 py-2 rounded-md shadow transition flex items-center space-x-2">
-        <i class="fa-solid fa-bolt"></i>
-        <span>Start Bot (Connect Webhook)</span>
-      </button>
-    </div>
+    <button onclick="launchBot()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-5 py-2.5 rounded-lg shadow transition flex items-center space-x-2">
+      <i class="fa-solid fa-bolt"></i>
+      <span>🚀 Launch Bot</span>
+    </button>
   </header>
 
-  <!-- Bot Token Bar -->
-  <div class="bg-slate-850 bg-slate-800/80 border-b border-slate-700/60 px-6 py-3">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
-      <div class="flex-1 min-w-[280px]">
-        <label class="block text-xs font-semibold text-slate-400 mb-1">Bot API Token (@BotFather)</label>
-        <input id="botToken" type="text" value="8693779636:AAHIeQCUgS7bvwrArl6otipy8wyifOgz8rU" placeholder="123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11" 
-          class="w-full bg-slate-950 border border-slate-700 rounded-md px-3 py-1.5 text-xs text-blue-300 font-mono focus:border-blue-500 focus:outline-none" />
-      </div>
-      <div class="flex-1 min-w-[200px]">
-        <label class="block text-xs font-semibold text-slate-400 mb-1">Admin / Owner ID</label>
-        <input id="ownerId" type="text" value="7209869264" placeholder="7209869264" 
-          class="w-full bg-slate-950 border border-slate-700 rounded-md px-3 py-1.5 text-xs text-blue-300 font-mono focus:border-blue-500 focus:outline-none" />
-      </div>
+  <!-- Bot Token Only (No Chat ID Needed!) -->
+  <div class="bg-slate-800/60 border-b border-slate-700 px-6 py-3">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-3">
+      <label class="text-xs font-bold text-slate-400 whitespace-nowrap">Bot Token (@BotFather):</label>
+      <input id="botToken" type="text" placeholder="এখানে আপনার বটের Token পেস্ট করুন..." 
+        class="w-full bg-slate-950 border border-slate-700 rounded-md px-3 py-2 text-xs text-blue-300 font-mono focus:border-blue-500 focus:outline-none" />
     </div>
   </div>
 
-  <!-- Main Dashboard Layout -->
+  <!-- Main Workspace -->
   <main class="flex-1 max-w-7xl mx-auto w-full p-4 grid grid-cols-1 md:grid-cols-4 gap-4">
     
-    <!-- Left Sidebar: Commands Manager -->
+    <!-- Commands Sidebar -->
     <div class="bg-slate-800 rounded-xl border border-slate-700 flex flex-col overflow-hidden shadow">
       <div class="p-3 bg-slate-750 border-b border-slate-700 flex justify-between items-center">
-        <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Commands List</span>
-        <button onclick="addNewCommand()" class="text-xs bg-blue-600 hover:bg-blue-500 text-white px-2 py-1 rounded font-medium flex items-center space-x-1">
+        <span class="text-xs font-bold uppercase text-slate-300">Commands List</span>
+        <button onclick="addCommandPrompt()" class="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded font-bold flex items-center space-x-1">
           <i class="fa-solid fa-plus"></i>
-          <span>Add</span>
+          <span>Add Command</span>
         </button>
       </div>
-      <div id="commandList" class="flex-1 overflow-y-auto divide-y divide-slate-750 p-2 space-y-1">
-        <!-- Dynamic Commands Appended Here -->
-      </div>
+      <div id="cmdList" class="flex-1 overflow-y-auto p-2 space-y-1"></div>
     </div>
 
-    <!-- Right Side: Code Editor -->
+    <!-- Code/Message Editor -->
     <div class="md:col-span-3 bg-slate-800 rounded-xl border border-slate-700 flex flex-col overflow-hidden shadow">
       <div class="p-3 bg-slate-750 border-b border-slate-700 flex justify-between items-center">
         <div class="flex items-center space-x-2">
           <span class="text-xs text-slate-400">Editing:</span>
-          <span id="currentCommandLabel" class="text-xs font-bold text-emerald-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-700 font-mono">/start</span>
+          <span id="activeCmdName" class="text-xs font-mono font-bold text-emerald-400 bg-slate-900 px-2.5 py-1 rounded border border-slate-700">/start</span>
         </div>
-        <div class="flex items-center space-x-2">
-          <button onclick="saveCurrentCommand()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-1 rounded text-xs font-semibold flex items-center space-x-1 transition">
-            <i class="fa-solid fa-floppy-disk"></i>
-            <span>Save Command</span>
-          </button>
-        </div>
+        <button onclick="saveCommandsToServer()" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-1.5 rounded text-xs font-bold flex items-center space-x-2 transition shadow">
+          <i class="fa-solid fa-floppy-disk"></i>
+          <span>Save Changes</span>
+        </button>
       </div>
+
+      <textarea id="cmdEditor" class="flex-1 bg-slate-950 p-4 text-emerald-400 font-mono text-sm leading-relaxed resize-none focus:outline-none min-h-[420px]" spellcheck="false"></textarea>
       
-      <!-- Editor Area -->
-      <textarea id="commandEditor" class="flex-1 bg-slate-950 p-4 text-emerald-400 font-mono text-xs leading-relaxed resize-none focus:outline-none min-h-[420px]" spellcheck="false"></textarea>
-      
-      <!-- Status Footer -->
-      <div id="saveNotification" class="bg-slate-900 px-4 py-2 border-t border-slate-800 text-xs text-slate-400 flex justify-between items-center">
-        <span>Press "Save Command" to store changes.</span>
-        <span class="text-emerald-400">TPY v7.1.1</span>
+      <div id="statusAlert" class="bg-slate-900 px-4 py-2 border-t border-slate-800 text-xs text-slate-400 flex justify-between items-center">
+        <span>ইউজার এই কমান্ড দিলে বট কী উত্তর দেবে তা এখানে লিখুন।</span>
+        <span class="text-emerald-400 font-mono">Dynamic Engine</span>
       </div>
     </div>
 
   </main>
 
   <footer class="text-center py-3 text-xs text-slate-500 border-t border-slate-800">
-    Telebot Creator GitHub & Vercel Edition • Created by SN Support
+    100% Free Telegram Bot Builder • No Hardcoded Data
   </footer>
 
   <script>
-    // ডিফল্ট কমান্ডস ডাটাবেজ
+    // কমান্ডস ডাটাবেজ (লোকাল স্টোরেজ)
+    let token = localStorage.getItem("tpy_token") || "";
     let commands = JSON.parse(localStorage.getItem("tpy_commands")) || {
-      "/start": `# =========================
-# Main /start Command
-# =========================
-first_name = message.from_user.first_name
-username = message.from_user.username or "N/A"
-uid = message.from_user.id
-
-welcome_text = f"""
-◈ ━━ ❖ 📋 <b>MAIN MENU</b> ❖ ━━ ◈
-
-🎊 <b>WELCOME :</b> {first_name}
-👤 <b>USER :</b> @{username}
-🆔 <b>ID :</b> <code>{uid}</code>
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-⚡ <b>OUR SERVICES & FEATURES :</b>
-━━━━━━━━━━━━━━━━━━━━━━━━
-💡 <b>CREATE, CUSTOMIZE & SCALE BOTS</b>
-🔧 <b>PROFESSIONAL BOT MAKER</b>
-🌐 <b>SMART & SECURE TELEGRAM BOTS</b>
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-👑 <b>DEVELOPED BY :</b> @sn_support_admin
-━━━━━━━━━━━━━━━━━━━━━━━━
-"""
-
-keyboard = [
-    [{"text": "🌟 𝐏𝐑𝐎𝐅𝐈𝐋𝐄", "callback_data": "/profile"}, {"text": "🛠️ 𝐌𝐘 𝐁𝐎𝐓", "callback_data": "/mybots"}],
-    [{"text": "➕ 𝐂𝐑𝐄𝐀𝐓𝐄 𝐍𝐄𝐖 𝐁𝐎𝐓", "callback_data": "/newbot"}],
-    [{"text": "🏆 𝐋𝐄𝐀𝐃𝐄𝐑𝐁𝐎𝐀𝐑𝐃", "callback_data": "/leaderboard"}, {"text": "❓ 𝐀𝐍𝐘 𝐇𝐄𝐋𝐏", "callback_data": "/help"}],
-    [{"text": "🛒 𝐁𝐔𝐘 𝐂𝐎𝐃𝐄", "callback_data": "/buy_code"}]
-]
-
-Bot.sendMessage(chat_id=uid, text=welcome_text, reply_markup={"inline_keyboard": keyboard}, parse_mode="HTML")`,
-
-      "/help": `uid = message.from_user.id
-Bot.sendMessage(chat_id=uid, text="ℹ️ <b>যেকোনো সাহায্যের জন্য আমাদের সাথে যোগাযোগ করুন:</b>\\n👉 @sn_support_admin", parse_mode="HTML")`,
-
-      "/profile": `uid = message.from_user.id
-name = message.from_user.first_name
-Bot.sendMessage(chat_id=uid, text=f"👤 <b>ইউজার প্রোফাইল</b>\\n\\n🆔 আইডি: <code>{uid}</code>\\n👤 নাম: {name}\\n💰 ব্যালেন্স: ০.০০ ৳", parse_mode="HTML")`
+      "/start": "👋 স্বাগতম {first_name}!\nআমাদের বটে আপনাকে স্বাগতম।",
+      "/help": "ℹ️ যেকোনো সাহায্যের জন্য অ্যাডমিনকে মেসেজ দিন।"
     };
-
     let activeCmd = "/start";
 
-    function renderCommandList() {
-      const listEl = document.getElementById("commandList");
-      listEl.innerHTML = "";
+    document.getElementById("botToken").value = token;
+    document.getElementById("botToken").addEventListener("input", (e) => {
+      localStorage.setItem("tpy_token", e.target.value.trim());
+    });
+
+    function renderList() {
+      const list = document.getElementById("cmdList");
+      list.innerHTML = "";
       for (let cmd in commands) {
-        const isSelected = cmd === activeCmd;
+        const isSel = cmd === activeCmd;
         const div = document.createElement("div");
-        div.className = `flex justify-between items-center p-2 rounded cursor-pointer text-xs font-mono transition ${isSelected ? 'bg-blue-600 text-white font-bold' : 'hover:bg-slate-700 text-slate-300'}`;
-        div.onclick = () => selectCommand(cmd);
+        div.className = `flex justify-between items-center p-2.5 rounded-lg cursor-pointer text-xs font-mono transition ${isSel ? 'bg-blue-600 text-white font-bold' : 'hover:bg-slate-700 text-slate-300'}`;
+        div.onclick = () => selectCmd(cmd);
         div.innerHTML = `
-          <span><i class="fa-solid fa-terminal mr-1.5 opacity-70"></i>${cmd}</span>
-          ${cmd !== '/start' ? `<button onclick="deleteCommand(event, '${cmd}')" class="text-red-400 hover:text-red-200 ml-2"><i class="fa-solid fa-trash"></i></button>` : ''}
+          <span><i class="fa-solid fa-terminal mr-2 opacity-70"></i>${cmd}</span>
+          ${cmd !== '/start' ? `<button onclick="deleteCmd(event, '${cmd}')" class="text-red-400 hover:text-white"><i class="fa-solid fa-trash"></i></button>` : ''}
         `;
-        listEl.appendChild(div);
+        list.appendChild(div);
       }
-      document.getElementById("currentCommandLabel").innerText = activeCmd;
-      document.getElementById("commandEditor").value = commands[activeCmd] || "";
+      document.getElementById("activeCmdName").innerText = activeCmd;
+      document.getElementById("cmdEditor").value = commands[activeCmd] || "";
     }
 
-    function selectCommand(cmd) {
+    function selectCmd(cmd) {
       activeCmd = cmd;
-      renderCommandList();
+      renderList();
     }
 
-    function addNewCommand() {
-      const name = prompt("নতুন কমান্ডের নাম দিন (যেমন: /balance, /bonus):");
+    function addCommandPrompt() {
+      const name = prompt("কমান্ডের নাম লিখুন (যেমন: /balance, /about, /info):");
       if (name) {
-        const formatted = name.startsWith("/") ? name : "/" + name;
-        if (!commands[formatted]) {
-          commands[formatted] = `# New command ${formatted}\\nuid = message.from_user.id\\nBot.sendMessage(chat_id=uid, text="কমান্ড চালু হয়েছে!")`;
-          activeCmd = formatted;
-          saveToStorage();
-          renderCommandList();
+        const cleanName = name.startsWith("/") ? name.trim() : "/" + name.trim();
+        if (!commands[cleanName]) {
+          commands[cleanName] = `🎉 আপনি ${cleanName} কমান্ড ওপেন করেছেন!\nহ্যালো {first_name}!`;
+          activeCmd = cleanName;
+          renderList();
+          saveCommandsToServer();
         } else {
-          alert("এই কমান্ডটি ইতিমধ্যে বিদ্যমান আছে!");
+          alert("এই কমান্ডটি ইতিমধ্যে আছে!");
         }
       }
     }
 
-    function deleteCommand(e, cmd) {
+    function deleteCmd(e, cmd) {
       e.stopPropagation();
-      if (confirm(`আপনি কি ${cmd} কমান্ডটি ডিলিট করতে চান?`)) {
+      if (confirm(`আপনি কি ${cmd} কমান্ডটি মুছতে চান?`)) {
         delete commands[cmd];
         activeCmd = "/start";
-        saveToStorage();
-        renderCommandList();
+        renderList();
+        saveCommandsToServer();
       }
     }
 
-    function saveCurrentCommand() {
-      commands[activeCmd] = document.getElementById("commandEditor").value;
-      saveToStorage();
-      const notif = document.getElementById("saveNotification");
-      notif.innerHTML = `<span class="text-green-400 font-bold"><i class="fa-solid fa-circle-check"></i> ${activeCmd} কমান্ড সেভ সফল হয়েছে!</span><span class="text-emerald-400">Saved</span>`;
-      setTimeout(() => {
-        notif.innerHTML = `<span>Press "Save Command" to store changes.</span><span class="text-emerald-400">TPY v7.1.1</span>`;
-      }, 2500);
-    }
-
-    function saveToStorage() {
+    async function saveCommandsToServer() {
+      commands[activeCmd] = document.getElementById("cmdEditor").value;
       localStorage.setItem("tpy_commands", JSON.stringify(commands));
+      const curToken = document.getElementById("botToken").value.trim();
+
+      const status = document.getElementById("statusAlert");
+      try {
+        await fetch('/api/webhook', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: curToken, commands: commands })
+        });
+        status.innerHTML = `<span class="text-green-400 font-bold"><i class="fa-solid fa-circle-check"></i> ${activeCmd} কমান্ড সেভ সফল হয়েছে!</span>`;
+      } catch (e) {
+        status.innerHTML = `<span class="text-green-400 font-bold"><i class="fa-solid fa-circle-check"></i> লোকাল সেভ হয়েছে!</span>`;
+      }
+
+      setTimeout(() => {
+        status.innerHTML = `<span>ইউজার এই কমান্ড দিলে বট কী উত্তর দেবে তা এখানে লিখুন।</span><span class="text-emerald-400 font-mono">Dynamic Engine</span>`;
+      }, 3000);
     }
 
-    function connectWebhook() {
-      const token = document.getElementById("botToken").value.trim();
-      const domain = window.location.origin;
-      const webhookUrl = `${domain}/api/webhook`;
-
-      if (!token) {
-        alert("অনুগ্রহ করে Bot Token দিন!");
+    function launchBot() {
+      const curToken = document.getElementById("botToken").value.trim();
+      if (!curToken) {
+        alert("অনুগ্রহ করে আগে Bot Token দিন!");
         return;
       }
-
-      window.open(`https://api.telegram.org/bot${token}/setWebhook?url=${webhookUrl}&drop_pending_updates=true`, '_blank');
+      saveCommandsToServer();
+      const webhookUrl = `${window.location.origin}/api/webhook`;
+      window.open(`https://api.telegram.org/bot${curToken}/setWebhook?url=${webhookUrl}&drop_pending_updates=true`, '_blank');
     }
 
-    renderCommandList();
+    renderList();
   </script>
 </body>
 </html>
