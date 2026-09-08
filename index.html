@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TPY Code Runner - Free Online Playground</title>
+  <title>TPY Bot Runner - Console Setup</title>
   
-  <!-- Tailwind CSS (ডিজাইনের জন্য) -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Pyodide (ব্রাউজারে পাইথন রান করার ইঞ্জিন) -->
+  <!-- Pyodide Engine -->
   <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
 </head>
 <body class="bg-slate-900 text-gray-100 min-h-screen flex flex-col font-sans">
@@ -17,7 +17,7 @@
   <header class="bg-slate-800 border-b border-slate-700 py-4 px-6 flex justify-between items-center">
     <div class="flex items-center space-x-3">
       <div class="bg-blue-600 p-2 rounded-lg font-bold text-white">TPY</div>
-      <h1 class="text-xl font-bold">TPY Code Runner (Online Playground)</h1>
+      <h1 class="text-xl font-bold">TPY Bot Console Manager</h1>
     </div>
     <div id="status" class="text-sm px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full border border-yellow-500/30">
       ইঞ্জিন লোড হচ্ছে...
@@ -27,55 +27,92 @@
   <!-- Main Content -->
   <main class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 max-w-7xl mx-auto w-full">
     
-    <!-- Code Editor Area -->
+    <!-- Left: Code / Info Area -->
     <div class="flex flex-col bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-lg">
       <div class="bg-slate-750 px-4 py-2 border-b border-slate-700 flex justify-between items-center">
-        <span class="text-sm font-semibold text-slate-300">Editor (TPY Code)</span>
-        <button id="runBtn" disabled onclick="runCode()" class="bg-blue-600 hover:bg-blue-500 disabled:bg-gray-600 text-white px-4 py-1.5 rounded-md font-medium transition flex items-center space-x-2 text-sm">
-          <span>▶ রান করুন</span>
+        <span class="text-sm font-semibold text-slate-300">Python CLI Engine</span>
+        <button id="runBtn" disabled onclick="startConsoleSession()" class="bg-blue-600 hover:bg-blue-500 disabled:bg-gray-600 text-white px-4 py-1.5 rounded-md font-medium transition text-sm">
+          ▶ কনসোল সেটআপ শুরু করুন
         </button>
       </div>
-      <textarea id="code" class="flex-1 bg-slate-950 p-4 text-emerald-400 font-mono text-sm resize-none focus:outline-none" spellcheck="false">
-# TPY / Python কোড এখানে লিখুন
-
-user_name = "Rahim"
-bot_name = "MyTeleBot"
-
-print(f"বট শুরু হয়েছে: {bot_name}")
-
-# সিম্পল মেসেজ পাঠানোর লজিক
-def send_welcome(user):
-    return f"স্বাগতম {user}! Telebot Creator-এ আপনার বট রেডি।"
-
-output = send_welcome(user_name)
-print(output)
+      <textarea id="code" class="flex-1 bg-slate-950 p-4 text-emerald-400 font-mono text-xs resize-none focus:outline-none" spellcheck="false" readonly>
+# এই কোডটি কনসোলের মাধ্যমে ইন্টারঅ্যাক্টিভলি কাজ করবে:
+# ১. কনসোলে Token ইনপুট নিবে এবং ভেরিফাই করবে।
+# ২. /start কমান্ডের জন্য ওয়েলকাম টেক্সট সেট করবে।
+# ৩. সার্বক্ষণিক Telegram Polling চালু রাখবে।
       </textarea>
     </div>
 
-    <!-- Output / Terminal Area -->
+    <!-- Right: Interactive Terminal -->
     <div class="flex flex-col bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-lg">
       <div class="bg-slate-750 px-4 py-2 border-b border-slate-700 flex justify-between items-center">
-        <span class="text-sm font-semibold text-slate-300">Terminal Output</span>
-        <button onclick="clearOutput()" class="text-xs text-gray-400 hover:text-white">ক্লিয়ার</button>
+        <span class="text-sm font-semibold text-slate-300">Live Terminal / Console</span>
+        <button onclick="clearOutput()" class="text-xs text-gray-400 hover:text-white">ক্লিয়ার</button>
       </div>
-      <pre id="output" class="flex-1 bg-black p-4 text-gray-200 font-mono text-sm overflow-auto whitespace-pre-wrap">আউটপুট এখানে দেখাবে...</pre>
+      
+      <!-- Terminal Output Screen -->
+      <pre id="output" class="flex-1 bg-black p-4 text-green-400 font-mono text-sm overflow-auto whitespace-pre-wrap h-80"></pre>
+
+      <!-- Terminal Input Line (কনসোল ইনপুট বার) -->
+      <div class="bg-slate-950 p-2 border-t border-slate-800 flex items-center space-x-2">
+        <span class="text-emerald-500 font-mono font-bold px-2">&gt;</span>
+        <input id="termInput" type="text" placeholder="এখানে Token বা Command লিখে Enter চাপুন..." class="flex-1 bg-slate-900 text-white px-3 py-1.5 rounded text-sm font-mono focus:outline-none focus:ring-1 focus:ring-blue-500" disabled onkeydown="handleInputKey(event)" />
+        <button id="sendInputBtn" onclick="submitTerminalInput()" disabled class="bg-emerald-600 hover:bg-emerald-500 disabled:bg-gray-700 text-white px-3 py-1.5 rounded text-sm font-medium">
+          Send
+        </button>
+      </div>
     </div>
 
   </main>
 
-  <!-- Footer -->
   <footer class="text-center py-3 text-xs text-slate-500 border-t border-slate-800">
-    100% Free TPY Runner • Powered by WebAssembly & Pyodide
+    Interactive Console Runner • Powered by Pyodide
   </footer>
 
-  <!-- Script for Execution -->
+  <!-- Execution Script -->
   <script>
     let pyodideInstance = null;
     const statusEl = document.getElementById("status");
     const runBtn = document.getElementById("runBtn");
     const outputEl = document.getElementById("output");
+    const termInput = document.getElementById("termInput");
+    const sendInputBtn = document.getElementById("sendInputBtn");
 
-    // Pyodide লোড করা
+    let inputResolver = null;
+
+    // JS Bridge: পাইথন যখন ইনপুটের জন্য অপেক্ষা করবে
+    window.waitForUserInput = function() {
+      termInput.disabled = false;
+      sendInputBtn.disabled = false;
+      termInput.focus();
+      return new Promise((resolve) => {
+        inputResolver = resolve;
+      });
+    };
+
+    function submitTerminalInput() {
+      const val = termInput.value.trim();
+      if (!val) return;
+
+      outputEl.innerText += `> ${val}\n`;
+      outputEl.scrollTop = outputEl.scrollHeight;
+      termInput.value = "";
+      termInput.disabled = true;
+      sendInputBtn.disabled = true;
+
+      if (inputResolver) {
+        const resolve = inputResolver;
+        inputResolver = null;
+        resolve(val);
+      }
+    }
+
+    function handleInputKey(e) {
+      if (e.key === "Enter") {
+        submitTerminalInput();
+      }
+    }
+
     async function loadEngine() {
       try {
         pyodideInstance = await loadPyodide();
@@ -83,30 +120,103 @@ print(output)
         statusEl.className = "text-sm px-3 py-1 bg-green-500/20 text-green-400 rounded-full border border-green-500/30";
         runBtn.disabled = false;
       } catch (err) {
-        statusEl.innerText = "ইঞ্জিন লোড হতে ব্যর্থ!";
+        statusEl.innerText = "ইঞ্জিন লোড ব্যর্থ!";
         statusEl.className = "text-sm px-3 py-1 bg-red-500/20 text-red-400 rounded-full border border-red-500/30";
-        console.error(err);
       }
     }
     loadEngine();
 
-    // কোড রান করার ফাংশন
-    async function runCode() {
+    async function startConsoleSession() {
       if (!pyodideInstance) return;
-      
-      const code = document.getElementById("code").value;
-      outputEl.innerText = "কোড রান হচ্ছে...\n";
+      outputEl.innerText = "";
+
+      pyodideInstance.setStdout({
+        batched: (msg) => {
+          outputEl.innerText += msg + "\n";
+          outputEl.scrollTop = outputEl.scrollHeight;
+        }
+      });
+
+      const pythonInteractiveScript = `
+import json
+import asyncio
+from pyodide.http import pyfetch
+import js
+
+async def ask_console(prompt_text):
+    print(prompt_text)
+    return await js.waitForUserInput()
+
+async def main():
+    print("========================================")
+    print("⚙️  TPY কনসোল বট সেটআপ ম্যানেজারে স্বাগতম!")
+    print("========================================")
+    
+    token = await ask_console("🔑 অনুগ্রহ করে আপনার Telegram Bot Token দিন:")
+    token = token.strip()
+    
+    print("⏳ টোকেন যাচাই করা হচ্ছে...")
+    try:
+        res = await pyfetch(f"https://api.telegram.org/bot{token}/getMe")
+        data = await res.json()
+        if not data.get("ok"):
+            print("❌ ভুল টোকেন! অনুগ্রহ করে সঠিক টোকেন দিয়ে আবার শুরু করুন।")
+            return
+        bot_info = data["result"]
+        print(f"✅ কানেকশন সফল: @{bot_info['username']} ({bot_info['first_name']})")
+    except Exception as e:
+        print(f"❌ নেটওয়ার্ক এরর: {e}")
+        return
+
+    welcome_msg = await ask_console("💬 /start দিলে ব্যবহারকারীকে কী রিপ্লাই পাঠাবেন? (লিখুন):")
+    if not welcome_msg:
+        welcome_msg = f"স্বাগতম! @{bot_info['username']} বটে আপনাকে স্বাগতম।"
+
+    print("========================================")
+    print("🚀 বট সফলভাবে লাইভ হয়েছে!")
+    print("👉 এখন টেলিগ্রামে গিয়ে আপনার বটে /start লিখে মেসেজ দিন।")
+    print("========================================")
+
+    offset = 0
+    while True:
+        try:
+            url = f"https://api.telegram.org/bot{token}/getUpdates?offset={offset}&timeout=5"
+            res = await pyfetch(url)
+            updates = await res.json()
+
+            if updates.get("ok"):
+                for upd in updates.get("result", []):
+                    offset = upd["update_id"] + 1
+                    if "message" in upd and "text" in upd["message"]:
+                        msg = upd["message"]
+                        text = msg["text"]
+                        chat_id = msg["chat"]["id"]
+                        sender = msg["from"].get("first_name", "User")
+
+                        print(f"📩 মেসেজ এসেছে [{sender}]: {text}")
+
+                        if text == "/start":
+                            reply = welcome_msg
+                        else:
+                            reply = f"আপনি লিখেছেন: {text}"
+
+                        await pyfetch(
+                            f"https://api.telegram.org/bot{token}/sendMessage",
+                            method="POST",
+                            headers={"Content-Type": "application/json"},
+                            body=json.dumps({"chat_id": chat_id, "text": reply})
+                        )
+                        print(f"📤 রিপ্লাই পাঠানো হয়েছে -> @{sender}")
+        except Exception as err:
+            print(f"Polling Error: {err}")
+        
+        await asyncio.sleep(1)
+
+await main()
+`;
 
       try {
-        // print() এর আউটপুট ক্যাপচার করার সেটআপ
-        pyodideInstance.setStdout({
-          batched: (msg) => {
-            outputEl.innerText += msg + "\n";
-          }
-        });
-
-        // কোড এক্সিকিউট করা
-        await pyodideInstance.runPythonAsync(code);
+        await pyodideInstance.runPythonAsync(pythonInteractiveScript);
       } catch (err) {
         outputEl.innerText += "\n[Error]: " + err.message;
       }
