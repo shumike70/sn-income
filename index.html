@@ -3,171 +3,118 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Telebot Creator - Pure Dynamic Platform</title>
+  <title>TPY Code Runner - Free Online Playground</title>
+  
+  <!-- Tailwind CSS (ডিজাইনের জন্য) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Pyodide (ব্রাউজারে পাইথন রান করার ইঞ্জিন) -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
 </head>
 <body class="bg-slate-900 text-gray-100 min-h-screen flex flex-col font-sans">
 
   <!-- Header -->
-  <header class="bg-slate-800 border-b border-slate-700 px-6 py-3 flex flex-wrap justify-between items-center gap-4">
+  <header class="bg-slate-800 border-b border-slate-700 py-4 px-6 flex justify-between items-center">
     <div class="flex items-center space-x-3">
-      <div class="bg-blue-600 text-white font-black px-3 py-1.5 rounded-lg shadow">TC</div>
-      <h1 class="font-bold text-base text-white">Telebot Creator (Universal Runner)</h1>
+      <div class="bg-blue-600 p-2 rounded-lg font-bold text-white">TPY</div>
+      <h1 class="text-xl font-bold">TPY Code Runner (Online Playground)</h1>
     </div>
-    <button onclick="launchBot()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-5 py-2.5 rounded-lg shadow transition flex items-center space-x-2">
-      <i class="fa-solid fa-bolt"></i>
-      <span>🚀 Launch Bot</span>
-    </button>
+    <div id="status" class="text-sm px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full border border-yellow-500/30">
+      ইঞ্জিন লোড হচ্ছে...
+    </div>
   </header>
 
-  <!-- Bot Token Only (No Chat ID Needed!) -->
-  <div class="bg-slate-800/60 border-b border-slate-700 px-6 py-3">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-3">
-      <label class="text-xs font-bold text-slate-400 whitespace-nowrap">Bot Token (@BotFather):</label>
-      <input id="botToken" type="text" placeholder="এখানে আপনার বটের Token পেস্ট করুন..." 
-        class="w-full bg-slate-950 border border-slate-700 rounded-md px-3 py-2 text-xs text-blue-300 font-mono focus:border-blue-500 focus:outline-none" />
-    </div>
-  </div>
-
-  <!-- Main Workspace -->
-  <main class="flex-1 max-w-7xl mx-auto w-full p-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+  <!-- Main Content -->
+  <main class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 max-w-7xl mx-auto w-full">
     
-    <!-- Commands Sidebar -->
-    <div class="bg-slate-800 rounded-xl border border-slate-700 flex flex-col overflow-hidden shadow">
-      <div class="p-3 bg-slate-750 border-b border-slate-700 flex justify-between items-center">
-        <span class="text-xs font-bold uppercase text-slate-300">Commands List</span>
-        <button onclick="addCommandPrompt()" class="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded font-bold flex items-center space-x-1">
-          <i class="fa-solid fa-plus"></i>
-          <span>Add Command</span>
+    <!-- Code Editor Area -->
+    <div class="flex flex-col bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-lg">
+      <div class="bg-slate-750 px-4 py-2 border-b border-slate-700 flex justify-between items-center">
+        <span class="text-sm font-semibold text-slate-300">Editor (TPY Code)</span>
+        <button id="runBtn" disabled onclick="runCode()" class="bg-blue-600 hover:bg-blue-500 disabled:bg-gray-600 text-white px-4 py-1.5 rounded-md font-medium transition flex items-center space-x-2 text-sm">
+          <span>▶ রান করুন</span>
         </button>
       </div>
-      <div id="cmdList" class="flex-1 overflow-y-auto p-2 space-y-1"></div>
+      <textarea id="code" class="flex-1 bg-slate-950 p-4 text-emerald-400 font-mono text-sm resize-none focus:outline-none" spellcheck="false">
+# TPY / Python কোড এখানে লিখুন
+
+user_name = "Rahim"
+bot_name = "MyTeleBot"
+
+print(f"বট শুরু হয়েছে: {bot_name}")
+
+# সিম্পল মেসেজ পাঠানোর লজিক
+def send_welcome(user):
+    return f"স্বাগতম {user}! Telebot Creator-এ আপনার বট রেডি।"
+
+output = send_welcome(user_name)
+print(output)
+      </textarea>
     </div>
 
-    <!-- Code/Message Editor -->
-    <div class="md:col-span-3 bg-slate-800 rounded-xl border border-slate-700 flex flex-col overflow-hidden shadow">
-      <div class="p-3 bg-slate-750 border-b border-slate-700 flex justify-between items-center">
-        <div class="flex items-center space-x-2">
-          <span class="text-xs text-slate-400">Editing:</span>
-          <span id="activeCmdName" class="text-xs font-mono font-bold text-emerald-400 bg-slate-900 px-2.5 py-1 rounded border border-slate-700">/start</span>
-        </div>
-        <button onclick="saveCommandsToServer()" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-1.5 rounded text-xs font-bold flex items-center space-x-2 transition shadow">
-          <i class="fa-solid fa-floppy-disk"></i>
-          <span>Save Changes</span>
-        </button>
+    <!-- Output / Terminal Area -->
+    <div class="flex flex-col bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-lg">
+      <div class="bg-slate-750 px-4 py-2 border-b border-slate-700 flex justify-between items-center">
+        <span class="text-sm font-semibold text-slate-300">Terminal Output</span>
+        <button onclick="clearOutput()" class="text-xs text-gray-400 hover:text-white">ক্লিয়ার</button>
       </div>
-
-      <textarea id="cmdEditor" class="flex-1 bg-slate-950 p-4 text-emerald-400 font-mono text-sm leading-relaxed resize-none focus:outline-none min-h-[420px]" spellcheck="false"></textarea>
-      
-      <div id="statusAlert" class="bg-slate-900 px-4 py-2 border-t border-slate-800 text-xs text-slate-400 flex justify-between items-center">
-        <span>ইউজার এই কমান্ড দিলে বট কী উত্তর দেবে তা এখানে লিখুন।</span>
-        <span class="text-emerald-400 font-mono">Dynamic Engine</span>
-      </div>
+      <pre id="output" class="flex-1 bg-black p-4 text-gray-200 font-mono text-sm overflow-auto whitespace-pre-wrap">আউটপুট এখানে দেখাবে...</pre>
     </div>
 
   </main>
 
+  <!-- Footer -->
   <footer class="text-center py-3 text-xs text-slate-500 border-t border-slate-800">
-    100% Free Telegram Bot Builder • No Hardcoded Data
+    100% Free TPY Runner • Powered by WebAssembly & Pyodide
   </footer>
 
+  <!-- Script for Execution -->
   <script>
-    // কমান্ডস ডাটাবেজ (লোকাল স্টোরেজ)
-    let token = localStorage.getItem("tpy_token") || "";
-    let commands = JSON.parse(localStorage.getItem("tpy_commands")) || {
-      "/start": "👋 স্বাগতম {first_name}!\nআমাদের বটে আপনাকে স্বাগতম।",
-      "/help": "ℹ️ যেকোনো সাহায্যের জন্য অ্যাডমিনকে মেসেজ দিন।"
-    };
-    let activeCmd = "/start";
+    let pyodideInstance = null;
+    const statusEl = document.getElementById("status");
+    const runBtn = document.getElementById("runBtn");
+    const outputEl = document.getElementById("output");
 
-    document.getElementById("botToken").value = token;
-    document.getElementById("botToken").addEventListener("input", (e) => {
-      localStorage.setItem("tpy_token", e.target.value.trim());
-    });
-
-    function renderList() {
-      const list = document.getElementById("cmdList");
-      list.innerHTML = "";
-      for (let cmd in commands) {
-        const isSel = cmd === activeCmd;
-        const div = document.createElement("div");
-        div.className = `flex justify-between items-center p-2.5 rounded-lg cursor-pointer text-xs font-mono transition ${isSel ? 'bg-blue-600 text-white font-bold' : 'hover:bg-slate-700 text-slate-300'}`;
-        div.onclick = () => selectCmd(cmd);
-        div.innerHTML = `
-          <span><i class="fa-solid fa-terminal mr-2 opacity-70"></i>${cmd}</span>
-          ${cmd !== '/start' ? `<button onclick="deleteCmd(event, '${cmd}')" class="text-red-400 hover:text-white"><i class="fa-solid fa-trash"></i></button>` : ''}
-        `;
-        list.appendChild(div);
-      }
-      document.getElementById("activeCmdName").innerText = activeCmd;
-      document.getElementById("cmdEditor").value = commands[activeCmd] || "";
-    }
-
-    function selectCmd(cmd) {
-      activeCmd = cmd;
-      renderList();
-    }
-
-    function addCommandPrompt() {
-      const name = prompt("কমান্ডের নাম লিখুন (যেমন: /balance, /about, /info):");
-      if (name) {
-        const cleanName = name.startsWith("/") ? name.trim() : "/" + name.trim();
-        if (!commands[cleanName]) {
-          commands[cleanName] = `🎉 আপনি ${cleanName} কমান্ড ওপেন করেছেন!\nহ্যালো {first_name}!`;
-          activeCmd = cleanName;
-          renderList();
-          saveCommandsToServer();
-        } else {
-          alert("এই কমান্ডটি ইতিমধ্যে আছে!");
-        }
-      }
-    }
-
-    function deleteCmd(e, cmd) {
-      e.stopPropagation();
-      if (confirm(`আপনি কি ${cmd} কমান্ডটি মুছতে চান?`)) {
-        delete commands[cmd];
-        activeCmd = "/start";
-        renderList();
-        saveCommandsToServer();
-      }
-    }
-
-    async function saveCommandsToServer() {
-      commands[activeCmd] = document.getElementById("cmdEditor").value;
-      localStorage.setItem("tpy_commands", JSON.stringify(commands));
-      const curToken = document.getElementById("botToken").value.trim();
-
-      const status = document.getElementById("statusAlert");
+    // Pyodide লোড করা
+    async function loadEngine() {
       try {
-        await fetch('/api/webhook', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token: curToken, commands: commands })
+        pyodideInstance = await loadPyodide();
+        statusEl.innerText = "ইঞ্জিন রেডি (Active)";
+        statusEl.className = "text-sm px-3 py-1 bg-green-500/20 text-green-400 rounded-full border border-green-500/30";
+        runBtn.disabled = false;
+      } catch (err) {
+        statusEl.innerText = "ইঞ্জিন লোড হতে ব্যর্থ!";
+        statusEl.className = "text-sm px-3 py-1 bg-red-500/20 text-red-400 rounded-full border border-red-500/30";
+        console.error(err);
+      }
+    }
+    loadEngine();
+
+    // কোড রান করার ফাংশন
+    async function runCode() {
+      if (!pyodideInstance) return;
+      
+      const code = document.getElementById("code").value;
+      outputEl.innerText = "কোড রান হচ্ছে...\n";
+
+      try {
+        // print() এর আউটপুট ক্যাপচার করার সেটআপ
+        pyodideInstance.setStdout({
+          batched: (msg) => {
+            outputEl.innerText += msg + "\n";
+          }
         });
-        status.innerHTML = `<span class="text-green-400 font-bold"><i class="fa-solid fa-circle-check"></i> ${activeCmd} কমান্ড সেভ সফল হয়েছে!</span>`;
-      } catch (e) {
-        status.innerHTML = `<span class="text-green-400 font-bold"><i class="fa-solid fa-circle-check"></i> লোকাল সেভ হয়েছে!</span>`;
-      }
 
-      setTimeout(() => {
-        status.innerHTML = `<span>ইউজার এই কমান্ড দিলে বট কী উত্তর দেবে তা এখানে লিখুন।</span><span class="text-emerald-400 font-mono">Dynamic Engine</span>`;
-      }, 3000);
+        // কোড এক্সিকিউট করা
+        await pyodideInstance.runPythonAsync(code);
+      } catch (err) {
+        outputEl.innerText += "\n[Error]: " + err.message;
+      }
     }
 
-    function launchBot() {
-      const curToken = document.getElementById("botToken").value.trim();
-      if (!curToken) {
-        alert("অনুগ্রহ করে আগে Bot Token দিন!");
-        return;
-      }
-      saveCommandsToServer();
-      const webhookUrl = `${window.location.origin}/api/webhook`;
-      window.open(`https://api.telegram.org/bot${curToken}/setWebhook?url=${webhookUrl}&drop_pending_updates=true`, '_blank');
+    function clearOutput() {
+      outputEl.innerText = "";
     }
-
-    renderList();
   </script>
 </body>
 </html>
