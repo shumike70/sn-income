@@ -61,7 +61,7 @@ welcome_msg = f"""
 আইডি: {user_id}
 """
 
-# সরাসরি মেসেজ পাঠান
+# মেসেজ পাঠানো
 res = await Bot.sendMessage(welcome_msg)
 print(res)
       </textarea>
@@ -79,7 +79,7 @@ print(res)
   </main>
 
   <footer class="text-center py-3 text-xs text-slate-500 border-t border-slate-800">
-    100% Free TPY Telegram Bot Runner • Powered by WebAssembly & Pyodide
+    100% Free TPY Telegram Bot Runner • Powered by Vercel Serverless
   </footer>
 
   <script>
@@ -88,42 +88,27 @@ print(res)
     const runBtn = document.getElementById("runBtn");
     const outputEl = document.getElementById("output");
 
-    // JavaScript ফেচ ফাংশন (CORS বাইপাস সহ)
+    // Vercel Serverless API কল
     window.sendTelegramJS = async function(token, chatId, text) {
-      // CORS বাইপাস প্রক্সি
-      const targetUrl = `https://api.telegram.org/bot${token}/sendMessage`;
-      const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(targetUrl)}`;
-      
       try {
-        const response = await fetch(proxyUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const response = await fetch('/api/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            token: token,
             chat_id: chatId,
-            text: text,
-            parse_mode: "HTML"
+            text: text
           })
         });
+        
         const data = await response.json();
         if (data.ok) {
           return "✅ টেলিগ্রামে মেসেজ সফলভাবে চলে গেছে!";
         } else {
-          return "❌ এরর: " + (data.description || "টোকেন বা চ্যাট আইডি ভুল");
+          return "❌ এরর: " + (data.description || "টোকেন বা চ্যাট আইডি যাচাই করুন");
         }
-      } catch (e) {
-        // অল্টারনেট প্রক্সি যদি প্রথমটি কাজ না করে
-        try {
-          const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ chat_id: chatId, text: text, parse_mode: "HTML" })
-          });
-          const d = await res.json();
-          if (d.ok) return "✅ টেলিগ্রামে মেসেজ সফলভাবে চলে গেছে!";
-          return "❌ এরর: " + d.description;
-        } catch (err) {
-          return "❌ কানেকশন এরর: " + e.message;
-        }
+      } catch (err) {
+        return "❌ এরর: " + err.message;
       }
     };
 
@@ -154,7 +139,6 @@ print(res)
           batched: (msg) => { outputEl.innerText += msg + "\n"; }
         });
 
-        // TPY Simulator এনভায়রনমেন্ট ইনজেক্ট করা
         const tpyEnvironment = `
 import js
 
