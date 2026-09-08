@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TPY Code Runner - Free Online Playground</title>
+  <title>Telebot Creator (TPY) Full Simulator</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
 </head>
@@ -12,8 +12,8 @@
   <!-- Header -->
   <header class="bg-slate-800 border-b border-slate-700 py-3 px-6 flex flex-wrap justify-between items-center gap-3">
     <div class="flex items-center space-x-3">
-      <div class="bg-blue-600 px-3 py-1 rounded-lg font-bold text-white">TPY</div>
-      <h1 class="text-lg font-bold">TPY Telegram Bot Runner</h1>
+      <div class="bg-blue-600 px-3 py-1 rounded-lg font-bold text-white shadow">TPY</div>
+      <h1 class="text-lg font-bold">Telebot Creator (TPY) Simulator & Runner</h1>
     </div>
     <div id="status" class="text-xs px-3 py-1 bg-yellow-500/20 text-yellow-400 rounded-full border border-yellow-500/30">
       ইঞ্জিন লোড হচ্ছে...
@@ -25,7 +25,7 @@
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-3">
       <div>
         <label class="block text-xs font-semibold text-slate-400 mb-1">Bot API Token (@BotFather থেকে)</label>
-        <input id="botToken" type="text" placeholder="123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ" 
+        <input id="botToken" type="text" placeholder="123456789:ABCdef..." 
           value="8693779636:AAHIeQCUgS7bvwrArl6otipy8wyifOgz8rU"
           class="w-full bg-slate-950 border border-slate-700 rounded-md px-3 py-1.5 text-xs text-blue-300 font-mono focus:border-blue-500 focus:outline-none" />
       </div>
@@ -45,26 +45,11 @@
     <div class="flex flex-col bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-lg">
       <div class="bg-slate-750 px-4 py-2 border-b border-slate-700 flex justify-between items-center">
         <span class="text-sm font-semibold text-slate-300">Editor (TPY Code)</span>
-        <button id="runBtn" disabled onclick="runCode()" class="bg-blue-600 hover:bg-blue-500 disabled:bg-gray-600 text-white px-4 py-1.5 rounded-md font-medium transition flex items-center space-x-2 text-sm">
+        <button id="runBtn" disabled onclick="runCode()" class="bg-blue-600 hover:bg-blue-500 disabled:bg-gray-600 text-white px-4 py-1.5 rounded-md font-medium transition flex items-center space-x-2 text-sm shadow">
           <span>▶ রান করুন</span>
         </button>
       </div>
-      <textarea id="code" class="flex-1 bg-slate-950 p-4 text-emerald-400 font-mono text-sm resize-none focus:outline-none" spellcheck="false">
-# TPY কোড (Telebot Creator স্টাইল)
-user_id = user.telegramid
-first_name = user.first_name
-
-welcome_msg = f"""
-👋 স্বাগতম, <b>{first_name}</b>!
-
-আমাদের টেলিগ্রাম আর্নিং ও সার্ভিস বটে আপনাকে স্বাগতম 🚀
-আইডি: {user_id}
-"""
-
-# মেসেজ পাঠানো
-res = await Bot.sendMessage(welcome_msg)
-print(res)
-      </textarea>
+      <textarea id="code" class="flex-1 bg-slate-950 p-4 text-emerald-400 font-mono text-xs leading-relaxed resize-none focus:outline-none" spellcheck="false"></textarea>
     </div>
 
     <!-- Output Area -->
@@ -73,13 +58,13 @@ print(res)
         <span class="text-sm font-semibold text-slate-300">Terminal Output</span>
         <button onclick="clearOutput()" class="text-xs text-gray-400 hover:text-white">ক্লিয়ার</button>
       </div>
-      <pre id="output" class="flex-1 bg-black p-4 text-gray-200 font-mono text-sm overflow-auto whitespace-pre-wrap">আউটপুট এখানে দেখাবে...</pre>
+      <pre id="output" class="flex-1 bg-black p-4 text-gray-200 font-mono text-xs overflow-auto whitespace-pre-wrap">আউটপুট এখানে দেখাবে...</pre>
     </div>
 
   </main>
 
   <footer class="text-center py-3 text-xs text-slate-500 border-t border-slate-800">
-    100% Free TPY Telegram Bot Runner • Powered by Vercel Serverless
+    100% Free Telebot Creator (TPY) Simulator • Powered by Pyodide & Vercel
   </footer>
 
   <script>
@@ -88,27 +73,28 @@ print(res)
     const runBtn = document.getElementById("runBtn");
     const outputEl = document.getElementById("output");
 
-    // Vercel Serverless API কল
-    window.sendTelegramJS = async function(token, chatId, text) {
+    // Vercel Serverless API Call
+    window.sendTelegramJS = async function(token, chatId, text, replyMarkup) {
       try {
+        const payload = {
+          token: token,
+          chat_id: chatId,
+          text: text,
+          reply_markup: replyMarkup
+        };
         const response = await fetch('/api/send', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            token: token,
-            chat_id: chatId,
-            text: text
-          })
+          body: JSON.stringify(payload)
         });
-        
         const data = await response.json();
         if (data.ok) {
-          return "✅ টেলিগ্রামে মেসেজ সফলভাবে চলে গেছে!";
+          return "✅ [Telegram]: মেসেজ সফলভাবে চলে গেছে!";
         } else {
-          return "❌ এরর: " + (data.description || "টোকেন বা চ্যাট আইডি যাচাই করুন");
+          return "❌ [Telegram Error]: " + (data.description || "রিকোয়েস্ট ব্যর্থ হয়েছে");
         }
       } catch (err) {
-        return "❌ এরর: " + err.message;
+        return "❌ [Error]: " + err.message;
       }
     };
 
@@ -132,36 +118,151 @@ print(res)
       const chatId = document.getElementById("chatId").value.trim();
       const code = document.getElementById("code").value;
       
-      outputEl.innerText = "কোড রান হচ্ছে...\n";
+      outputEl.innerText = "⚡ TPY কোড এক্সিকিউট হচ্ছে...\n";
 
       try {
         pyodideInstance.setStdout({
           batched: (msg) => { outputEl.innerText += msg + "\n"; }
         });
 
-        const tpyEnvironment = `
-import js
+        // পূর্ণাঙ্গ TPY এনভায়রনমেন্ট ও লাইব্রেরি ইনজেকশন
+        const tpyCoreSDK = `
+import js, json, random, datetime
 
-class TelegramUser:
-    def __init__(self, uid):
-        self.telegramid = uid
-        self.first_name = "Shanto"
-        self.username = "user"
+# Global Storage Simulation
+_bot_storage = {"owner": "${chatId}", "join_verification": {"math": False, "device": False, "emoji": False, "photo_emoji": False}}
+_user_storage = {"main_task": True}
 
-class BotHandler:
+class ReturnCommand(Exception):
+    pass
+
+class InlineKeyboardButton:
+    def __init__(self, text, callback_data=None, url=None, web_app=None):
+        self.dict = {"text": text}
+        if callback_data: self.dict["callback_data"] = callback_data
+        if url: self.dict["url"] = url
+        if web_app: self.dict["web_app"] = {"url": web_app}
+
+class InlineKeyboardMarkup:
+    def __init__(self, inline_keyboard=None):
+        self.inline_keyboard = inline_keyboard or []
+    def add(self, *buttons):
+        row = [b.dict if isinstance(b, InlineKeyboardButton) else b for b in buttons]
+        self.inline_keyboard.append(row)
+    def to_dict(self):
+        return {"inline_keyboard": self.inline_keyboard}
+
+class BotSDK:
     def __init__(self, token, chat_id):
         self.token = token
         self.chat_id = chat_id
-
-    async def sendMessage(self, text, parse_mode="HTML", reply_markup=None):
-        res = await js.window.sendTelegramJS(self.token, self.chat_id, str(text))
+        
+    def getData(self, key):
+        return _bot_storage.get(key, None)
+    def saveData(self, key, value):
+        _bot_storage[key] = value
+    def info(self):
+        class Info:
+            username = "SnBot"
+            token = "${token}"
+        return Info()
+    def handleNextCommand(self, cmd, options=None):
+        pass
+    async def sendMessage(self, chat_id=None, text="", reply_markup=None, disable_web_page_preview=False, parse_mode="HTML"):
+        target_id = chat_id or self.chat_id
+        markup = reply_markup
+        if hasattr(markup, "to_dict"):
+            markup = markup.to_dict()
+        res = await js.window.sendTelegramJS(self.token, target_id, str(text), markup)
+        print(res)
         return res
+    async def editMessageText(self, chat_id=None, message_id=None, text="", reply_markup=None, disable_web_page_preview=False):
+        return await self.sendMessage(chat_id, text, reply_markup)
+    async def deleteMessage(self, chat_id=None, message_id=None):
+        pass
+    async def answerCallbackQuery(self, call_id=None, text="", show_alert=False):
+        print(f"🔔 [Alert]: {text}")
+    def getChatMember(self, chan, uid):
+        class Member:
+            status = "creator"
+        return Member()
 
-user = TelegramUser("${chatId}")
-Bot = BotHandler("${token}", "${chatId}")
+class UserSDK:
+    @staticmethod
+    def getData(key):
+        return _user_storage.get(key, None)
+    @staticmethod
+    def saveData(key, value):
+        _user_storage[key] = value
+    @staticmethod
+    def getProperty(key):
+        return _user_storage.get(key, None)
+    @staticmethod
+    def setProperty(key, val):
+        _user_storage[key] = val
+
+class RandomLib:
+    @staticmethod
+    def randomInt(a, b): return random.randint(a, b)
+    @staticmethod
+    def randomStr(n, chars): return "".join(random.choices(chars, k=n))
+    @staticmethod
+    def randomWeightedChoice(chars, weights): return random.choices(chars, weights=weights, k=1)[0]
+
+class DateTimeLib:
+    @staticmethod
+    def now(tz="Asia/Dhaka"):
+        n = datetime.datetime.now()
+        return {"time": n.strftime("%H:%M:%S")}
+    @staticmethod
+    def date_now():
+        n = datetime.datetime.now()
+        return {"date": n.strftime("%Y-%m-%d")}
+
+class Libs:
+    Random = RandomLib
+    random = RandomLib
+    DateAndTime = DateTimeLib
+    class Webhook:
+        @staticmethod
+        def getUrlFor(command="", user_id=""): return f"https://webhook.site/{command}"
+
+class DummyUser:
+    first_name = "Shanto"
+    last_name = "Admin"
+    username = "sn_support_admin"
+
+class DummyMessage:
+    message_id = 100
+    text = "/start"
+    reply_markup = None
+    from_user = DummyUser()
+    class chat:
+        id = "${chatId}"
+
+# Initializing global instances
+u = "${chatId}"
+user = DummyUser()
+message = DummyMessage()
+params = ""
+options = ""
+libs = Libs()
+Bot = BotSDK("${token}", "${chatId}")
+bot = Bot
+User = UserSDK
 `;
-        await pyodideInstance.runPythonAsync(tpyEnvironment);
-        await pyodideInstance.runPythonAsync(code);
+        await pyodideInstance.runPythonAsync(tpyCoreSDK);
+        
+        try {
+            await pyodideInstance.runPythonAsync(code);
+            outputEl.innerText += "\n✨ এক্সিকিউশন সফলভাবে সম্পন্ন হয়েছে!";
+        } catch (execErr) {
+            if (execErr.message.includes("ReturnCommand")) {
+                outputEl.innerText += "\n✨ [ReturnCommand] কমান্ড সফলভাবে সম্পন্ন হয়েছে!";
+            } else {
+                throw execErr;
+            }
+        }
 
       } catch (err) {
         outputEl.innerText += "\n[Error]: " + err.message;
