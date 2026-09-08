@@ -1,35 +1,28 @@
-// api/send.js (Vercel Serverless Backend)
+// api/send.js
 export default async function handler(req, res) {
-  // CORS হেডার এলাউ করা
-  res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ ok: false, description: "Method not allowed" });
 
-  if (req.method !== 'POST') {
-    return res.status(405).json({ ok: false, description: "Method not allowed" });
-  }
-
-  const { token, chat_id, text } = req.body;
-
-  if (!token || !chat_id || !text) {
-    return res.status(400).json({ ok: false, description: "Token, Chat ID এবং Text বাধ্যতামূলক!" });
-  }
+  const { token, chat_id, text, reply_markup } = req.body;
 
   try {
+    const payload = {
+      chat_id: chat_id,
+      text: text,
+      parse_mode: 'HTML'
+    };
+    if (reply_markup) {
+      payload.reply_markup = reply_markup;
+    }
+
     const telegramRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: chat_id,
-        text: text,
-        parse_mode: 'HTML'
-      })
+      body: JSON.stringify(payload)
     });
 
     const data = await telegramRes.json();
